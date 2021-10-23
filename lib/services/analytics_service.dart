@@ -4,7 +4,7 @@ import 'package:loglytics/analytics/feature_analytics.dart';
 import 'package:loglytics/crashlytics/crashlytics_interface.dart';
 import 'package:loglytics/services/log_service.dart';
 
-/// Used to provide an easy interface for logging analytics.
+/// Used to provide an easy interface for sending analytics.
 ///
 /// Each [AnalyticType] has its own method that exposes implementations of predefined
 /// [FeatureSubjects] and [FeatureParameters]. When wanting to register an [AnalyticType.tap] for
@@ -30,7 +30,7 @@ class AnalyticsService<S extends FeatureSubjects, P extends FeatureParameters> {
   final AnalyticsInterface? _analyticsImplementation;
   final CrashlyticsInterface? _crashlyticsImplementation;
 
-  /// Used to identify the first input when logging a stream of similar analytics.
+  /// Used to identify the first input when sending a stream of similar analytics.
   Analytic? _firstInput;
 
   /// Sets a [userId] that persists throughout the app.
@@ -55,14 +55,14 @@ class AnalyticsService<S extends FeatureSubjects, P extends FeatureParameters> {
     _logService?.logAnalytic(name: name, value: _value);
   }
 
-  /// Logs a custom analytic event by providing both [FeatureSubjects] and [FeatureParameters].
+  /// Sends a custom analytic event by providing both [FeatureSubjects] and [FeatureParameters].
   ///
   /// This method may be used to log anything that is not covered by any other method in this class
   /// and expects an [Analytic] in return from the [analytic] callback.
   void event({required Analytic Function(S subjects, P parameters) analytic}) =>
       _logEvent(analytic(_featureSubjects, _featureParameters));
 
-  /// Logs an [AnalyticType.tap] and provides the appropriate [FeatureSubjects] and optional [FeatureParameters].
+  /// Sends an [AnalyticType.tap] and provides the appropriate [FeatureSubjects] and optional [FeatureParameters].
   void tap({
     required String Function(S subjects) subject,
     Map<String, Object?>? Function(P parameters)? parameters,
@@ -75,7 +75,7 @@ class AnalyticsService<S extends FeatureSubjects, P extends FeatureParameters> {
         ),
       );
 
-  /// Logs an [AnalyticType.focus] and provides the appropriate [FeatureSubjects] and optional [FeatureParameters].
+  /// Sends an [AnalyticType.focus] and provides the appropriate [FeatureSubjects] and optional [FeatureParameters].
   void focus({
     required String Function(S subjects) subject,
     Map<String, Object?>? Function(P parameters)? parameters,
@@ -88,7 +88,7 @@ class AnalyticsService<S extends FeatureSubjects, P extends FeatureParameters> {
         ),
       );
 
-  /// Logs an [AnalyticType.unFocus] and provides the appropriate [FeatureSubjects] and optional [FeatureParameters].
+  /// Sends an [AnalyticType.unFocus] and provides the appropriate [FeatureSubjects] and optional [FeatureParameters].
   void unFocus({
     required String Function(S subjects) subject,
     Map<String, Object?>? Function(P parameters)? parameters,
@@ -101,7 +101,7 @@ class AnalyticsService<S extends FeatureSubjects, P extends FeatureParameters> {
         ),
       );
 
-  /// Logs an [AnalyticType.select] and provides the appropriate [FeatureSubjects] and optional [FeatureParameters].
+  /// Sends an [AnalyticType.select] and provides the appropriate [FeatureSubjects] and optional [FeatureParameters].
   void select({
     required String Function(S subjects) subject,
     Map<String, Object?>? Function(P parameters)? parameters,
@@ -114,7 +114,7 @@ class AnalyticsService<S extends FeatureSubjects, P extends FeatureParameters> {
         ),
       );
 
-  /// Logs an [AnalyticType.view] and provides the appropriate [FeatureSubjects] and optional [FeatureParameters].
+  /// Sends an [AnalyticType.view] and provides the appropriate [FeatureSubjects] and optional [FeatureParameters].
   void view({
     required String Function(S subjects) subject,
     Map<String, Object?>? Function(P parameters)? parameters,
@@ -127,7 +127,7 @@ class AnalyticsService<S extends FeatureSubjects, P extends FeatureParameters> {
         ),
       );
 
-  /// Logs an [AnalyticType.open] and provides the appropriate [FeatureSubjects] and optional [FeatureParameters].
+  /// Sends an [AnalyticType.open] and provides the appropriate [FeatureSubjects] and optional [FeatureParameters].
   void open({
     required String Function(S subjects) subject,
     Map<String, Object?>? Function(P parameters)? parameters,
@@ -140,7 +140,7 @@ class AnalyticsService<S extends FeatureSubjects, P extends FeatureParameters> {
         ),
       );
 
-  /// Logs an [AnalyticType.close] and provides the appropriate [FeatureSubjects] and optional [FeatureParameters].
+  /// Sends an [AnalyticType.close] and provides the appropriate [FeatureSubjects] and optional [FeatureParameters].
   void close({
     required String Function(S subjects) subject,
     Map<String, Object?>? Function(P parameters)? parameters,
@@ -153,7 +153,7 @@ class AnalyticsService<S extends FeatureSubjects, P extends FeatureParameters> {
         ),
       );
 
-  /// Logs an [AnalyticType.create] and provides the appropriate [FeatureSubjects] and optional [FeatureParameters].
+  /// Sends an [AnalyticType.create] and provides the appropriate [FeatureSubjects] and optional [FeatureParameters].
   void create({
     required String Function(S subjects) subject,
     Map<String, Object?>? Function(P parameters)? parameters,
@@ -166,7 +166,7 @@ class AnalyticsService<S extends FeatureSubjects, P extends FeatureParameters> {
         ),
       );
 
-  /// Logs an [AnalyticType.update] and provides the appropriate [FeatureSubjects] and optional [FeatureParameters].
+  /// Sends an [AnalyticType.update] and provides the appropriate [FeatureSubjects] and optional [FeatureParameters].
   void update({
     required String Function(S subjects) subject,
     Map<String, Object?>? Function(P parameters)? parameters,
@@ -179,7 +179,7 @@ class AnalyticsService<S extends FeatureSubjects, P extends FeatureParameters> {
         ),
       );
 
-  /// Logs an [AnalyticType.delete] and provides the appropriate [FeatureSubjects] and optional [FeatureParameters].
+  /// Sends an [AnalyticType.delete] and provides the appropriate [FeatureSubjects] and optional [FeatureParameters].
   void delete({
     required String Function(S subjects) subject,
     Map<String, Object?>? Function(P parameters)? parameters,
@@ -192,7 +192,7 @@ class AnalyticsService<S extends FeatureSubjects, P extends FeatureParameters> {
         ),
       );
 
-  /// Logs an [AnalyticType.fail] and provides the appropriate [FeatureSubjects] and optional [FeatureParameters].
+  /// Sends an [AnalyticType.fail] and provides the appropriate [FeatureSubjects] and optional [FeatureParameters].
   void fail({
     required String Function(S subjects) subject,
     Map<String, Object?>? Function(P parameters)? parameters,
@@ -205,7 +205,7 @@ class AnalyticsService<S extends FeatureSubjects, P extends FeatureParameters> {
         ),
       );
 
-  /// Logs an [AnalyticType.success] and provides the appropriate [FeatureSubjects] and optional [FeatureParameters].
+  /// Sends an [AnalyticType.success] and provides the appropriate [FeatureSubjects] and optional [FeatureParameters].
   void success({
     required String Function(S subjects) subject,
     Map<String, Object?>? Function(P parameters)? parameters,
@@ -218,7 +218,7 @@ class AnalyticsService<S extends FeatureSubjects, P extends FeatureParameters> {
         ),
       );
 
-  /// Logs an [AnalyticType.valid] and provides the appropriate [FeatureSubjects] and optional [FeatureParameters].
+  /// Sends an [AnalyticType.valid] and provides the appropriate [FeatureSubjects] and optional [FeatureParameters].
   void valid({
     required String Function(S subjects) subject,
     Map<String, Object?>? Function(P parameters)? parameters,
@@ -231,7 +231,7 @@ class AnalyticsService<S extends FeatureSubjects, P extends FeatureParameters> {
         ),
       );
 
-  /// Logs an [AnalyticType.invalid] and provides the appropriate [FeatureSubjects] and optional [FeatureParameters].
+  /// Sends an [AnalyticType.invalid] and provides the appropriate [FeatureSubjects] and optional [FeatureParameters].
   void invalid({
     required String Function(S subjects) subject,
     Map<String, Object?>? Function(P parameters)? parameters,
@@ -244,7 +244,7 @@ class AnalyticsService<S extends FeatureSubjects, P extends FeatureParameters> {
         ),
       );
 
-  /// Logs an [AnalyticType.search] and provides the appropriate [FeatureSubjects] and optional [FeatureParameters].
+  /// Sends an [AnalyticType.search] and provides the appropriate [FeatureSubjects] and optional [FeatureParameters].
   void search({
     required String Function(S subjects) subject,
     Map<String, Object?>? Function(P parameters)? parameters,
@@ -257,7 +257,7 @@ class AnalyticsService<S extends FeatureSubjects, P extends FeatureParameters> {
         ),
       );
 
-  /// Logs an [AnalyticType.share] and provides the appropriate [FeatureSubjects] and optional [FeatureParameters].
+  /// Sends an [AnalyticType.share] and provides the appropriate [FeatureSubjects] and optional [FeatureParameters].
   void share({
     required String Function(S subjects) subject,
     Map<String, Object?>? Function(P parameters)? parameters,
@@ -270,9 +270,9 @@ class AnalyticsService<S extends FeatureSubjects, P extends FeatureParameters> {
         ),
       );
 
-  /// Logs an [AnalyticType.input] and provides the appropriate [FeatureSubjects] and optional [FeatureParameters].
+  /// Sends an [AnalyticType.input] and provides the appropriate [FeatureSubjects] and optional [FeatureParameters].
   ///
-  /// Defaults to only logging the first analytic by settings [onlyFirstValue] to true.
+  /// Defaults to only sending the first analytic by settings [onlyFirstValue] to true.
   void input({
     required String Function(S subjects) subject,
     Map<String, Object?>? Function(P parameters)? parameters,
@@ -289,7 +289,7 @@ class AnalyticsService<S extends FeatureSubjects, P extends FeatureParameters> {
     _firstInput = analytic;
   }
 
-  /// Logs an [AnalyticType.input] and provides the appropriate [FeatureSubjects] where a possible screen name should reside.
+  /// Sends an [AnalyticType.input] and provides the appropriate [FeatureSubjects] where a possible screen name should reside.
   void screen({
     required String Function(S subjects) subject,
   }) {
@@ -307,7 +307,7 @@ class AnalyticsService<S extends FeatureSubjects, P extends FeatureParameters> {
   /// Resets the [_firstInput] used by [AnalyticsService.input].
   void resetFirstInput() => _firstInput = null;
 
-  /// Main method used for logging any [analytic] in this class.
+  /// Main method used for sending any [analytic] in this class.
   void _logEvent(Analytic analytic) {
     final name = analytic.name;
     final parameters = analytic.parameters;
