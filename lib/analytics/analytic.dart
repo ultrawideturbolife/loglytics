@@ -1,6 +1,6 @@
 import 'package:loglytics/loglytics.dart';
 
-/// Wrapper class that's used to structure analytics in the [AnalyticsService].
+/// Wrapper class that's used to structure and provide analytics in the [AnalyticsService].
 class Analytic {
   const Analytic({
     required String subject,
@@ -24,7 +24,7 @@ class Analytic {
               parameters == other.parameters);
 }
 
-/// Every type resembles an action or state that's applicable to subject from [FeatureSubjects]
+/// Every action or state that's applicable to subject from [FeatureSubjects]
 enum AnalyticType {
   tap,
   focus,
