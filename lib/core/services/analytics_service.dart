@@ -1,9 +1,9 @@
 // @dart = 2.12
 
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:loglytics/core/abstract/analytics_strings.dart';
+import 'package:loglytics/core/abstract/analytics_interface.dart';
+import 'package:loglytics/core/abstract/crashlytics_interface.dart';
 import 'package:loglytics/core/abstract/log_service.dart';
+import 'package:loglytics/core/abstract/subjects_and_parameters.dart';
 import 'package:loglytics/core/analytics/analytic.dart';
 
 class AnalyticsService<S extends AnalyticsSubjects, P extends AnalyticsParameters> {
@@ -11,30 +11,34 @@ class AnalyticsService<S extends AnalyticsSubjects, P extends AnalyticsParameter
     required S analyticsSubjects,
     required P analyticsParameters,
     LogService? logService,
-    FirebaseAnalytics? firebaseAnalytics,
+    AnalyticsInterface? analyticsInterface,
+    CrashlyticsInterface? crashlyticsInterface,
   })  : _analyticsSubjects = analyticsSubjects,
         _analyticsParameters = analyticsParameters,
         _logService = logService,
-        _firebaseAnalytics = firebaseAnalytics;
+        _analyticsInterface = analyticsInterface,
+        _crashlyticsInterface = crashlyticsInterface;
 
   final S _analyticsSubjects;
   final P _analyticsParameters;
 
   final LogService? _logService;
-  final FirebaseAnalytics? _firebaseAnalytics;
+  final AnalyticsInterface? _analyticsInterface;
+  final CrashlyticsInterface? _crashlyticsInterface;
 
   Analytic? _firstInput;
 
   void userId({required String userId}) {
-    _firebaseAnalytics?.setUserId(userId);
+    _analyticsInterface?.setUserId(userId);
+    _crashlyticsInterface?.setUserIdentifier(userId);
     _logService?.logAnalytic(name: 'user_id', value: userId);
   }
 
   void userProperty({required String Function(S subjects) property, required Object? value}) {
     final name = property(_analyticsSubjects);
     final _value = value?.toString() ?? '-';
-    _firebaseAnalytics?.setUserProperty(name: name, value: _value);
-    if (LogService.crashlyticsEnabled) FirebaseCrashlytics.instance.setCustomKey(name, _value);
+    _analyticsInterface?.setUserProperty(name: name, value: _value);
+    _crashlyticsInterface?.setCustomKey(name, _value);
     _logService?.logAnalytic(name: name, value: _value);
   }
 
@@ -256,17 +260,17 @@ class AnalyticsService<S extends AnalyticsSubjects, P extends AnalyticsParameter
       subject: subject(_analyticsSubjects),
       type: AnalyticType.screen,
     );
-    _firebaseAnalytics?.setCurrentScreen(screenName: analytic.name);
+    _analyticsInterface?.setCurrentScreen(screenName: analytic.name);
     _logService?.logAnalytic(name: analytic.name);
   }
 
-  Future<void> reset() async => _firebaseAnalytics?.resetAnalyticsData();
+  Future<void> reset() async => _analyticsInterface?.resetAnalyticsData();
   void resetFirstInput() async => _firstInput = null;
 
   void _logEvent(Analytic analytic) {
     final name = analytic.name;
     final parameters = analytic.parameters;
-    _firebaseAnalytics?.logEvent(name: name, parameters: parameters);
+    _analyticsInterface?.logEvent(name: name, parameters: parameters);
     _logService?.logAnalytic(name: name, parameters: parameters);
   }
 }

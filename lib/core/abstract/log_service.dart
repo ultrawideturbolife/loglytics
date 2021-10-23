@@ -1,49 +1,53 @@
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
-import 'package:loglytics/core/abstract/analytics_strings.dart';
+import 'package:loglytics/core/abstract/crashlytics_interface.dart';
+import 'package:loglytics/core/abstract/subjects_and_parameters.dart';
 import 'package:loglytics/core/services/analytics_service.dart';
 
-import 'analytics_strings.dart';
+import 'analytics_interface.dart';
+import 'subjects_and_parameters.dart';
 
 enum LogType { info, warning, error, success, analytic }
 
 mixin LogService<S extends AnalyticsSubjects, P extends AnalyticsParameters> {
   late final AnalyticsService<S, P> _analyticsService = AnalyticsService<S, P>(
-    analyticsSubjects: analyticsStrings!.subjects,
-    analyticsParameters: analyticsStrings!.parameters,
-    firebaseAnalytics: _analyticsEnabled ? FirebaseAnalytics() : null,
+    analyticsSubjects: subjectsAndParameters!.subjects,
+    analyticsParameters: subjectsAndParameters!.parameters,
+    analyticsInterface: _analyticsInterface,
     logService: this,
   );
 
   AnalyticsService<S, P> get analytics {
-    assert(analyticsStrings != null, 'Override the analyticsStrings getter first.');
+    assert(subjectsAndParameters != null, 'Override the subjectsAndParameters getter first.');
     return _analyticsService;
   }
 
-  AnalyticsStrings<S, P>? get analyticsStrings => null;
+  SubjectsAndParameters<S, P>? get subjectsAndParameters => null;
 
   String get logLocation => _logLocation;
   late final String _logLocation = runtimeType.toString();
 
   // --------------- SETUP --------------- SETUP --------------- SETUP --------------- \\
 
-  static bool _analyticsEnabled = true;
-  static bool _analyticsLogsEnabled = true;
-  static bool _crashlyticsEnabled = true;
+  static AnalyticsInterface? _analyticsInterface;
+  static bool _shouldLogAnalytics = true;
+  static CrashlyticsInterface? _crashlyticsInterface;
 
-  static bool get analyticsEnabled => _analyticsEnabled;
-  static bool get analyticsLogsEnabled => _analyticsLogsEnabled;
-  static bool get crashlyticsEnabled => _crashlyticsEnabled;
+  static bool get isAnalyticsEnabled => _isAnalyticsEnabled;
+  static bool _isAnalyticsEnabled = false;
+  static bool get isCrashlyticsEnabled => _isCrashLyticsEnabled;
+  static bool _isCrashLyticsEnabled = false;
+  static bool get shouldLogAnalytics => _shouldLogAnalytics;
 
   static void setup({
-    bool? analyticsEnabled,
-    bool? logAnalyticsEnabled,
-    bool? crashlyticsEnabled,
+    AnalyticsInterface? analyticsInterface,
+    bool? shouldLogAnalytics,
+    CrashlyticsInterface? crashlyticsInterface,
   }) {
-    if (analyticsEnabled != null) _analyticsEnabled = analyticsEnabled;
-    if (logAnalyticsEnabled != null) _analyticsLogsEnabled = _analyticsLogsEnabled;
-    if (crashlyticsEnabled != null) _crashlyticsEnabled = crashlyticsEnabled;
+    _analyticsInterface = analyticsInterface;
+    _isAnalyticsEnabled = _analyticsInterface != null;
+    if (shouldLogAnalytics != null) _shouldLogAnalytics = shouldLogAnalytics;
+    _crashlyticsInterface = crashlyticsInterface;
+    _isCrashLyticsEnabled = _crashlyticsInterface != null;
   }
 
   // --------------- REGULAR --------------- REGULAR --------------- REGULAR --------------- \\
@@ -59,14 +63,12 @@ mixin LogService<S extends AnalyticsSubjects, P extends AnalyticsParameters> {
       );
 
   void logError(String message, {Object? error, StackTrace? stack, bool fatal = false}) {
-    if (_crashlyticsEnabled) {
-      FirebaseCrashlytics.instance.recordError(
-        error,
-        stack ?? StackTrace.current,
-        fatal: fatal,
-        printDetails: false,
-      );
-    }
+    _crashlyticsInterface?.recordError(
+      error,
+      stack ?? StackTrace.current,
+      fatal: fatal,
+      printDetails: false,
+    );
     _logMessage(
       message: message,
       logType: LogType.error,
@@ -86,7 +88,7 @@ mixin LogService<S extends AnalyticsSubjects, P extends AnalyticsParameters> {
       );
 
   void logAnalytic({required String name, String? value, Map<String, Object?>? parameters}) {
-    if (_analyticsLogsEnabled) {
+    if (_shouldLogAnalytics) {
       debugPrint(
         '$_time '
         '[$_logLocation] '
@@ -269,27 +271,19 @@ mixin LogService<S extends AnalyticsSubjects, P extends AnalyticsParameters> {
   // --------------- CRASHLYTICS --------------- CRASHLYTICS --------------- CRASHLYTICS --------------- \\
 
   void _tryLogCrashlyticsMessage(LogType logType, String message) {
-    if (_crashlyticsEnabled) {
-      FirebaseCrashlytics.instance.log('${logType.name}: $message');
-    }
+    _crashlyticsInterface?.log('${logType.name}: $message');
   }
 
   void _tryLogCrashlyticsKeyValue(String key, Object? value) {
-    if (_crashlyticsEnabled) {
-      FirebaseCrashlytics.instance.log('$key: $value');
-    }
+    _crashlyticsInterface?.log('$key: $value');
   }
 
   void _tryLogCrashlyticsKey(Object? key) {
-    if (_crashlyticsEnabled) {
-      FirebaseCrashlytics.instance.log('key: $key');
-    }
+    _crashlyticsInterface?.log('key: $key');
   }
 
   void _tryLogCrashlyticsValue(Object? value) {
-    if (_crashlyticsEnabled) {
-      FirebaseCrashlytics.instance.log('value: $value');
-    }
+    _crashlyticsInterface?.log('value: $value');
   }
 }
 
@@ -333,11 +327,9 @@ void customLog({
   required String message,
   required String location,
   required LogType logType,
-  required bool logCrashlytics,
+  required CrashlyticsInterface? crashlyticsInterface,
 }) {
-  if (LogService._crashlyticsEnabled) {
-    FirebaseCrashlytics.instance.log('${logType.name}: $message');
-  }
+  crashlyticsInterface?.log('${logType.name}: $message');
   debugPrint(
     '$_time '
     '[$location] '

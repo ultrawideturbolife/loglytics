@@ -1,4 +1,3 @@
-import 'package:loglytics/core/abstract/analytics_strings.dart';
 import 'package:loglytics/core/abstract/log_service.dart';
 
 import 'example_analytics.dart';
@@ -19,6 +18,6 @@ class ExampleClassWithAnalytics
   }
 
   @override
-  AnalyticsStrings<ExampleAnalyticsSubjects, ExampleAnalyticsParameters> get analyticsStrings =>
-      ExampleAnalytics();
+  SubjectsAndParameters<ExampleAnalyticsSubjects, ExampleAnalyticsParameters>
+      get subjectsAndParameters => ExampleAnalytics();
 }

@@ -1,7 +1,7 @@
 import 'package:loglytics/core/abstract/analytics_strings.dart';
 
 class ExampleAnalytics
-    extends AnalyticsStrings<ExampleAnalyticsSubjects, ExampleAnalyticsParameters> {
+    extends SubjectsAndParameters<ExampleAnalyticsSubjects, ExampleAnalyticsParameters> {
   @override
   ExampleAnalyticsSubjects get subjects => _templatesSubjects;
   late final ExampleAnalyticsSubjects _templatesSubjects = ExampleAnalyticsSubjects();
