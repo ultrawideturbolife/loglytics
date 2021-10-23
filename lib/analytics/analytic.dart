@@ -1,3 +1,6 @@
+import 'package:loglytics/loglytics.dart';
+
+/// Wrapper class that's used to structure analytics in the [AnalyticsService].
 class Analytic {
   const Analytic({
     required String subject,
@@ -10,7 +13,7 @@ class Analytic {
   final AnalyticType _type;
   final Map<String, Object?>? parameters;
 
-  String get name => '$_subject\_${_type.name}';
+  String get name => _subject + '_' + _type.name;
 
   bool equals(Analytic? other) =>
       other != null &&
@@ -21,6 +24,7 @@ class Analytic {
               parameters == other.parameters);
 }
 
+/// Every type resembles an action or state that's applicable to subject from [FeatureSubjects]
 enum AnalyticType {
   tap,
   focus,
@@ -43,6 +47,7 @@ enum AnalyticType {
   event
 }
 
+/// Used to generate the proper String format when sending analytics to the analytics provider.
 extension on AnalyticType {
   String get name {
     switch (this) {

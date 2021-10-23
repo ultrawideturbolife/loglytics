@@ -51,7 +51,7 @@ class _MyHomePageState extends State<MyHomePage>
   FeatureAnalytics<CounterSubjects, CounterParameters> get featureAnalytics => CounterAnalytics();
 
   void _incrementCounter() {
-    analytics.tap(subject: (subjects) => subjects.exampleButton);
+    analytics.tap(subject: (subjects) => subjects.counterButton);
     setState(
       () {
         _counter++;

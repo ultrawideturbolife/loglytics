@@ -1,5 +1,3 @@
-// @dart = 2.12
-
 import 'package:loglytics/analytics/analytic.dart';
 import 'package:loglytics/analytics/analytics_interface.dart';
 import 'package:loglytics/analytics/feature_analytics.dart';

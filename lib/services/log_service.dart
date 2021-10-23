@@ -6,7 +6,13 @@ import 'package:loglytics/services/analytics_service.dart';
 import '../analytics/analytics_interface.dart';
 import '../analytics/feature_analytics.dart';
 
-enum LogType { info, warning, error, success, analytic }
+enum LogType {
+  info,
+  warning,
+  error,
+  success,
+  analytic,
+}
 
 mixin LogService<S extends FeatureSubjects, P extends FeatureParameters> {
   late final AnalyticsService<S, P> _analyticsService = AnalyticsService<S, P>(
@@ -69,7 +75,6 @@ mixin LogService<S extends FeatureSubjects, P extends FeatureParameters> {
       error,
       stack ?? StackTrace.current,
       fatal: fatal,
-      printDetails: false,
     );
     _logMessage(
       message: message,
