@@ -1,8 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:loglytics/core/abstract/analytics_interface.dart';
-import 'package:loglytics/core/abstract/log_service.dart';
+import 'package:loglytics/analytics/analytics_interface.dart';
 
-class AnalyticsImplementation with LogService implements AnalyticsInterface {
+class AnalyticsImplementation implements AnalyticsInterface {
   AnalyticsImplementation(this._firebaseAnalytics);
   final FirebaseAnalytics _firebaseAnalytics;
 

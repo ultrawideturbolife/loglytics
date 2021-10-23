@@ -1,8 +1,8 @@
-abstract class Analytics<S extends AnalyticsSubjects, P extends AnalyticsParameters> {
+abstract class FeatureAnalytics<S extends FeatureSubjects, P extends FeatureParameters> {
   S get subjects;
   P get parameters;
 }
 
-abstract class AnalyticsSubjects {}
+abstract class FeatureSubjects {}
 
-abstract class AnalyticsParameters {}
+abstract class FeatureParameters {}

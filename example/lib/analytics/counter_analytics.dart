@@ -1,17 +1,16 @@
-import 'package:loglytics/core/abstract/subjects_and_parameters.dart';
+import 'package:loglytics/loglytics.dart';
 
-class CounterAnalytics
-    extends SubjectsAndParameters<ExampleAnalyticsSubjects, ExampleAnalyticsParameters> {
+class CounterAnalytics extends FeatureAnalytics<CounterSubjects, CounterParameters> {
   @override
-  ExampleAnalyticsSubjects get subjects => _templatesSubjects;
-  late final ExampleAnalyticsSubjects _templatesSubjects = ExampleAnalyticsSubjects();
+  CounterSubjects get subjects => _counterSubjects;
+  late final CounterSubjects _counterSubjects = CounterSubjects();
 
   @override
-  ExampleAnalyticsParameters get parameters => _templatesParameters;
-  late final ExampleAnalyticsParameters _templatesParameters = ExampleAnalyticsParameters();
+  CounterParameters get parameters => _counterParameters;
+  late final CounterParameters _counterParameters = CounterParameters();
 }
 
-class ExampleAnalyticsSubjects extends AnalyticsSubjects {
+class CounterSubjects extends FeatureSubjects {
   final String userId = 'user_id';
   final String exampleButton = 'example_button';
   final String exampleEntity = 'example_entity';
@@ -19,7 +18,7 @@ class ExampleAnalyticsSubjects extends AnalyticsSubjects {
   final String incrementCounter = 'increment_counter';
 }
 
-class ExampleAnalyticsParameters extends AnalyticsParameters {
+class CounterParameters extends FeatureParameters {
   final String exampleParameterOne = 'example_parameter_one';
   final String exampleParameterTwo = 'example_parameter_two';
   final String amount = 'amount';

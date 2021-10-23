@@ -6,21 +6,21 @@ import 'package:loglytics/analytics/analytics_interface.dart';
 import 'package:loglytics/crashlytics/crashlytics_interface.dart';
 import 'package:loglytics/services/log_service.dart';
 
-class AnalyticsService<S extends AnalyticsSubjects, P extends AnalyticsParameters> {
+class AnalyticsService<S extends FeatureSubjects, P extends FeatureParameters> {
   AnalyticsService({
-    required S analyticsSubjects,
-    required P analyticsParameters,
+    required S featureSubjects,
+    required P featureParameters,
     LogService? logService,
     AnalyticsInterface? analyticsImplementation,
     CrashlyticsInterface? crashlyticsImplementation,
-  })  : _analyticsSubjects = analyticsSubjects,
-        _analyticsParameters = analyticsParameters,
+  })  : _featureSubjects = featureSubjects,
+        _featureParameters = featureParameters,
         _logService = logService,
         _analyticsImplementation = analyticsImplementation,
         _crashlyticsImplementation = crashlyticsImplementation;
 
-  final S _analyticsSubjects;
-  final P _analyticsParameters;
+  final S _featureSubjects;
+  final P _featureParameters;
 
   final LogService? _logService;
   final AnalyticsInterface? _analyticsImplementation;
@@ -35,7 +35,7 @@ class AnalyticsService<S extends AnalyticsSubjects, P extends AnalyticsParameter
   }
 
   void userProperty({required String Function(S subjects) property, required Object? value}) {
-    final name = property(_analyticsSubjects);
+    final name = property(_featureSubjects);
     final _value = value?.toString() ?? '-';
     _analyticsImplementation?.setUserProperty(name: name, value: _value);
     _crashlyticsImplementation?.setCustomKey(name, _value);
@@ -43,7 +43,7 @@ class AnalyticsService<S extends AnalyticsSubjects, P extends AnalyticsParameter
   }
 
   void event({required Analytic Function(S subjects, P parameters) analytic}) =>
-      _logEvent(analytic(_analyticsSubjects, _analyticsParameters));
+      _logEvent(analytic(_featureSubjects, _featureParameters));
 
   void tap({
     required String Function(S subjects) subject,
@@ -51,8 +51,8 @@ class AnalyticsService<S extends AnalyticsSubjects, P extends AnalyticsParameter
   }) =>
       _logEvent(
         Analytic(
-          subject: subject(_analyticsSubjects),
-          parameters: parameters?.call(_analyticsParameters),
+          subject: subject(_featureSubjects),
+          parameters: parameters?.call(_featureParameters),
           type: AnalyticType.tap,
         ),
       );
@@ -63,8 +63,8 @@ class AnalyticsService<S extends AnalyticsSubjects, P extends AnalyticsParameter
   }) =>
       _logEvent(
         Analytic(
-          subject: subject(_analyticsSubjects),
-          parameters: parameters?.call(_analyticsParameters),
+          subject: subject(_featureSubjects),
+          parameters: parameters?.call(_featureParameters),
           type: AnalyticType.focus,
         ),
       );
@@ -75,8 +75,8 @@ class AnalyticsService<S extends AnalyticsSubjects, P extends AnalyticsParameter
   }) =>
       _logEvent(
         Analytic(
-          subject: subject(_analyticsSubjects),
-          parameters: parameters?.call(_analyticsParameters),
+          subject: subject(_featureSubjects),
+          parameters: parameters?.call(_featureParameters),
           type: AnalyticType.unFocus,
         ),
       );
@@ -87,8 +87,8 @@ class AnalyticsService<S extends AnalyticsSubjects, P extends AnalyticsParameter
   }) =>
       _logEvent(
         Analytic(
-          subject: subject(_analyticsSubjects),
-          parameters: parameters?.call(_analyticsParameters),
+          subject: subject(_featureSubjects),
+          parameters: parameters?.call(_featureParameters),
           type: AnalyticType.select,
         ),
       );
@@ -99,8 +99,8 @@ class AnalyticsService<S extends AnalyticsSubjects, P extends AnalyticsParameter
   }) =>
       _logEvent(
         Analytic(
-          subject: subject(_analyticsSubjects),
-          parameters: parameters?.call(_analyticsParameters),
+          subject: subject(_featureSubjects),
+          parameters: parameters?.call(_featureParameters),
           type: AnalyticType.view,
         ),
       );
@@ -111,8 +111,8 @@ class AnalyticsService<S extends AnalyticsSubjects, P extends AnalyticsParameter
   }) =>
       _logEvent(
         Analytic(
-          subject: subject(_analyticsSubjects),
-          parameters: parameters?.call(_analyticsParameters),
+          subject: subject(_featureSubjects),
+          parameters: parameters?.call(_featureParameters),
           type: AnalyticType.open,
         ),
       );
@@ -123,8 +123,8 @@ class AnalyticsService<S extends AnalyticsSubjects, P extends AnalyticsParameter
   }) =>
       _logEvent(
         Analytic(
-          subject: subject(_analyticsSubjects),
-          parameters: parameters?.call(_analyticsParameters),
+          subject: subject(_featureSubjects),
+          parameters: parameters?.call(_featureParameters),
           type: AnalyticType.close,
         ),
       );
@@ -135,8 +135,8 @@ class AnalyticsService<S extends AnalyticsSubjects, P extends AnalyticsParameter
   }) =>
       _logEvent(
         Analytic(
-          subject: subject(_analyticsSubjects),
-          parameters: parameters?.call(_analyticsParameters),
+          subject: subject(_featureSubjects),
+          parameters: parameters?.call(_featureParameters),
           type: AnalyticType.create,
         ),
       );
@@ -147,8 +147,8 @@ class AnalyticsService<S extends AnalyticsSubjects, P extends AnalyticsParameter
   }) =>
       _logEvent(
         Analytic(
-          subject: subject(_analyticsSubjects),
-          parameters: parameters?.call(_analyticsParameters),
+          subject: subject(_featureSubjects),
+          parameters: parameters?.call(_featureParameters),
           type: AnalyticType.update,
         ),
       );
@@ -159,8 +159,8 @@ class AnalyticsService<S extends AnalyticsSubjects, P extends AnalyticsParameter
   }) =>
       _logEvent(
         Analytic(
-          subject: subject(_analyticsSubjects),
-          parameters: parameters?.call(_analyticsParameters),
+          subject: subject(_featureSubjects),
+          parameters: parameters?.call(_featureParameters),
           type: AnalyticType.delete,
         ),
       );
@@ -171,8 +171,8 @@ class AnalyticsService<S extends AnalyticsSubjects, P extends AnalyticsParameter
   }) =>
       _logEvent(
         Analytic(
-          subject: subject(_analyticsSubjects),
-          parameters: parameters?.call(_analyticsParameters),
+          subject: subject(_featureSubjects),
+          parameters: parameters?.call(_featureParameters),
           type: AnalyticType.fail,
         ),
       );
@@ -183,8 +183,8 @@ class AnalyticsService<S extends AnalyticsSubjects, P extends AnalyticsParameter
   }) =>
       _logEvent(
         Analytic(
-          subject: subject(_analyticsSubjects),
-          parameters: parameters?.call(_analyticsParameters),
+          subject: subject(_featureSubjects),
+          parameters: parameters?.call(_featureParameters),
           type: AnalyticType.success,
         ),
       );
@@ -195,8 +195,8 @@ class AnalyticsService<S extends AnalyticsSubjects, P extends AnalyticsParameter
   }) =>
       _logEvent(
         Analytic(
-          subject: subject(_analyticsSubjects),
-          parameters: parameters?.call(_analyticsParameters),
+          subject: subject(_featureSubjects),
+          parameters: parameters?.call(_featureParameters),
           type: AnalyticType.valid,
         ),
       );
@@ -207,8 +207,8 @@ class AnalyticsService<S extends AnalyticsSubjects, P extends AnalyticsParameter
   }) =>
       _logEvent(
         Analytic(
-          subject: subject(_analyticsSubjects),
-          parameters: parameters?.call(_analyticsParameters),
+          subject: subject(_featureSubjects),
+          parameters: parameters?.call(_featureParameters),
           type: AnalyticType.invalid,
         ),
       );
@@ -219,8 +219,8 @@ class AnalyticsService<S extends AnalyticsSubjects, P extends AnalyticsParameter
   }) =>
       _logEvent(
         Analytic(
-          subject: subject(_analyticsSubjects),
-          parameters: parameters?.call(_analyticsParameters),
+          subject: subject(_featureSubjects),
+          parameters: parameters?.call(_featureParameters),
           type: AnalyticType.search,
         ),
       );
@@ -231,8 +231,8 @@ class AnalyticsService<S extends AnalyticsSubjects, P extends AnalyticsParameter
   }) =>
       _logEvent(
         Analytic(
-          subject: subject(_analyticsSubjects),
-          parameters: parameters?.call(_analyticsParameters),
+          subject: subject(_featureSubjects),
+          parameters: parameters?.call(_featureParameters),
           type: AnalyticType.share,
         ),
       );
@@ -243,8 +243,8 @@ class AnalyticsService<S extends AnalyticsSubjects, P extends AnalyticsParameter
     bool onlyFirstValue = true,
   }) {
     final analytic = Analytic(
-      subject: subject(_analyticsSubjects),
-      parameters: parameters?.call(_analyticsParameters),
+      subject: subject(_featureSubjects),
+      parameters: parameters?.call(_featureParameters),
       type: AnalyticType.input,
     );
     if (_firstInput == null || !onlyFirstValue || !analytic.equals(_firstInput)) {
@@ -257,7 +257,7 @@ class AnalyticsService<S extends AnalyticsSubjects, P extends AnalyticsParameter
     required String Function(S subjects) subject,
   }) {
     final analytic = Analytic(
-      subject: subject(_analyticsSubjects),
+      subject: subject(_featureSubjects),
       type: AnalyticType.screen,
     );
     _analyticsImplementation?.setCurrentScreen(screenName: analytic.name);

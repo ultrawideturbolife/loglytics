@@ -1,7 +1,6 @@
 import 'package:example/analytics/counter_analytics.dart';
 import 'package:flutter/material.dart';
-import 'package:loglytics/core/abstract/log_service.dart';
-import 'package:loglytics/core/abstract/subjects_and_parameters.dart';
+import 'package:loglytics/loglytics.dart';
 
 void main() {
   LogService.setup();
@@ -33,12 +32,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage>
-    with LogService<ExampleAnalyticsSubjects, ExampleAnalyticsParameters> {
+    with LogService<CounterSubjects, CounterParameters> {
   int _counter = 0;
 
   @override
-  SubjectsAndParameters<ExampleAnalyticsSubjects, ExampleAnalyticsParameters>
-      get subjectsAndParameters => CounterAnalytics();
+  FeatureAnalytics<CounterSubjects, CounterParameters> get featureAnalytics => CounterAnalytics();
 
   void _incrementCounter() {
     analytics.tap(subject: (subjects) => subjects.exampleButton);

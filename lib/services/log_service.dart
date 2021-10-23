@@ -8,22 +8,22 @@ import '../analytics/analytics_interface.dart';
 
 enum LogType { info, warning, error, success, analytic }
 
-mixin LogService<S extends AnalyticsSubjects, P extends AnalyticsParameters> {
+mixin LogService<S extends FeatureSubjects, P extends FeatureParameters> {
   late final AnalyticsService<S, P> _analyticsService = AnalyticsService<S, P>(
-    analyticsSubjects: analytics!.subjects,
-    analyticsParameters: analytics!.parameters,
+    featureSubjects: featureAnalytics!.subjects,
+    featureParameters: featureAnalytics!.parameters,
     analyticsImplementation: _analyticsImplementation,
     crashlyticsImplementation: _crashlyticsImplementation,
     logService: this,
   );
 
-  AnalyticsService<S, P> get analyticsService {
-    assert(analytics != null, 'Override the subjectsAndParameters getter first.');
+  AnalyticsService<S, P> get analytics {
+    assert(featureAnalytics != null, 'Override the featureAnalytics getter first.');
     return _analyticsService;
   }
 
   @protected
-  Analytics<S, P>? get analytics => null;
+  FeatureAnalytics<S, P>? get featureAnalytics => null;
 
   String get logLocation => _logLocation;
   late final String _logLocation = runtimeType.toString();
