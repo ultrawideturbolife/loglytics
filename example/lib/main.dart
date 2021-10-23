@@ -4,11 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:loglytics/core/abstract/log_service.dart';
 
 void main() {
-  LogService.setup(
-    analyticsEnabled: false,
-    crashlyticsEnabled: false,
-    logAnalyticsEnabled: true,
-  );
+  LogService.setup();
   runApp(const MyApp());
 }
 

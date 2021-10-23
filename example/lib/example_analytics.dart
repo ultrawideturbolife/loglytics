@@ -1,4 +1,4 @@
-import 'package:loglytics/core/abstract/analytics_strings.dart';
+import 'package:loglytics/core/abstract/subjects_and_parameters.dart';
 
 class ExampleAnalytics
     extends SubjectsAndParameters<ExampleAnalyticsSubjects, ExampleAnalyticsParameters> {

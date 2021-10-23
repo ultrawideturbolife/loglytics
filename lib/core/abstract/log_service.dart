@@ -12,7 +12,8 @@ mixin LogService<S extends AnalyticsSubjects, P extends AnalyticsParameters> {
   late final AnalyticsService<S, P> _analyticsService = AnalyticsService<S, P>(
     analyticsSubjects: subjectsAndParameters!.subjects,
     analyticsParameters: subjectsAndParameters!.parameters,
-    analyticsInterface: _analyticsInterface,
+    analyticsImplementation: _analyticsImplementation,
+    crashlyticsImplementation: _crashlyticsImplementation,
     logService: this,
   );
 
@@ -28,26 +29,26 @@ mixin LogService<S extends AnalyticsSubjects, P extends AnalyticsParameters> {
 
   // --------------- SETUP --------------- SETUP --------------- SETUP --------------- \\
 
-  static AnalyticsInterface? _analyticsInterface;
-  static bool _shouldLogAnalytics = true;
-  static CrashlyticsInterface? _crashlyticsInterface;
+  static AnalyticsInterface? _analyticsImplementation;
+  static CrashlyticsInterface? _crashlyticsImplementation;
 
   static bool get isAnalyticsEnabled => _isAnalyticsEnabled;
   static bool _isAnalyticsEnabled = false;
   static bool get isCrashlyticsEnabled => _isCrashLyticsEnabled;
   static bool _isCrashLyticsEnabled = false;
   static bool get shouldLogAnalytics => _shouldLogAnalytics;
+  static bool _shouldLogAnalytics = true;
 
   static void setup({
-    AnalyticsInterface? analyticsInterface,
+    AnalyticsInterface? analyticsImplementation,
+    CrashlyticsInterface? crashlyticsImplementation,
     bool? shouldLogAnalytics,
-    CrashlyticsInterface? crashlyticsInterface,
   }) {
-    _analyticsInterface = analyticsInterface;
-    _isAnalyticsEnabled = _analyticsInterface != null;
+    _analyticsImplementation = analyticsImplementation;
+    _isAnalyticsEnabled = _analyticsImplementation != null;
+    _crashlyticsImplementation = crashlyticsImplementation;
+    _isCrashLyticsEnabled = _crashlyticsImplementation != null;
     if (shouldLogAnalytics != null) _shouldLogAnalytics = shouldLogAnalytics;
-    _crashlyticsInterface = crashlyticsInterface;
-    _isCrashLyticsEnabled = _crashlyticsInterface != null;
   }
 
   // --------------- REGULAR --------------- REGULAR --------------- REGULAR --------------- \\
@@ -63,7 +64,7 @@ mixin LogService<S extends AnalyticsSubjects, P extends AnalyticsParameters> {
       );
 
   void logError(String message, {Object? error, StackTrace? stack, bool fatal = false}) {
-    _crashlyticsInterface?.recordError(
+    _crashlyticsImplementation?.recordError(
       error,
       stack ?? StackTrace.current,
       fatal: fatal,
@@ -271,19 +272,19 @@ mixin LogService<S extends AnalyticsSubjects, P extends AnalyticsParameters> {
   // --------------- CRASHLYTICS --------------- CRASHLYTICS --------------- CRASHLYTICS --------------- \\
 
   void _tryLogCrashlyticsMessage(LogType logType, String message) {
-    _crashlyticsInterface?.log('${logType.name}: $message');
+    _crashlyticsImplementation?.log('${logType.name}: $message');
   }
 
   void _tryLogCrashlyticsKeyValue(String key, Object? value) {
-    _crashlyticsInterface?.log('$key: $value');
+    _crashlyticsImplementation?.log('$key: $value');
   }
 
   void _tryLogCrashlyticsKey(Object? key) {
-    _crashlyticsInterface?.log('key: $key');
+    _crashlyticsImplementation?.log('key: $key');
   }
 
   void _tryLogCrashlyticsValue(Object? value) {
-    _crashlyticsInterface?.log('value: $value');
+    _crashlyticsImplementation?.log('value: $value');
   }
 }
 

@@ -11,34 +11,34 @@ class AnalyticsService<S extends AnalyticsSubjects, P extends AnalyticsParameter
     required S analyticsSubjects,
     required P analyticsParameters,
     LogService? logService,
-    AnalyticsInterface? analyticsInterface,
-    CrashlyticsInterface? crashlyticsInterface,
+    AnalyticsInterface? analyticsImplementation,
+    CrashlyticsInterface? crashlyticsImplementation,
   })  : _analyticsSubjects = analyticsSubjects,
         _analyticsParameters = analyticsParameters,
         _logService = logService,
-        _analyticsInterface = analyticsInterface,
-        _crashlyticsInterface = crashlyticsInterface;
+        _analyticsImplementation = analyticsImplementation,
+        _crashlyticsImplementation = crashlyticsImplementation;
 
   final S _analyticsSubjects;
   final P _analyticsParameters;
 
   final LogService? _logService;
-  final AnalyticsInterface? _analyticsInterface;
-  final CrashlyticsInterface? _crashlyticsInterface;
+  final AnalyticsInterface? _analyticsImplementation;
+  final CrashlyticsInterface? _crashlyticsImplementation;
 
   Analytic? _firstInput;
 
   void userId({required String userId}) {
-    _analyticsInterface?.setUserId(userId);
-    _crashlyticsInterface?.setUserIdentifier(userId);
+    _analyticsImplementation?.setUserId(userId);
+    _crashlyticsImplementation?.setUserIdentifier(userId);
     _logService?.logAnalytic(name: 'user_id', value: userId);
   }
 
   void userProperty({required String Function(S subjects) property, required Object? value}) {
     final name = property(_analyticsSubjects);
     final _value = value?.toString() ?? '-';
-    _analyticsInterface?.setUserProperty(name: name, value: _value);
-    _crashlyticsInterface?.setCustomKey(name, _value);
+    _analyticsImplementation?.setUserProperty(name: name, value: _value);
+    _crashlyticsImplementation?.setCustomKey(name, _value);
     _logService?.logAnalytic(name: name, value: _value);
   }
 
@@ -260,17 +260,17 @@ class AnalyticsService<S extends AnalyticsSubjects, P extends AnalyticsParameter
       subject: subject(_analyticsSubjects),
       type: AnalyticType.screen,
     );
-    _analyticsInterface?.setCurrentScreen(screenName: analytic.name);
+    _analyticsImplementation?.setCurrentScreen(screenName: analytic.name);
     _logService?.logAnalytic(name: analytic.name);
   }
 
-  Future<void> reset() async => _analyticsInterface?.resetAnalyticsData();
+  Future<void> reset() async => _analyticsImplementation?.resetAnalyticsData();
   void resetFirstInput() async => _firstInput = null;
 
   void _logEvent(Analytic analytic) {
     final name = analytic.name;
     final parameters = analytic.parameters;
-    _analyticsInterface?.logEvent(name: name, parameters: parameters);
+    _analyticsImplementation?.logEvent(name: name, parameters: parameters);
     _logService?.logAnalytic(name: name, parameters: parameters);
   }
 }

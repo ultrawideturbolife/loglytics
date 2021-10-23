@@ -1,4 +1,5 @@
 import 'package:loglytics/core/abstract/log_service.dart';
+import 'package:loglytics/core/abstract/subjects_and_parameters.dart';
 
 import 'example_analytics.dart';
 
