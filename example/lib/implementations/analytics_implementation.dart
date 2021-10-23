@@ -13,10 +13,14 @@ class AnalyticsImplementation implements AnalyticsInterface {
   Future<void> resetAnalyticsData() => _firebaseAnalytics.resetAnalyticsData();
 
   @override
-  Future<void> setCurrentScreen(
-          {required String? screenName, String screenClassOverride = 'Flutter'}) =>
-      _firebaseAnalytics.setCurrentScreen(
-          screenName: screenName, screenClassOverride: screenClassOverride);
+  Future<void> setCurrentScreen({required String name, String? screenClassOverride}) {
+    if (screenClassOverride != null) {
+      return _firebaseAnalytics.setCurrentScreen(
+          screenName: name, screenClassOverride: screenClassOverride);
+    } else {
+      return _firebaseAnalytics.setCurrentScreen(screenName: name);
+    }
+  }
 
   @override
   Future<void> setUserId(String? id) => _firebaseAnalytics.setUserId(id);

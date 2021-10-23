@@ -258,7 +258,7 @@ class AnalyticsService<S extends FeatureSubjects, P extends FeatureParameters> {
       subject: subject(_featureSubjects),
       type: AnalyticType.screen,
     );
-    _analyticsImplementation?.setCurrentScreen(screenName: analytic.name);
+    _analyticsImplementation?.setCurrentScreen(name: analytic.name);
     _logService?.logAnalytic(name: analytic.name);
   }
 
