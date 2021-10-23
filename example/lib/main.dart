@@ -1,15 +1,15 @@
-import 'package:example/example_analytics.dart';
-import 'package:example/example_class_with_analytics.dart';
+import 'package:example/analytics/counter_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:loglytics/core/abstract/log_service.dart';
+import 'package:loglytics/core/abstract/subjects_and_parameters.dart';
 
 void main() {
   LogService.setup();
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class MyApp extends StatelessWidget with LogService {
+  MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,10 +36,11 @@ class _MyHomePageState extends State<MyHomePage>
     with LogService<ExampleAnalyticsSubjects, ExampleAnalyticsParameters> {
   int _counter = 0;
 
-  final ExampleClassWithAnalytics exampleClassWithAnalytics = ExampleClassWithAnalytics();
+  @override
+  SubjectsAndParameters<ExampleAnalyticsSubjects, ExampleAnalyticsParameters>
+      get subjectsAndParameters => CounterAnalytics();
 
   void _incrementCounter() {
-    exampleClassWithAnalytics.example();
     analytics.tap(subject: (subjects) => subjects.exampleButton);
     setState(
       () {

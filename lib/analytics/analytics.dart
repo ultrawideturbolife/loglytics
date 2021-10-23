@@ -1,4 +1,4 @@
-abstract class SubjectsAndParameters<S extends AnalyticsSubjects, P extends AnalyticsParameters> {
+abstract class Analytics<S extends AnalyticsSubjects, P extends AnalyticsParameters> {
   S get subjects;
   P get parameters;
 }

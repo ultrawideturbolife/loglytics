@@ -1,6 +1,6 @@
 import 'package:loglytics/core/abstract/subjects_and_parameters.dart';
 
-class ExampleAnalytics
+class CounterAnalytics
     extends SubjectsAndParameters<ExampleAnalyticsSubjects, ExampleAnalyticsParameters> {
   @override
   ExampleAnalyticsSubjects get subjects => _templatesSubjects;

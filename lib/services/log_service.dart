@@ -1,28 +1,29 @@
 import 'package:flutter/foundation.dart';
-import 'package:loglytics/core/abstract/crashlytics_interface.dart';
-import 'package:loglytics/core/abstract/subjects_and_parameters.dart';
-import 'package:loglytics/core/services/analytics_service.dart';
+import 'package:loglytics/analytics/analytics.dart';
+import 'package:loglytics/crashlytics/crashlytics_interface.dart';
+import 'package:loglytics/services/analytics_service.dart';
 
-import 'analytics_interface.dart';
-import 'subjects_and_parameters.dart';
+import '../analytics/analytics.dart';
+import '../analytics/analytics_interface.dart';
 
 enum LogType { info, warning, error, success, analytic }
 
 mixin LogService<S extends AnalyticsSubjects, P extends AnalyticsParameters> {
   late final AnalyticsService<S, P> _analyticsService = AnalyticsService<S, P>(
-    analyticsSubjects: subjectsAndParameters!.subjects,
-    analyticsParameters: subjectsAndParameters!.parameters,
+    analyticsSubjects: analytics!.subjects,
+    analyticsParameters: analytics!.parameters,
     analyticsImplementation: _analyticsImplementation,
     crashlyticsImplementation: _crashlyticsImplementation,
     logService: this,
   );
 
-  AnalyticsService<S, P> get analytics {
-    assert(subjectsAndParameters != null, 'Override the subjectsAndParameters getter first.');
+  AnalyticsService<S, P> get analyticsService {
+    assert(analytics != null, 'Override the subjectsAndParameters getter first.');
     return _analyticsService;
   }
 
-  SubjectsAndParameters<S, P>? get subjectsAndParameters => null;
+  @protected
+  Analytics<S, P>? get analytics => null;
 
   String get logLocation => _logLocation;
   late final String _logLocation = runtimeType.toString();

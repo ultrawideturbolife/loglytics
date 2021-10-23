@@ -1,10 +1,10 @@
 // @dart = 2.12
 
-import 'package:loglytics/core/abstract/analytics_interface.dart';
-import 'package:loglytics/core/abstract/crashlytics_interface.dart';
-import 'package:loglytics/core/abstract/log_service.dart';
-import 'package:loglytics/core/abstract/subjects_and_parameters.dart';
-import 'package:loglytics/core/analytics/analytic.dart';
+import 'package:loglytics/analytics/analytic.dart';
+import 'package:loglytics/analytics/analytics.dart';
+import 'package:loglytics/analytics/analytics_interface.dart';
+import 'package:loglytics/crashlytics/crashlytics_interface.dart';
+import 'package:loglytics/services/log_service.dart';
 
 class AnalyticsService<S extends AnalyticsSubjects, P extends AnalyticsParameters> {
   AnalyticsService({

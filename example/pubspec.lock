@@ -65,7 +65,7 @@ packages:
     source: hosted
     version: "9.0.2"
   firebase_analytics:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: firebase_analytics
       url: "https://pub.dartlang.org"
@@ -107,7 +107,7 @@ packages:
     source: hosted
     version: "1.1.0"
   firebase_crashlytics:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: firebase_crashlytics
       url: "https://pub.dartlang.org"
@@ -175,7 +175,7 @@ packages:
     description:
       path: "."
       ref: main
-      resolved-ref: "4aa99e770dfe3cbf7c25decd6c87c083548a6f32"
+      resolved-ref: "848b39f4a83301ffd0f5f501169bf54e9b589813"
       url: "https://github.com/codaveto/loglytics.git"
     source: git
     version: "0.0.1"
