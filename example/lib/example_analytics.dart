@@ -12,9 +12,15 @@ class ExampleAnalytics
 }
 
 class ExampleAnalyticsSubjects extends AnalyticsSubjects {
-  final String exampleSubject = 'example_subject';
+  final String userId = 'user_id';
+  final String exampleButton = 'example_button';
+  final String exampleEntity = 'example_entity';
+  final String updateExample = 'update_example';
+  final String incrementCounter = 'increment_counter';
 }
 
 class ExampleAnalyticsParameters extends AnalyticsParameters {
-  final String exampleParameter = 'example_parameter';
+  final String exampleParameterOne = 'example_parameter_one';
+  final String exampleParameterTwo = 'example_parameter_two';
+  final String amount = 'amount';
 }
