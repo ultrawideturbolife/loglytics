@@ -175,7 +175,7 @@ packages:
     description:
       path: "."
       ref: main
-      resolved-ref: a21d158f9f635d75fd3c731b73e57fbdfce2c2c7
+      resolved-ref: f3bfae1da5a186dab4d4fff3c73a041481be5705
       url: "https://github.com/codaveto/loglytics.git"
     source: git
     version: "0.0.1"

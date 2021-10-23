@@ -1,9 +1,21 @@
 import 'package:example/analytics/counter_analytics.dart';
+import 'package:example/implementations/analytics_implementation.dart';
+import 'package:example/implementations/crashlytics_implementation.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:loglytics/loglytics.dart';
 
 void main() {
-  LogService.setup();
+  LogService.setup(
+    analyticsImplementation: AnalyticsImplementation(
+      FirebaseAnalytics(),
+    ),
+    crashlyticsImplementation: CrashlyticsImplementation(
+      FirebaseCrashlytics.instance,
+    ),
+    shouldLogAnalytics: true,
+  );
   runApp(MyApp());
 }
 

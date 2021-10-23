@@ -1,8 +1,8 @@
 // @dart = 2.12
 
 import 'package:loglytics/analytics/analytic.dart';
-import 'package:loglytics/analytics/analytics.dart';
 import 'package:loglytics/analytics/analytics_interface.dart';
+import 'package:loglytics/analytics/feature_analytics.dart';
 import 'package:loglytics/crashlytics/crashlytics_interface.dart';
 import 'package:loglytics/services/log_service.dart';
 

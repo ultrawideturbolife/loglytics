@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
-import 'package:loglytics/analytics/analytics.dart';
+import 'package:loglytics/analytics/feature_analytics.dart';
 import 'package:loglytics/crashlytics/crashlytics_interface.dart';
 import 'package:loglytics/services/analytics_service.dart';
 
-import '../analytics/analytics.dart';
 import '../analytics/analytics_interface.dart';
+import '../analytics/feature_analytics.dart';
 
 enum LogType { info, warning, error, success, analytic }
 
