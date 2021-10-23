@@ -12,9 +12,9 @@ class ExampleAnalytics
 }
 
 class ExampleAnalyticsSubjects extends AnalyticsSubjects {
-  final String subject = 'sub_ject';
+  final String exampleSubject = 'example_subject';
 }
 
 class ExampleAnalyticsParameters extends AnalyticsParameters {
-  final String parameter = 'para_meter';
+  final String exampleParameter = 'example_parameter';
 }

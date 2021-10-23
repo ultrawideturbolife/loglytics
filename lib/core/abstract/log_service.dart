@@ -21,7 +21,7 @@ mixin LogService<S extends AnalyticsSubjects, P extends AnalyticsParameters> {
     return _analyticsService;
   }
 
-  AnalyticsStrings<S, P>? get analyticsStrings;
+  AnalyticsStrings<S, P>? get analyticsStrings => null;
 
   String get logLocation => _logLocation;
   late final String _logLocation = runtimeType.toString();
