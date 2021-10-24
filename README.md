@@ -112,12 +112,12 @@ import 'package:loglytics/loglytics.dart';
 
 class TemplateAnalytics extends FeatureAnalytics<TemplateSubjects, TemplateParameters> {
   @override
-  TemplateSubjects get subjects => _counterSubjects;
-  late final TemplateSubjects _counterSubjects = TemplateSubjects();
+  TemplateSubjects get subjects => _templateSubjects;
+  late final TemplateSubjects _templateSubjects = TemplateSubjects();
 
   @override
-  TemplateParameters get parameters => _counterParameters;
-  late final TemplateParameters _counterParameters = TemplateParameters();
+  TemplateParameters get parameters => _templateParameters;
+  late final TemplateParameters _templateParameters = TemplateParameters();
 }
 
 class TemplateSubjects extends FeatureSubjects {}
