@@ -1,14 +1,10 @@
 # 📖 Introduction
 
----
-
 Loglytics aims to provide a complete solution for simple but powerful logging and simultaneously (but optionally) sending analytics and crash reports inside your apps. Originally this package was created for integration with `firebase_analytics` and `firebase_crashlytics`, but through an interface it is now also possible to implement your own analytics or crash reporting solutions.
 
 Besides trying to facilitate easier logging and sending of analytics, Loglytics also aims to improve your overall approach to analytics. Everything analytic inside Loglytics is based on *subjects* and *parameters*. Each of your analytics will be grouped per feature (or other part of our project that you seem fit) and they will have a list of subjects (e.g. a `'login_button'`) and possible parameters (e.g. `'time_on_page'`) defined for them. In general subjects may have an analytic event attached to them and parameters are for extra information. Because we specify and save our analytics in a central location for each feature (or other part of our project), we create a certain peace, clarity and structure within our projects that's often missed when analytics are being sent from all over the place.
 
 # 🔎 How do I start?
-
----
 
 The first thing we need to do is determine if we want to implement analytics and/or crashlytics in your project. If we don't, we can still use the `LogService` to log anything and everywhere without having to configure anything. If we do want to use one or both of them we must implement the `AnalyticsInterface` and `CrashlyticsInterface` respectively so we can pass them along to the `LogService.setup()` method. We will need to call the `LogService.setup()` method before we can send any analytics or crashlytics using this package. See below for an example of an implementation of where `FirebaseAnalytics` and `FirebaseCrashlytics` were used.
 
@@ -109,8 +105,6 @@ void main() {
 
 # 📈 How do I send analytics (and crash reports)?
 
----
-
 Next we need to determine how we want to implement the feature-like way of specifying analytics in our project. In any case, it is important that we can define parts of our project (such as a feature) and link them to subjects and parameters for that specific part (or feature). Once we are clear on how we want to do this, we can set up our first implementation of a `FeatureAnalytics`. See below for an example of what a template of that looks like.
 
 ```dart
@@ -134,17 +128,17 @@ class TemplateParameters extends FeatureParameters {}
 Defining our first `FeatureAnalytics` consists of 3 steps:
 
 1. **Rename the TemplateAnalytics, TemplateSubjects and TemplateParameters.**
-    
+
     We can do this in a smart way by finding the word `Template` throughout the file and replacing it with the name of the feature or part of our project that these analytics are for. We will use `Login` as our feature in this example.
-    
+
 2. **Specifying your first subjects.**
-    
+
     We can do this by defining our first subjects as immutable variables in our just renamed `TemplateSubjects`. Subjects are, as the name implies, subjects of a certain feature/part of our app. These can be obvious things like buttons (for example `'login_button'`) and screens (for example `'login_screen'`), but also actions itself like login (`'login'`). Based on these subjects we will later send analytic events to our provider. For example a `'login_button'` might get a `tap`, a `'login_screen'` might get a `view` and a `'login'` might get `success`.
-    
+
 3. **Specifying your first parameters.**
-    
+
     We can do this by defining our first parameters as immutable variables in our just renamed `TemplateParameters`. Parameters are not always applicable, but they can often communicate additional valuable information. For example, when logging in, think about the number of failed attempts (`'number_of_tries'`) or the amount of time the user took (`'time_on_page’`) to login. Check out the example below for more information.
-    
+
 
 ```dart
 import 'package:loglytics/loglytics.dart';
@@ -199,8 +193,6 @@ class LoginClass with LogService<LoginSubjects, LoginParameters> {
 ```
 
 # 🥑 Additional information
-
----
 
 **Todo:**
 
