@@ -24,7 +24,7 @@ class Analytic {
               parameters == other.parameters);
 }
 
-/// Every action or state that's applicable to subject from [FeatureSubjects]
+/// Every action or state that's applicable to a subject from [FeatureSubjects].
 enum AnalyticType {
   tap,
   focus,

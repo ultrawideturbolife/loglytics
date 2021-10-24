@@ -3,13 +3,8 @@ import 'package:loglytics/loglytics.dart';
 /// Used to wrap implementations of [FeatureSubjects] and [FeatureParameters] for a specific feature.
 ///
 /// Each feature in your app should have its own [FeatureAnalytics] implementation with its own
-/// respective [FeatureSubjects] and [FeatureParameters] implementations.
-///
-/// By then specifying the implementations as generic arguments to a [LogService] like
-/// LogService<FeatureSubjectsImplementation, FeatureParametersImplementation>
-/// the [LogService.analytics] will have access to these implementations. Do remember to also
-/// override [LogService.featureAnalytics] and provide your implementation of this class to
-/// complete the setup.
+/// respective [FeatureSubjects] and [FeatureParameters] implementations. Check out the [LogService]
+/// documentation for more info on how to use these as part of your anakytics solution.
 abstract class FeatureAnalytics<S extends FeatureSubjects, P extends FeatureParameters> {
   S get subjects;
   P get parameters;

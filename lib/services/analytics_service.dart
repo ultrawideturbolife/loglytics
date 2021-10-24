@@ -9,7 +9,7 @@ import 'package:loglytics/services/log_service.dart';
 /// Each [AnalyticType] has its own method that exposes implementations of predefined
 /// [FeatureSubjects] and [FeatureParameters]. When wanting to register an [AnalyticType.tap] for
 /// example you can use [AnalyticsService.tap] and it the will automatically provide you with the
-/// proper [FeatureSubjects] that the tap could relate to.
+/// proper [FeatureSubjects] and [FeatureParameters] that the tap could relate to.
 class AnalyticsService<S extends FeatureSubjects, P extends FeatureParameters> {
   AnalyticsService({
     required S featureSubjects,
