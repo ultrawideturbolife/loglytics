@@ -1,8 +1,8 @@
-import 'package:loglytics/analytics/analytic.dart';
-import 'package:loglytics/analytics/analytics_interface.dart';
-import 'package:loglytics/analytics/feature_analytics.dart';
-import 'package:loglytics/crashlytics/crashlytics_interface.dart';
-import 'package:loglytics/services/log_service.dart';
+import '../analytics/analytic.dart';
+import '../analytics/analytics_interface.dart';
+import '../analytics/feature_analytics.dart';
+import '../crashlytics/crashlytics_interface.dart';
+import 'log_service.dart';
 
 /// Used to provide an easy interface for sending analytics.
 ///
@@ -288,6 +288,32 @@ class AnalyticsService<S extends FeatureSubjects, P extends FeatureParameters> {
     }
     _firstInput = analytic;
   }
+
+  /// Sends an [AnalyticType.increment] and provides the appropriate [FeatureSubjects] and optional [FeatureParameters].
+  void increment({
+    required String Function(S subjects) subject,
+    Map<String, Object?>? Function(P parameters)? parameters,
+  }) =>
+      _logEvent(
+        Analytic(
+          subject: subject(_featureSubjects),
+          parameters: parameters?.call(_featureParameters),
+          type: AnalyticType.increment,
+        ),
+      );
+
+  /// Sends an [AnalyticType.decrement] and provides the appropriate [FeatureSubjects] and optional [FeatureParameters].
+  void decrement({
+    required String Function(S subjects) subject,
+    Map<String, Object?>? Function(P parameters)? parameters,
+  }) =>
+      _logEvent(
+        Analytic(
+          subject: subject(_featureSubjects),
+          parameters: parameters?.call(_featureParameters),
+          type: AnalyticType.decrement,
+        ),
+      );
 
   /// Sends an [AnalyticType.input] and provides the appropriate [FeatureSubjects] where a possible screen name should reside.
   void screen({

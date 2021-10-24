@@ -1,8 +1,8 @@
 library loglytics;
 
-export 'analytics/analytic.dart';
-export 'analytics/analytics_interface.dart';
-export 'analytics/feature_analytics.dart';
-export 'crashlytics/crashlytics_interface.dart';
-export 'services/analytics_service.dart';
-export 'services/log_service.dart';
+export 'src/analytics/analytic.dart';
+export 'src/analytics/analytics_interface.dart';
+export 'src/analytics/feature_analytics.dart';
+export 'src/crashlytics/crashlytics_interface.dart';
+export 'src/services/analytics_service.dart';
+export 'src/services/log_service.dart';

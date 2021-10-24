@@ -1,5 +1,3 @@
-import 'package:loglytics/loglytics.dart';
-
 /// Wrapper class that's used to structure and provide analytics in the [AnalyticsService].
 class Analytic {
   const Analytic({
@@ -43,6 +41,8 @@ enum AnalyticType {
   search,
   share,
   input,
+  increment,
+  decrement,
   screen,
   event
 }
@@ -89,6 +89,10 @@ extension on AnalyticType {
         return 'screen';
       case AnalyticType.event:
         return 'event';
+      case AnalyticType.increment:
+        return 'increment';
+      case AnalyticType.decrement:
+        return 'decrement';
     }
   }
 }
