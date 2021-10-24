@@ -23,7 +23,8 @@ import 'package:loglytics/loglytics.dart';
 ///
 /// class TemplateParameters extends FeatureParameters {}
 @immutable
-abstract class FeatureAnalytics<S extends FeatureSubjects, P extends FeatureParameters> {
+abstract class FeatureAnalytics<S extends FeatureSubjects,
+    P extends FeatureParameters> {
   S get subjects;
   P get parameters;
 }

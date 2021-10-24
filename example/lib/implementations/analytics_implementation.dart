@@ -6,14 +6,16 @@ class AnalyticsImplementation implements AnalyticsInterface {
   final FirebaseAnalytics _firebaseAnalytics;
 
   @override
-  Future<void> logEvent({required String name, Map<String, Object?>? parameters}) =>
+  Future<void> logEvent(
+          {required String name, Map<String, Object?>? parameters}) =>
       _firebaseAnalytics.logEvent(name: name, parameters: parameters);
 
   @override
   Future<void> resetAnalyticsData() => _firebaseAnalytics.resetAnalyticsData();
 
   @override
-  Future<void> setCurrentScreen({required String name, String? screenClassOverride}) {
+  Future<void> setCurrentScreen(
+      {required String name, String? screenClassOverride}) {
     if (screenClassOverride != null) {
       return _firebaseAnalytics.setCurrentScreen(
           screenName: name, screenClassOverride: screenClassOverride);
@@ -26,6 +28,7 @@ class AnalyticsImplementation implements AnalyticsInterface {
   Future<void> setUserId(String? id) => _firebaseAnalytics.setUserId(id);
 
   @override
-  Future<void> setUserProperty({required String name, required String? value}) =>
+  Future<void> setUserProperty(
+          {required String name, required String? value}) =>
       _firebaseAnalytics.setUserProperty(name: name, value: value);
 }

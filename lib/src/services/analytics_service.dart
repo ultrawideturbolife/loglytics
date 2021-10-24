@@ -47,7 +47,8 @@ class AnalyticsService<S extends FeatureSubjects, P extends FeatureParameters> {
   ///
   /// This applies to your possible [_analyticsImplementation] as well as your
   /// [_crashlyticsImplementation].
-  void userProperty({required String Function(S subjects) property, required Object? value}) {
+  void userProperty(
+      {required String Function(S subjects) property, required Object? value}) {
     final name = property(_featureSubjects);
     final _value = value?.toString() ?? '-';
     _analyticsImplementation?.setUserProperty(name: name, value: _value);
@@ -283,7 +284,9 @@ class AnalyticsService<S extends FeatureSubjects, P extends FeatureParameters> {
       parameters: parameters?.call(_featureParameters),
       type: AnalyticType.input,
     );
-    if (_firstInput == null || !onlyFirstValue || !analytic.equals(_firstInput)) {
+    if (_firstInput == null ||
+        !onlyFirstValue ||
+        !analytic.equals(_firstInput)) {
       _logEvent(analytic);
     }
     _firstInput = analytic;

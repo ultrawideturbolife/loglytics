@@ -48,7 +48,8 @@ mixin LogService<S extends FeatureSubjects, P extends FeatureParameters> {
   /// [FeatureParameters] as specified in the [LogService.featureAnalytics] method that you should
   /// override before using this method.
   AnalyticsService<S, P> get analytics {
-    assert(featureAnalytics != null, 'Override the featureAnalytics getter first.');
+    assert(featureAnalytics != null,
+        'Override the featureAnalytics getter first.');
     return _analyticsService;
   }
 
@@ -129,8 +130,8 @@ mixin LogService<S extends FeatureSubjects, P extends FeatureParameters> {
       _logMessage(message: error.toString(), logType: LogType.error);
     }
     _logMessage(
-        message:
-            stack?.toString() ?? StackTrace.current.toString().split('\n').sublist(2, 8).join('\n'),
+        message: stack?.toString() ??
+            StackTrace.current.toString().split('\n').sublist(2, 8).join('\n'),
         logType: LogType.error);
   }
 
@@ -326,7 +327,8 @@ mixin LogService<S extends FeatureSubjects, P extends FeatureParameters> {
     if (message != null) _tryLogCrashlyticsMessage(message, logType);
     _tryLogCrashlyticsValue(value, logType);
     final time = _time;
-    if (message != null) debugPrint('$time [$_logLocation] ${'${logType.icon} $message '}');
+    if (message != null)
+      debugPrint('$time [$_logLocation] ${'${logType.icon} $message '}');
     debugPrint('$time [$_logLocation] 💾 $value');
   }
 
