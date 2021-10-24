@@ -1,6 +1,6 @@
 name: loglytics
 description: A user friendly way of structuring logging, analytics and crash reports to create more calmness in your project.
-version: 0.0.1
+version: 0.1.0
 homepage: https://github.com/codaveto/loglytics
 
 environment:

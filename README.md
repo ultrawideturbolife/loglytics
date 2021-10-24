@@ -1,4 +1,4 @@
-# 📖 Introduction
+# 📊 Loglytics [![Pub Version](https://img.shields.io/pub/v/loglytics)](https://pub.dev/packages/loglytics)
 
 Loglytics aims to provide a complete solution for simple but powerful logging and simultaneously (but optionally) sending analytics and crash reports inside your apps. Originally this package was created for integration with `firebase_analytics` and `firebase_crashlytics`, but through an interface it is now also possible to implement your own analytics or crash reporting solutions.
 
@@ -128,17 +128,17 @@ class TemplateParameters extends FeatureParameters {}
 Defining our first `FeatureAnalytics` consists of 3 steps:
 
 1. **Rename the TemplateAnalytics, TemplateSubjects and TemplateParameters.**
-
+    
     We can do this in a smart way by finding the word `Template` throughout the file and replacing it with the name of the feature or part of our project that these analytics are for. We will use `Login` as our feature in this example.
-
+    
 2. **Specifying your first subjects.**
-
+    
     We can do this by defining our first subjects as immutable variables in our just renamed `TemplateSubjects`. Subjects are, as the name implies, subjects of a certain feature/part of our app. These can be obvious things like buttons (for example `'login_button'`) and screens (for example `'login_screen'`), but also actions itself like login (`'login'`). Based on these subjects we will later send analytic events to our provider. For example a `'login_button'` might get a `tap`, a `'login_screen'` might get a `view` and a `'login'` might get `success`.
-
+    
 3. **Specifying your first parameters.**
-
+    
     We can do this by defining our first parameters as immutable variables in our just renamed `TemplateParameters`. Parameters are not always applicable, but they can often communicate additional valuable information. For example, when logging in, think about the number of failed attempts (`'number_of_tries'`) or the amount of time the user took (`'time_on_page’`) to login. Check out the example below for more information.
-
+    
 
 ```dart
 import 'package:loglytics/loglytics.dart';
