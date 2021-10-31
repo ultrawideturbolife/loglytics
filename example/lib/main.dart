@@ -8,7 +8,7 @@ import 'implementations/analytics_implementation.dart';
 import 'implementations/crash_reports_implementation.dart';
 
 void main() {
-  LogService.setup(
+  Loglytics.setup(
     analyticsImplementation: AnalyticsImplementation(
       FirebaseAnalytics(),
     ),
@@ -20,7 +20,7 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget with LogService {
+class MyApp extends StatelessWidget with Loglytics {
   MyApp({Key? key}) : super(key: key);
 
   @override
@@ -45,7 +45,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage>
-    with LogService<CounterSubjects, CounterParameters> {
+    with Loglytics<CounterSubjects, CounterParameters> {
   int _counter = 0;
 
   @override

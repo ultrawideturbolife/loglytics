@@ -6,7 +6,7 @@ Besides trying to facilitate easier logging and sending of analytics, Loglytics 
 
 # 🔎 How do I start?
 
-The first thing we need to do is determine if we want to implement analytics and/or crash reporting in your project. If we don't, we can still use the `LogService` to log anything and everywhere without having to configure anything. If we do want to use one or both of them we must implement the `AnalyticsInterface` and `CrashReportsInterface` respectively so we can pass them along to the `LogService.setup()` method. We will need to call the `LogService.setup()` method before we can send any analytics or crash reports using this package. See below for an example of an implementation of where `FirebaseAnalytics` and `FirebaseCrashlytics` were used.
+The first thing we need to do is determine if we want to implement analytics and/or crash reporting in your project. If we don't, we can still use the `Loglytics` to log anything and everywhere without having to configure anything. If we do want to use one or both of them we must implement the `AnalyticsInterface` and `CrashReportsInterface` respectively so we can pass them along to the `Loglytics.setup()` method. We will need to call the `Loglytics.setup()` method before we can send any analytics or crash reports using this package. See below for an example of an implementation of where `FirebaseAnalytics` and `FirebaseCrashlytics` were used.
 
 ### AnalyticsInterface
 
@@ -90,7 +90,7 @@ class CrashReportsImplementation implements CrashReportsInterface {
 
 ```dart
 void main() {
-  LogService.setup(
+  Loglytics.setup(
     analyticsImplementation: AnalyticsImplementation(
       FirebaseAnalytics(),
     ),
@@ -163,16 +163,16 @@ class LoginParameters extends FeatureParameters {
 }
 ```
 
-After having specified at least one subject and one parameter we can now move on to our fist usage of a `LogService`. As mentioned earlier, the `LogService` can be used without analytics. We do this by simply adding the `LogService` as a `mixin` to a class. Et voilá now we have all the log capabilities this package has to offer, but without the analytics and crash reporting implementation. However, we do want to use analytics in this example so we specify two generic types when adding the `LogService` `mixin`. The two generic types are the implementations of the `FeatureSubjects` and `FeatureParameters` we just made. This looks like the following:
+After having specified at least one subject and one parameter we can now move on to our fist usage of a `Loglytics`. As mentioned earlier, the `Loglytics` can be used without analytics. We do this by simply adding the `Loglytics` as a `mixin` to a class. Et voilá now we have all the log capabilities this package has to offer, but without the analytics and crash reporting implementation. However, we do want to use analytics in this example so we specify two generic types when adding the `Loglytics` `mixin`. The two generic types are the implementations of the `FeatureSubjects` and `FeatureParameters` we just made. This looks like the following:
 
 ```dart
-class LoginClass with LogService<LoginSubjects, LoginParameters> {}
+class LoginClass with Loglytics<LoginSubjects, LoginParameters> {}
 ```
 
-As a last step we need to override the `LogService.featureAnalytics` getter and provide it with our implementation of the `FeatureAnalytics`. That's it, now we have everything at our disposal to log and send analytics for this feature/part of your app. Now when we type in `analytics` and then choose one of the actions we will have all our defined subjects and parameters (for that feature/part of our app) at our disposal in a callback (🆒). This looks like this:
+As a last step we need to override the `Loglytics.featureAnalytics` getter and provide it with our implementation of the `FeatureAnalytics`. That's it, now we have everything at our disposal to log and send analytics for this feature/part of your app. Now when we type in `analytics` and then choose one of the actions we will have all our defined subjects and parameters (for that feature/part of our app) at our disposal in a callback (🆒). This looks like this:
 
 ```dart
-class LoginClass with LogService<LoginSubjects, LoginParameters> {
+class LoginClass with Loglytics<LoginSubjects, LoginParameters> {
   void login() {
 		// Let's log the tap of the button here.
     analytics.tap(subject: (subjects) => subjects.loginButton);

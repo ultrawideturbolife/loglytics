@@ -1,5 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
+import 'package:loglytics/loglytics.dart';
 
 class CrashReportsImplementation implements CrashReportsInterface {
   CrashReportsImplementation(this._firebaseCrashlytics);

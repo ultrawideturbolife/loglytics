@@ -14,19 +14,19 @@ class AnalyticsService<S extends FeatureSubjects, P extends FeatureParameters> {
   AnalyticsService({
     required S featureSubjects,
     required P featureParameters,
-    Loglytics? logService,
+    Loglytics? loglytics,
     AnalyticsInterface? analyticsImplementation,
     CrashReportsInterface? crashReportsImplementation,
   })  : _featureSubjects = featureSubjects,
         _featureParameters = featureParameters,
-        _logService = logService,
+        _loglytics = loglytics,
         _analyticsImplementation = analyticsImplementation,
         _crashReportsImplementation = crashReportsImplementation;
 
   final S _featureSubjects;
   final P _featureParameters;
 
-  final Loglytics? _logService;
+  final Loglytics? _loglytics;
   final AnalyticsInterface? _analyticsImplementation;
   final CrashReportsInterface? _crashReportsImplementation;
 
@@ -40,7 +40,7 @@ class AnalyticsService<S extends FeatureSubjects, P extends FeatureParameters> {
   void userId({required String userId}) {
     _analyticsImplementation?.setUserId(userId);
     _crashReportsImplementation?.setUserIdentifier(userId);
-    _logService?.logAnalytic(name: 'user_id', value: userId);
+    _loglytics?.logAnalytic(name: 'user_id', value: userId);
   }
 
   /// Sets a user [property] and [value] that persists throughout the app.
@@ -52,7 +52,7 @@ class AnalyticsService<S extends FeatureSubjects, P extends FeatureParameters> {
     final _value = value?.toString() ?? '-';
     _analyticsImplementation?.setUserProperty(name: name, value: _value);
     _crashReportsImplementation?.setCustomKey(name, _value);
-    _logService?.logAnalytic(name: name, value: _value);
+    _loglytics?.logAnalytic(name: name, value: _value);
   }
 
   /// Sends a custom analytic event by providing both [FeatureSubjects] and [FeatureParameters].
@@ -324,7 +324,7 @@ class AnalyticsService<S extends FeatureSubjects, P extends FeatureParameters> {
       type: AnalyticType.screen,
     );
     _analyticsImplementation?.setCurrentScreen(name: analytic.name);
-    _logService?.logAnalytic(name: analytic.name);
+    _loglytics?.logAnalytic(name: analytic.name);
   }
 
   /// Resets all current analytics data.
@@ -338,6 +338,6 @@ class AnalyticsService<S extends FeatureSubjects, P extends FeatureParameters> {
     final name = analytic.name;
     final parameters = analytic.parameters;
     _analyticsImplementation?.logEvent(name: name, parameters: parameters);
-    _logService?.logAnalytic(name: name, parameters: parameters);
+    _loglytics?.logAnalytic(name: name, parameters: parameters);
   }
 }

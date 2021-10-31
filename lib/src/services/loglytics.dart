@@ -23,7 +23,7 @@ enum LogType {
 /// add the [Loglytics] mixin to any class where you would like to add logging and/or analytics to.
 /// In order to have access to the appropriate [FeatureSubjects] and [FeatureParameters]
 /// implementations for a specific feature you should add these as generic arguments to a
-/// [Loglytics] like LogService<FeatureSubjectsImplementation, FeatureParametersImplementation>.
+/// [Loglytics] like Loglytics<FeatureSubjectsImplementation, FeatureParametersImplementation>.
 /// Do remember to also override [Loglytics.featureAnalytics] afterwards and provide your
 /// implementation of the [FeatureAnalytics] wrapper that holds the former specified
 /// [FeatureSubjects] and [FeatureParameters] implementations to complete the setup. By doing so
@@ -40,7 +40,7 @@ mixin Loglytics<S extends FeatureSubjects, P extends FeatureParameters> {
     featureParameters: featureAnalytics!.parameters,
     analyticsImplementation: _analyticsImplementation,
     crashReportsImplementation: _crashReportsImplementation,
-    logService: this,
+    loglytics: this,
   );
 
   /// Provides the configured [AnalyticsService] functionality through the [Loglytics].
