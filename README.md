@@ -2,11 +2,11 @@
 
 Loglytics aims to provide a complete solution for simple but powerful logging and simultaneously (but optionally) sending analytics and crash reports inside your apps. Originally this package was created for integration with `firebase_analytics` and `firebase_crashlytics`, but by clever use of interfaces it is now also possible to implement your own analytics or crash reporting solutions.
 
-Besides trying to facilitate easier logging and sending of analytics, Loglytics also aims to improve your overall approach to analytics. Everything analytic inside Loglytics is based on *subjects* and *parameters*. Each of your analytics will be grouped per feature (or other part of our project that you seem fit) and they will have a list of subjects (e.g. a `'login_button'`) and possible parameters (e.g. `'time_on_page'`) defined for them. In general subjects may have an analytic event attached to them and parameters are for extra information. Because we specify and save our analytics in a central location for each feature (or other part of our project), we create a certain peace, clarity and structure within our projects that's often missed when analytics are being sent from all over the place.
+In addition to facilitating easier logging and sending of analytics, Loglytics also aims to improve your overall approach to analytics. Everything analytic inside Loglytics is based on *subjects* and *parameters*. Each of your analytics will be grouped per feature (or other part of our project that you seem fit) and they will have a list of subjects (e.g. a `'login_button'`) and possible parameters (e.g. `'time_on_page'`) defined for them. In general subjects may have an analytic event attached to them and parameters are for extra information. Because we specify and save our analytics in a central location for each feature (or other part of our project), we create a certain peace, clarity and structure within our projects that's often missed when analytics are being sent from all over the place.
 
 # 🔎 How do I start?
 
-The first thing we need to do is determine if we want to implement analytics and/or crash reporting in your project. If we don't, we can still use the `Loglytics` to log anything and everywhere without having to configure anything. If we do want to use one or both of them we must implement the `AnalyticsInterface` and `CrashReportsInterface` respectively so we can pass them along to the `Loglytics.setup()` method. We will need to call the `Loglytics.setup()` method before we can send any analytics or crash reports using this package. See below for an example of an implementation of where `FirebaseAnalytics` and `FirebaseCrashlytics` were used.
+The first thing we need to do is determine if we want to implement custom analytics and/or crash reporting in your project. If we don't, we can still use the `Loglytics` to log anything and everywhere without having to configure anything. If we do want to use one or both of them we must implement the `AnalyticsInterface` and `CrashReportsInterface` respectively so we can pass them along to the `Loglytics.setup()` method. We will need to call the `Loglytics.setup()` method before we can send any analytics or crash reports using this package. See below for an example of an implementation of where `FirebaseAnalytics` and `FirebaseCrashlytics` were used.
 
 ### AnalyticsInterface
 
@@ -105,12 +105,12 @@ void main() {
 
 # 📈 How do I send analytics (and crash reports)?
 
-Next we need to determine how we want to implement the feature-like way of specifying analytics in our project. In any case, it is important that we can define parts of our project (such as a feature) and link them to subjects and parameters for that specific part (or feature). Once we are clear on how we want to do this, we can set up our first implementation of a `FeatureAnalytics`. See below for an example of what a template of that looks like.
+Next we need to determine how we want to implement the feature-like way of specifying analytics in our project. In any case, it is important that we can define parts of our project (such as a feature) and link them to subjects and parameters for that specific part (or feature). Once we are clear on how we want to do this, we can set up our first implementation of a `AnalyticsWrapper`. See below for an example of what a template of that looks like.
 
 ```dart
 import 'package:loglytics/loglytics.dart';
 
-class TemplateAnalytics extends FeatureAnalytics<TemplateSubjects, TemplateParameters> {
+class TemplateAnalytics extends AnalyticsWrapper<TemplateSubjects, TemplateParameters> {
   @override
   TemplateSubjects get subjects => _templateSubjects;
   late final TemplateSubjects _templateSubjects = TemplateSubjects();
@@ -120,12 +120,12 @@ class TemplateAnalytics extends FeatureAnalytics<TemplateSubjects, TemplateParam
   late final TemplateParameters _templateParameters = TemplateParameters();
 }
 
-class TemplateSubjects extends FeatureSubjects {}
+class TemplateSubjects extends AnalyticsSubjects {}
 
-class TemplateParameters extends FeatureParameters {}
+class TemplateParameters extends AnalyticsParameters {}
 ```
 
-Defining our first `FeatureAnalytics` consists of 3 steps:
+Defining our first `AnalyticsWrapper` consists of 3 steps:
 
 1. **Rename the TemplateAnalytics, TemplateSubjects and TemplateParameters.**
     
@@ -143,7 +143,7 @@ Defining our first `FeatureAnalytics` consists of 3 steps:
 ```dart
 import 'package:loglytics/loglytics.dart';
 
-class LoginAnalytics extends FeatureAnalytics<LoginSubjects, LoginParameters> {
+class LoginAnalytics extends AnalyticsWrapper<LoginSubjects, LoginParameters> {
   @override
   LoginSubjects get subjects => _loginSubjects;
   late final LoginSubjects _loginSubjects = LoginSubjects();
@@ -153,23 +153,23 @@ class LoginAnalytics extends FeatureAnalytics<LoginSubjects, LoginParameters> {
   late final LoginParameters _loginParameters = LoginParameters();
 }
 
-class LoginSubjects extends FeatureSubjects {
+class LoginSubjects extends AnalyticsSubjects {
   final String login = 'login';
   final String loginButton = 'login_button';
 }
 
-class LoginParameters extends FeatureParameters {
+class LoginParameters extends AnalyticsParameters {
   final String timeOnPage = 'time_on_page';
 }
 ```
 
-After having specified at least one subject and one parameter we can now move on to our fist usage of a `Loglytics`. As mentioned earlier, the `Loglytics` can be used without analytics. We do this by simply adding the `Loglytics` as a `mixin` to a class. Et voilá now we have all the log capabilities this package has to offer, but without the analytics and crash reporting implementation. However, we do want to use analytics in this example so we specify two generic types when adding the `Loglytics` `mixin`. The two generic types are the implementations of the `FeatureSubjects` and `FeatureParameters` we just made. This looks like the following:
+After having specified at least one subject and one parameter we can now move on to our fist usage of a `Loglytics`. As mentioned earlier, the `Loglytics` can be used without analytics. We do this by simply adding the `Loglytics` as a `mixin` to a class. Et voilá now we have all the log capabilities this package has to offer, but without the analytics and crash reporting implementation. However, we do want to use analytics in this example so we specify two generic types when adding the `Loglytics` `mixin`. The two generic types are the implementations of the `AnalyticsSubjects` and `AnalyticsParameters` we just made. This looks like the following:
 
 ```dart
 class LoginClass with Loglytics<LoginSubjects, LoginParameters> {}
 ```
 
-As a last step we need to override the `Loglytics.featureAnalytics` getter and provide it with our implementation of the `FeatureAnalytics`. That's it, now we have everything at our disposal to log and send analytics for this feature/part of your app. Now when we type in `analytics` and then choose one of the actions we will have all our defined subjects and parameters (for that feature/part of our app) at our disposal in a callback (🆒). This looks like this:
+As a last step we need to override the `Loglytics.wrapper` getter and provide it with our implementation of the `AnalyticsWrapper`. That's it, now we have everything at our disposal to log and send analytics for this feature/part of your app. Now when we type in `analytics` and then choose one of the actions we will have all our defined subjects and parameters (for that feature/part of our app) at our disposal in a callback (🆒). This looks like this:
 
 ```dart
 class LoginClass with Loglytics<LoginSubjects, LoginParameters> {
@@ -188,13 +188,19 @@ class LoginClass with Loglytics<LoginSubjects, LoginParameters> {
   }
 
   @override
-  FeatureAnalytics<LoginSubjects, LoginParameters> get featureAnalytics => LoginAnalytics();
+  AnalyticsWrapper<LoginSubjects, LoginParameters> get wrapper => LoginAnalytics();
 }
 ```
 
+*Note: As of 0.1.3 Loglytics provides a default implementation for using analytics where you don't necessarily have to implement your own version of a `AnalyticsWrapper`. To access this default implementation simply use `defaultAnalytics` (instead of `analytics`) anywhere you use the Loglytics mixin.*
+
 # 🥑 Additional information
+
+If you have any suggestions for default subjects/parameters and/or ideas for this package please send me an email via info@codaveto.com and I will get to it ASAP.
 
 **Todo:**
 
 - Add annotations for easier defining of subjects and parameters.
+- Find a way to easier facilitate access to subjects and parameters (2 generics + override is a bit heavy).
+- Add logSum functionality (logging of events that won't send until signaled to do so).  
 - Improve example project with comments and more examples.

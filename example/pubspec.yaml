@@ -12,9 +12,7 @@ dependencies:
     sdk: flutter
 
   loglytics:
-    git:
-      url: https://github.com/codaveto/loglytics.git
-      ref: main
+    path: ../
 
   firebase_crashlytics: ^2.2.4
   firebase_analytics: ^8.3.4
