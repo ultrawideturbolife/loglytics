@@ -1,10 +1,11 @@
 import 'package:flutter/foundation.dart';
+import 'package:get_it/get_it.dart';
 import 'package:loglytics/loglytics.dart';
+import 'package:loglytics/src/loglytics/loglytics_data.dart';
 
 import '../analytics/analytics_interface.dart';
-import '../analytics/loglytics_wrapper.dart';
-import '../crashlytics/crash_reports_interface.dart';
-import 'analytics_service.dart';
+import '../analytics/analytics_service.dart';
+import '../crash_reports/crash_reports_interface.dart';
 
 /// All types of logging.
 ///
@@ -22,58 +23,33 @@ enum LogType {
 /// If you want to make use of the analytic functionality use [Loglytics.setup] to provide your
 /// implementations of the [AnalyticsInterface] and [CrashReportsInterface]. After doing so you can
 /// add the [Loglytics] mixin to any class where you would like to add logging and/or analytics to.
-/// In order to have access to the appropriate [LoglyticsSubjects] and [LoglyticsParameters]
+/// In order to have access to the appropriate [DefaultSubjects] and [DefaultParameters]
 /// implementations for a specific feature you should add these as generic arguments to a
 /// [Loglytics] like Loglytics<LoglyticsSubjectsImplementation, LoglyticsParametersImplementation>.
 /// Do remember to also override [Loglytics.wrapper] afterwards and provide your
 /// implementation of the [LoglyticsWrapper] that holds the former specified
-/// [LoglyticsSubjects] and [LoglyticsParameters] implementations to complete the setup. By doing so
+/// [DefaultSubjects] and [DefaultParameters] implementations to complete the setup. By doing so
 /// the [Loglytics.analytics] will provide you with access to these implementations inside the
 /// various [AnalyticsService] methods.
 ///
 /// Defining the former is optional however as the [Loglytics] will also work as a pure logging
 /// service. When using this mixing just for logging there is no need to define the
-/// [LoglyticsSubjects] and [LoglyticsParameters] as generic arguments. Just add the mixin and enjoy
+/// [DefaultSubjects] and [DefaultParameters] as generic arguments. Just add the mixin and enjoy
 /// the ride.
-mixin Loglytics<S extends LoglyticsSubjects, P extends LoglyticsParameters> {
-  late final AnalyticsService<S, P> _analyticsService = AnalyticsService<S, P>(
-    loglyticsSubjects: wrapper!.subjects,
-    loglyticsParameters: wrapper!.parameters,
+mixin Loglytics<D extends LoglyticsData> {
+  late final AnalyticsService<D> _analyticsService = AnalyticsService<D>(
+    loglyticsData: GetIt.I.get<D>(),
     analyticsImplementation: _analyticsImplementation,
     crashReportsImplementation: _crashReportsImplementation,
     loglytics: this,
   );
 
-  /// Provides the configured [AnalyticsService] functionality through the [Loglytics].
+  /// Provides the configured [AnalyticsService] functionality through the [Loglytics] mixin.
   ///
-  /// The [AnalyticsService] will have access to the specified [LoglyticsSubjects] and
-  /// [LoglyticsParameters] as specified in the [Loglytics.wrapper] method that you should
+  /// The [AnalyticsService] will have access to the specified [DefaultSubjects] and
+  /// [DefaultParameters] as specified in the [Loglytics.wrapper] method that you should
   /// override before using this method.
-  AnalyticsService<S, P> get analytics {
-    assert(wrapper != null, 'Override the wrapper getter first.');
-    return _analyticsService;
-  }
-
-  late final AnalyticsService<DefaultSubjects, DefaultParameters> _analyticsDefaultService =
-      AnalyticsService<DefaultSubjects, DefaultParameters>(
-    loglyticsSubjects: DefaultSubjects(),
-    loglyticsParameters: DefaultParameters(),
-    analyticsImplementation: _analyticsImplementation,
-    crashReportsImplementation: _crashReportsImplementation,
-    loglytics: this,
-  );
-
-  /// Provides default [AnalyticsService] functionality through the [Loglytics].
-  ///
-  /// The [AnalyticsService] will have access to the default subjects and parameters as specified
-  /// in [DefaultSubjects] and [DefaultParameters]. If you want to use your own implementation have
-  /// a look at the [LoglyticsWrapper] and [Loglytics] class documentations.
-  AnalyticsService<DefaultSubjects, DefaultParameters> get defaultAnalytics =>
-      _analyticsDefaultService;
-
-  /// Override this method to provide the appropriate [LoglyticsWrapper] for a certain class.
-  @protected
-  LoglyticsWrapper<S, P>? get wrapper => null;
+  AnalyticsService<D> get analytics => _analyticsService;
 
   /// Used for showing the location (class) of a single log.
   String get logLocation => _logLocation;
@@ -92,16 +68,33 @@ mixin Loglytics<S extends LoglyticsSubjects, P extends LoglyticsParameters> {
   static bool _shouldLogAnalytics = true;
 
   /// Used to configure the logging and analytic abilities of the [Loglytics].
-  static void setup({
+  static void setup<D extends LoglyticsData>({
     AnalyticsInterface? analyticsImplementation,
     CrashReportsInterface? crashReportsImplementation,
     bool? shouldLogAnalytics,
+    List<D Function()>? loglyticsData,
   }) {
     _analyticsImplementation = analyticsImplementation;
     _isAnalyticsEnabled = _analyticsImplementation != null;
     _crashReportsImplementation = crashReportsImplementation;
     _isCrashLyticsEnabled = _crashReportsImplementation != null;
     if (shouldLogAnalytics != null) _shouldLogAnalytics = shouldLogAnalytics;
+    if (loglyticsData != null) {
+      for (final data in loglyticsData) {
+        GetIt.instance.registerFactory(data);
+      }
+    }
+  }
+
+  /// Used to configure the logging and analytic abilities of the [Loglytics].
+  static Future<void> dispose({
+    bool disposeAnalyticsImplementation = true,
+    bool disposeCrashReportsImplementation = true,
+  }) async {
+    _analyticsImplementation = null;
+    _crashReportsImplementation = null;
+    _shouldLogAnalytics = true;
+    await GetIt.instance.reset();
   }
 
   // --------------- REGULAR --------------- REGULAR --------------- REGULAR --------------- \\

@@ -16,6 +16,9 @@ void main() {
       FirebaseCrashlytics.instance,
     ),
     shouldLogAnalytics: true,
+    loglyticsData: [
+      () => CounterAnalytics(),
+    ],
   );
   runApp(MyApp());
 }
@@ -44,22 +47,18 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage>
-    with Loglytics<CounterSubjects, CounterParameters> {
+class _MyHomePageState extends State<MyHomePage> with Loglytics {
   int _counter = 0;
 
-  @override
-  LoglyticsWrapper<CounterSubjects, CounterParameters> get wrapper => CounterAnalytics();
-
   void _incrementCounter() {
-    analytics.tap(subject: (subjects) => subjects.counterButton);
+    analytics.tap(subject: (data) => data.button);
     setState(
       () {
         _counter++;
-        analytics.success(
-          subject: (subjects) => subjects.incrementCounter,
-          parameters: (parameters) => {
-            parameters.amount: _counter,
+        analytics.increment(
+          subject: (data) => data.value,
+          parameters: (data) => {
+            data.time: DateTime.now(),
           },
         );
       },

@@ -3,10 +3,9 @@ library loglytics;
 // src/analytics
 export 'src/analytics/analytic.dart';
 export 'src/analytics/analytics_interface.dart';
-export 'src/analytics/default_analytics.dart';
-export 'src/analytics/loglytics_wrapper.dart';
+export 'src/analytics/analytics_service.dart';
 // src/crashlytics
-export 'src/crashlytics/crash_reports_interface.dart';
+export 'src/crash_reports/crash_reports_interface.dart';
 // src/services
-export 'src/services/analytics_service.dart';
-export 'src/services/loglytics.dart';
+export 'src/loglytics/loglytics.dart';
+export 'src/loglytics/loglytics_data.dart';
