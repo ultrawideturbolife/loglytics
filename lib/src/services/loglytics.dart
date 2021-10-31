@@ -533,7 +533,7 @@ void customLog({
   required String message,
   required String location,
   required LogType logType,
-  required CrashReportsInterface? crashReportsInterface,
+  CrashReportsInterface? crashReportsInterface,
 }) {
   crashReportsInterface?.log('[$location] '
       '${logType.name}: '
