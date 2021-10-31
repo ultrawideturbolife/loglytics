@@ -1,5 +1,5 @@
-/// Exposes all crashlytics methods for own implementation.
-abstract class CrashlyticsInterface {
+/// Exposes all crash reports methods for own implementation.
+abstract class CrashReportsInterface {
   /// Logs an error by dynamic [exception] and possible [stack] and/or [fatal] boolean.
   Future<void> recordError(
     dynamic exception,

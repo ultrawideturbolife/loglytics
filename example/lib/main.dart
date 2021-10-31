@@ -5,14 +5,14 @@ import 'package:loglytics/loglytics.dart';
 
 import 'analytics/counter_analytics.dart';
 import 'implementations/analytics_implementation.dart';
-import 'implementations/crashlytics_implementation.dart';
+import 'implementations/crash_reports_implementation.dart';
 
 void main() {
   LogService.setup(
     analyticsImplementation: AnalyticsImplementation(
       FirebaseAnalytics(),
     ),
-    crashlyticsImplementation: CrashlyticsImplementation(
+    crashReportsImplementation: CrashReportsImplementation(
       FirebaseCrashlytics.instance,
     ),
     shouldLogAnalytics: true,
@@ -49,8 +49,7 @@ class _MyHomePageState extends State<MyHomePage>
   int _counter = 0;
 
   @override
-  FeatureAnalytics<CounterSubjects, CounterParameters> get featureAnalytics =>
-      CounterAnalytics();
+  FeatureAnalytics<CounterSubjects, CounterParameters> get featureAnalytics => CounterAnalytics();
 
   void _incrementCounter() {
     analytics.tap(subject: (subjects) => subjects.counterButton);

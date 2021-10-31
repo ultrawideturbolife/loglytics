@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 
 import '../analytics/analytics_interface.dart';
 import '../analytics/feature_analytics.dart';
-import '../crashlytics/crashlytics_interface.dart';
+import '../crashlytics/crash_reports_interface.dart';
 import 'analytics_service.dart';
 
 /// All types of logging.
@@ -18,38 +18,38 @@ enum LogType {
 
 /// Used to provide all logging, analytics and crashlytics functionality to a class of your choosing.
 ///
-/// If you want to make use of the analytic functionality use [LogService.setup] to provide your
-/// implementations of the [AnalyticsInterface] and [CrashlyticsInterface]. After doing so you can
-/// add this [LogService] class as a mixin to any class where you would like to add analytics to.
+/// If you want to make use of the analytic functionality use [Loglytics.setup] to provide your
+/// implementations of the [AnalyticsInterface] and [CrashReportsInterface]. After doing so you can
+/// add the [Loglytics] mixin to any class where you would like to add logging and/or analytics to.
 /// In order to have access to the appropriate [FeatureSubjects] and [FeatureParameters]
 /// implementations for a specific feature you should add these as generic arguments to a
-/// [LogService] like LogService<FeatureSubjectsImplementation, FeatureParametersImplementation>.
-/// Do remember to also override [LogService.featureAnalytics] afterwards and provide your
+/// [Loglytics] like LogService<FeatureSubjectsImplementation, FeatureParametersImplementation>.
+/// Do remember to also override [Loglytics.featureAnalytics] afterwards and provide your
 /// implementation of the [FeatureAnalytics] wrapper that holds the former specified
 /// [FeatureSubjects] and [FeatureParameters] implementations to complete the setup. By doing so
-/// the [LogService.analytics] will provide you with access to these implementations inside the
+/// the [Loglytics.analytics] will provide you with access to these implementations inside the
 /// various [AnalyticsService] methods.
 ///
-/// Defining the former is optional however as the [LogService] will also work as a pure logging
+/// Defining the former is optional however as the [Loglytics] will also work as a pure logging
 /// service. When using this mixing just for logging there is no need to define the
-/// [FeatureSubjects] and [FeatureParameters] as generic arguments. Just add the mixin
-mixin LogService<S extends FeatureSubjects, P extends FeatureParameters> {
+/// [FeatureSubjects] and [FeatureParameters] as generic arguments. Just add the mixin and enjoy
+/// the ride.
+mixin Loglytics<S extends FeatureSubjects, P extends FeatureParameters> {
   late final AnalyticsService<S, P> _analyticsService = AnalyticsService<S, P>(
     featureSubjects: featureAnalytics!.subjects,
     featureParameters: featureAnalytics!.parameters,
     analyticsImplementation: _analyticsImplementation,
-    crashlyticsImplementation: _crashlyticsImplementation,
+    crashReportsImplementation: _crashReportsImplementation,
     logService: this,
   );
 
-  /// Provides the configured [AnalyticsService] functionality through the [LogService].
+  /// Provides the configured [AnalyticsService] functionality through the [Loglytics].
   ///
   /// The [AnalyticsService] will have access to the specified [FeatureSubjects] and
-  /// [FeatureParameters] as specified in the [LogService.featureAnalytics] method that you should
+  /// [FeatureParameters] as specified in the [Loglytics.featureAnalytics] method that you should
   /// override before using this method.
   AnalyticsService<S, P> get analytics {
-    assert(featureAnalytics != null,
-        'Override the featureAnalytics getter first.');
+    assert(featureAnalytics != null, 'Override the featureAnalytics getter first.');
     return _analyticsService;
   }
 
@@ -64,7 +64,7 @@ mixin LogService<S extends FeatureSubjects, P extends FeatureParameters> {
   // --------------- SETUP --------------- SETUP --------------- SETUP --------------- \\
 
   static AnalyticsInterface? _analyticsImplementation;
-  static CrashlyticsInterface? _crashlyticsImplementation;
+  static CrashReportsInterface? _crashReportsImplementation;
 
   static bool get isAnalyticsEnabled => _isAnalyticsEnabled;
   static bool _isAnalyticsEnabled = false;
@@ -73,16 +73,16 @@ mixin LogService<S extends FeatureSubjects, P extends FeatureParameters> {
   static bool get shouldLogAnalytics => _shouldLogAnalytics;
   static bool _shouldLogAnalytics = true;
 
-  /// Used to configure the logging and analytic abilities of the [LogService].
+  /// Used to configure the logging and analytic abilities of the [Loglytics].
   static void setup({
     AnalyticsInterface? analyticsImplementation,
-    CrashlyticsInterface? crashlyticsImplementation,
+    CrashReportsInterface? crashReportsImplementation,
     bool? shouldLogAnalytics,
   }) {
     _analyticsImplementation = analyticsImplementation;
     _isAnalyticsEnabled = _analyticsImplementation != null;
-    _crashlyticsImplementation = crashlyticsImplementation;
-    _isCrashLyticsEnabled = _crashlyticsImplementation != null;
+    _crashReportsImplementation = crashReportsImplementation;
+    _isCrashLyticsEnabled = _crashReportsImplementation != null;
     if (shouldLogAnalytics != null) _shouldLogAnalytics = shouldLogAnalytics;
   }
 
@@ -90,8 +90,8 @@ mixin LogService<S extends FeatureSubjects, P extends FeatureParameters> {
 
   /// Logs a regular [message] with [LogType.info] as [debugPrint].
   ///
-  /// Also tries to send the log to your [CrashlyticsInterface] implementation should you have
-  /// configured one with the [LogService.setup] method.
+  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
+  /// configured one with the [Loglytics.setup] method.
   void log(String message) => _logMessage(
         message: message,
         logType: LogType.info,
@@ -99,8 +99,8 @@ mixin LogService<S extends FeatureSubjects, P extends FeatureParameters> {
 
   /// Logs a warning [message] with [LogType.warning] as [debugPrint].
   ///
-  /// Also tries to send the log to your [CrashlyticsInterface] implementation should you have
-  /// configured one with the [LogService.setup] method.
+  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
+  /// configured one with the [Loglytics.setup] method.
   void logWarning(String message) => _logMessage(
         message: message,
         logType: LogType.warning,
@@ -109,15 +109,15 @@ mixin LogService<S extends FeatureSubjects, P extends FeatureParameters> {
   /// Logs an error [message] with [LogType.error] as [debugPrint].
   ///
   /// Also tries to send the log with optional [error], [stack] and [fatal] boolean to your
-  /// [CrashlyticsInterface] implementation should you have configured one with the
-  /// [LogService.setup] method.
+  /// [CrashReportsInterface] implementation should you have configured one with the
+  /// [Loglytics.setup] method.
   void logError(
     String message, {
     Object? error,
     StackTrace? stack,
     bool fatal = false,
   }) {
-    _crashlyticsImplementation?.recordError(
+    _crashReportsImplementation?.recordError(
       error,
       stack ?? StackTrace.current,
       fatal: fatal,
@@ -130,15 +130,15 @@ mixin LogService<S extends FeatureSubjects, P extends FeatureParameters> {
       _logMessage(message: error.toString(), logType: LogType.error);
     }
     _logMessage(
-        message: stack?.toString() ??
-            StackTrace.current.toString().split('\n').sublist(2, 8).join('\n'),
+        message:
+            stack?.toString() ?? StackTrace.current.toString().split('\n').sublist(2, 8).join('\n'),
         logType: LogType.error);
   }
 
   /// Logs a success [message] with [LogType.success] as [debugPrint].
   ///
-  /// Also tries to send the log to your [CrashlyticsInterface] implementation should you have
-  /// configured one with the [LogService.setup] method.
+  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
+  /// configured one with the [Loglytics.setup] method.
   void logSuccess(String message) => _logMessage(
         message: message,
         logType: LogType.success,
@@ -147,8 +147,8 @@ mixin LogService<S extends FeatureSubjects, P extends FeatureParameters> {
   /// Logs (does not send!) an analytic [name] with [LogType.analytic] as [debugPrint].
   ///
   /// Also accepts logs an optional [value] or [parameters] and tries to send the message to your
-  /// [CrashlyticsInterface] implementation should you have configured one with the
-  /// [LogService.setup] method.
+  /// [CrashReportsInterface] implementation should you have configured one with the
+  /// [Loglytics.setup] method.
   void logAnalytic({
     required String name,
     String? value,
@@ -178,8 +178,8 @@ mixin LogService<S extends FeatureSubjects, P extends FeatureParameters> {
 
   /// Logs a [value] and optional [message] with a default [LogType.info] as [debugPrint].
   ///
-  /// Also tries to send the log to your [CrashlyticsInterface] implementation should you have
-  /// configured one with the [LogService.setup] method.
+  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
+  /// configured one with the [Loglytics.setup] method.
   void logValue(
     Object? value, {
     String? message,
@@ -194,8 +194,8 @@ mixin LogService<S extends FeatureSubjects, P extends FeatureParameters> {
   /// Logs a [list] and optional [message] with a default [LogType.info] as [debugPrint].
   ///
   /// Iterates over the given [list] and uses the [_logValue] method under the hood to log each item.
-  /// Also tries to send the log to your [CrashlyticsInterface] implementation should you have
-  /// configured one with the [LogService.setup] method.
+  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
+  /// configured one with the [Loglytics.setup] method.
   void logList<T extends Object?>(
     List<T> list, {
     String? message,
@@ -210,8 +210,8 @@ mixin LogService<S extends FeatureSubjects, P extends FeatureParameters> {
   /// Logs a [set] and optional [message] with a default [LogType.info] as [debugPrint].
   ///
   /// Iterates over the given [set] and uses the [_logValue] method under the hood to log each item.
-  /// Also tries to send the log to your [CrashlyticsInterface] implementation should you have
-  /// configured one with the [LogService.setup] method.
+  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
+  /// configured one with the [Loglytics.setup] method.
   void logSet<T extends Object?>(
     Set<T> set, {
     String? message,
@@ -226,8 +226,8 @@ mixin LogService<S extends FeatureSubjects, P extends FeatureParameters> {
   /// Logs a [map] and optional [message] with a default [LogType.info] as [debugPrint].
   ///
   /// Iterates over the given [map] and uses the [_logKeyValue] method under the hood to log each item.
-  /// Also tries to send the log to your [CrashlyticsInterface] implementation should you have
-  /// configured one with the [LogService.setup] method.
+  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
+  /// configured one with the [Loglytics.setup] method.
   void logMap(
     Map<String, Object?> map, {
     String? message,
@@ -242,8 +242,8 @@ mixin LogService<S extends FeatureSubjects, P extends FeatureParameters> {
   /// Logs a [map]'s keys and optional [message] with a default [LogType.info] as [debugPrint].
   ///
   /// Iterates over the given [map] and uses the [_logKey] method under the hood to log each item.
-  /// Also tries to send the log to your [CrashlyticsInterface] implementation should you have
-  /// configured one with the [LogService.setup] method.
+  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
+  /// configured one with the [Loglytics.setup] method.
   void logKeys<T extends Object?, E extends Object?>(
     Map<T, E> map, {
     String? message,
@@ -258,8 +258,8 @@ mixin LogService<S extends FeatureSubjects, P extends FeatureParameters> {
   /// Logs a [map]'s values and optional [message] with a default [LogType.info] as [debugPrint].
   ///
   /// Iterates over the given [map] and uses the [_logValue] method under the hood to log each item.
-  /// Also tries to send the log to your [CrashlyticsInterface] implementation should you have
-  /// configured one with the [LogService.setup] method.
+  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
+  /// configured one with the [Loglytics.setup] method.
   void logValues<T extends Object?, E extends Object?>(
     Map<T, E> map, {
     String? message,
@@ -282,8 +282,8 @@ mixin LogService<S extends FeatureSubjects, P extends FeatureParameters> {
 
   /// Used under the hood to log a [message] with [logType].
   ///
-  /// Also tries to send the log to your [CrashlyticsInterface] implementation should you have
-  /// configured one with the [LogService.setup] method.
+  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
+  /// configured one with the [Loglytics.setup] method.
   void _logMessage({
     required String message,
     required LogType logType,
@@ -298,8 +298,8 @@ mixin LogService<S extends FeatureSubjects, P extends FeatureParameters> {
 
   /// Used under the hood to log a [key] and [logType] with optional [message].
   ///
-  /// Also tries to send the log to your [CrashlyticsInterface] implementation should you have
-  /// configured one with the [LogService.setup] method.
+  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
+  /// configured one with the [Loglytics.setup] method.
   void _logKey({
     required Object? key,
     required LogType logType,
@@ -317,8 +317,8 @@ mixin LogService<S extends FeatureSubjects, P extends FeatureParameters> {
 
   /// Used under the hood to log a [value] and [logType] with optional [message].
   ///
-  /// Also tries to send the log to your [CrashlyticsInterface] implementation should you have
-  /// configured one with the [LogService.setup] method.
+  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
+  /// configured one with the [Loglytics.setup] method.
   void _logValue({
     required Object? value,
     required LogType logType,
@@ -327,15 +327,14 @@ mixin LogService<S extends FeatureSubjects, P extends FeatureParameters> {
     if (message != null) _tryLogCrashlyticsMessage(message, logType);
     _tryLogCrashlyticsValue(value, logType);
     final time = _time;
-    if (message != null)
-      debugPrint('$time [$_logLocation] ${'${logType.icon} $message '}');
+    if (message != null) debugPrint('$time [$_logLocation] ${'${logType.icon} $message '}');
     debugPrint('$time [$_logLocation] 💾 $value');
   }
 
   /// Used under the hood to log a [key], [value] and [logType] with optional [message].
   ///
-  /// Also tries to send the log to your [CrashlyticsInterface] implementation should you have
-  /// configured one with the [LogService.setup] method.
+  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
+  /// configured one with the [Loglytics.setup] method.
   void _logKeyValue({
     required String key,
     required Object? value,
@@ -355,8 +354,8 @@ mixin LogService<S extends FeatureSubjects, P extends FeatureParameters> {
 
   /// Used under the hood to log an [iterable] and [logType] with optional [message].
   ///
-  /// Also tries to send the log to your [CrashlyticsInterface] implementation should you have
-  /// configured one with the [LogService.setup] method.
+  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
+  /// configured one with the [Loglytics.setup] method.
   void _logIterable<T extends Object?>({
     required Iterable<T> iterable,
     LogType logType = LogType.info,
@@ -373,8 +372,8 @@ mixin LogService<S extends FeatureSubjects, P extends FeatureParameters> {
 
   /// Used under the hood to log a [map] and [logType] with optional [message].
   ///
-  /// Also tries to send the log to your [CrashlyticsInterface] implementation should you have
-  /// configured one with the [LogService.setup] method.
+  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
+  /// configured one with the [Loglytics.setup] method.
   void _logMap({
     required Map<String, Object?> map,
     LogType logType = LogType.info,
@@ -393,8 +392,8 @@ mixin LogService<S extends FeatureSubjects, P extends FeatureParameters> {
 
   /// Used under the hood to log a [map]'s keys and [logType] with optional [message].
   ///
-  /// Also tries to send the log to your [CrashlyticsInterface] implementation should you have
-  /// configured one with the [LogService.setup] method.
+  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
+  /// configured one with the [Loglytics.setup] method.
   void _logKeys<K extends Object?, V extends Object?>({
     required Map<K, V> map,
     String? message,
@@ -412,8 +411,8 @@ mixin LogService<S extends FeatureSubjects, P extends FeatureParameters> {
 
   /// Used under the hood to log a [map]'s values and [logType] with optional [message].
   ///
-  /// Also tries to send the log to your [CrashlyticsInterface] implementation should you have
-  /// configured one with the [LogService.setup] method.
+  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
+  /// configured one with the [Loglytics.setup] method.
   void _logValues<K extends Object?, V extends Object?>({
     required Map<K, V> map,
     String? message,
@@ -436,7 +435,7 @@ mixin LogService<S extends FeatureSubjects, P extends FeatureParameters> {
     String message,
     LogType logType,
   ) {
-    _crashlyticsImplementation?.log('[$_logLocation] '
+    _crashReportsImplementation?.log('[$_logLocation] '
         '${logType.name}: '
         '$message');
   }
@@ -447,7 +446,7 @@ mixin LogService<S extends FeatureSubjects, P extends FeatureParameters> {
     Object? value,
     LogType logType,
   ) {
-    _crashlyticsImplementation?.log('[$_logLocation] '
+    _crashReportsImplementation?.log('[$_logLocation] '
         '${logType.name}: '
         '$key: $value');
   }
@@ -457,7 +456,7 @@ mixin LogService<S extends FeatureSubjects, P extends FeatureParameters> {
     Object? key,
     LogType logType,
   ) {
-    _crashlyticsImplementation?.log('[$_logLocation] '
+    _crashReportsImplementation?.log('[$_logLocation] '
         '${logType.name}: '
         'key: $key');
   }
@@ -467,7 +466,7 @@ mixin LogService<S extends FeatureSubjects, P extends FeatureParameters> {
     Object? value,
     LogType logType,
   ) {
-    _crashlyticsImplementation?.log('[$_logLocation] '
+    _crashReportsImplementation?.log('[$_logLocation] '
         '${logType.name}: '
         'value: $value');
   }
@@ -511,14 +510,14 @@ extension on LogType {
 
 // --------------- MISC --------------- MISC --------------- MISC --------------- \\
 
-/// Used to provide basic logging capabilities when using the [LogService] mixin is impossible.
+/// Used to provide basic logging capabilities when using the [Loglytics] mixin is impossible.
 void customLog({
   required String message,
   required String location,
   required LogType logType,
-  required CrashlyticsInterface? crashlyticsInterface,
+  required CrashReportsInterface? crashReportsInterface,
 }) {
-  crashlyticsInterface?.log('[$location] '
+  crashReportsInterface?.log('[$location] '
       '${logType.name}: '
       '$message'); // TODO(codaveto): Add more info | main | 24/10/2021
   debugPrint(

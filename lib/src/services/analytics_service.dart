@@ -1,8 +1,8 @@
 import '../analytics/analytic.dart';
 import '../analytics/analytics_interface.dart';
 import '../analytics/feature_analytics.dart';
-import '../crashlytics/crashlytics_interface.dart';
-import 'log_service.dart';
+import '../crashlytics/crash_reports_interface.dart';
+import 'loglytics.dart';
 
 /// Used to provide an easy interface for sending analytics.
 ///
@@ -14,21 +14,21 @@ class AnalyticsService<S extends FeatureSubjects, P extends FeatureParameters> {
   AnalyticsService({
     required S featureSubjects,
     required P featureParameters,
-    LogService? logService,
+    Loglytics? logService,
     AnalyticsInterface? analyticsImplementation,
-    CrashlyticsInterface? crashlyticsImplementation,
+    CrashReportsInterface? crashReportsImplementation,
   })  : _featureSubjects = featureSubjects,
         _featureParameters = featureParameters,
         _logService = logService,
         _analyticsImplementation = analyticsImplementation,
-        _crashlyticsImplementation = crashlyticsImplementation;
+        _crashReportsImplementation = crashReportsImplementation;
 
   final S _featureSubjects;
   final P _featureParameters;
 
-  final LogService? _logService;
+  final Loglytics? _logService;
   final AnalyticsInterface? _analyticsImplementation;
-  final CrashlyticsInterface? _crashlyticsImplementation;
+  final CrashReportsInterface? _crashReportsImplementation;
 
   /// Used to identify the first input when sending a stream of similar analytics.
   Analytic? _firstInput;
@@ -36,23 +36,22 @@ class AnalyticsService<S extends FeatureSubjects, P extends FeatureParameters> {
   /// Sets a [userId] that persists throughout the app.
   ///
   /// This applies to your possible [_analyticsImplementation] as well as your
-  /// [_crashlyticsImplementation].
+  /// [_crashReportsImplementation].
   void userId({required String userId}) {
     _analyticsImplementation?.setUserId(userId);
-    _crashlyticsImplementation?.setUserIdentifier(userId);
+    _crashReportsImplementation?.setUserIdentifier(userId);
     _logService?.logAnalytic(name: 'user_id', value: userId);
   }
 
   /// Sets a user [property] and [value] that persists throughout the app.
   ///
   /// This applies to your possible [_analyticsImplementation] as well as your
-  /// [_crashlyticsImplementation].
-  void userProperty(
-      {required String Function(S subjects) property, required Object? value}) {
+  /// [_crashReportsImplementation].
+  void userProperty({required String Function(S subjects) property, required Object? value}) {
     final name = property(_featureSubjects);
     final _value = value?.toString() ?? '-';
     _analyticsImplementation?.setUserProperty(name: name, value: _value);
-    _crashlyticsImplementation?.setCustomKey(name, _value);
+    _crashReportsImplementation?.setCustomKey(name, _value);
     _logService?.logAnalytic(name: name, value: _value);
   }
 
@@ -284,9 +283,7 @@ class AnalyticsService<S extends FeatureSubjects, P extends FeatureParameters> {
       parameters: parameters?.call(_featureParameters),
       type: AnalyticType.input,
     );
-    if (_firstInput == null ||
-        !onlyFirstValue ||
-        !analytic.equals(_firstInput)) {
+    if (_firstInput == null || !onlyFirstValue || !analytic.equals(_firstInput)) {
       _logEvent(analytic);
     }
     _firstInput = analytic;

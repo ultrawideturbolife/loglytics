@@ -4,7 +4,7 @@ import 'package:loglytics/loglytics.dart';
 /// Used to wrap implementations of [FeatureSubjects] and [FeatureParameters] for a specific feature.
 ///
 /// Each feature in your app should have its own [FeatureAnalytics] implementation with its own
-/// respective [FeatureSubjects] and [FeatureParameters] implementations. Check out the [LogService]
+/// respective [FeatureSubjects] and [FeatureParameters] implementations. Check out the [Loglytics]
 /// documentation for more info on how to use these as part of your analytics solution.
 ///
 /// Template:
@@ -23,8 +23,7 @@ import 'package:loglytics/loglytics.dart';
 ///
 /// class TemplateParameters extends FeatureParameters {}
 @immutable
-abstract class FeatureAnalytics<S extends FeatureSubjects,
-    P extends FeatureParameters> {
+abstract class FeatureAnalytics<S extends FeatureSubjects, P extends FeatureParameters> {
   S get subjects;
   P get parameters;
 }

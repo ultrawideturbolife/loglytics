@@ -6,7 +6,7 @@ Besides trying to facilitate easier logging and sending of analytics, Loglytics 
 
 # 🔎 How do I start?
 
-The first thing we need to do is determine if we want to implement analytics and/or crash reporting in your project. If we don't, we can still use the `LogService` to log anything and everywhere without having to configure anything. If we do want to use one or both of them we must implement the `AnalyticsInterface` and `CrashlyticsInterface` respectively so we can pass them along to the `LogService.setup()` method. We will need to call the `LogService.setup()` method before we can send any analytics or crash reports using this package. See below for an example of an implementation of where `FirebaseAnalytics` and `FirebaseCrashlytics` were used.
+The first thing we need to do is determine if we want to implement analytics and/or crash reporting in your project. If we don't, we can still use the `LogService` to log anything and everywhere without having to configure anything. If we do want to use one or both of them we must implement the `AnalyticsInterface` and `CrashReportsInterface` respectively so we can pass them along to the `LogService.setup()` method. We will need to call the `LogService.setup()` method before we can send any analytics or crash reports using this package. See below for an example of an implementation of where `FirebaseAnalytics` and `FirebaseCrashlytics` were used.
 
 ### AnalyticsInterface
 
@@ -44,15 +44,15 @@ class AnalyticsImplementation implements AnalyticsInterface {
 }
 ```
 
-### CrashlyticsInterface
+### CrashReportsInterface
 
 ```dart
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:loglytics/crashlytics/crashlytics_interface.dart';
 
-class CrashlyticsImplementation implements CrashlyticsInterface {
-  CrashlyticsImplementation(this._firebaseCrashlytics);
+class CrashReportsImplementation implements CrashReportsInterface {
+  CrashReportsImplementation(this._firebaseCrashlytics);
   final FirebaseCrashlytics _firebaseCrashlytics;
 
   @override
@@ -94,7 +94,7 @@ void main() {
     analyticsImplementation: AnalyticsImplementation(
       FirebaseAnalytics(),
     ),
-    crashlyticsImplementation: CrashlyticsImplementation(
+    crashReportsImplementation: CrashReportsImplementation(
       FirebaseCrashlytics.instance,
     ),
     shouldLogAnalytics: true,
