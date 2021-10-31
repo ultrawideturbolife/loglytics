@@ -22,7 +22,7 @@ class Analytic {
               parameters == other.parameters);
 }
 
-/// Every action or state that's applicable to a subject from [AnalyticsSubjects].
+/// Every action or state that's applicable to a subject from [LoglyticsSubjects].
 enum AnalyticType {
   event,
   tap,

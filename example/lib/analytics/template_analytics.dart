@@ -1,6 +1,6 @@
 import 'package:loglytics/loglytics.dart';
 
-class TemplateAnalytics extends AnalyticsWrapper<TemplateSubjects, TemplateParameters> {
+class TemplateAnalytics extends LoglyticsWrapper<TemplateSubjects, TemplateParameters> {
   @override
   TemplateSubjects get subjects => _counterSubjects;
   late final TemplateSubjects _counterSubjects = TemplateSubjects();
@@ -10,6 +10,6 @@ class TemplateAnalytics extends AnalyticsWrapper<TemplateSubjects, TemplateParam
   late final TemplateParameters _counterParameters = TemplateParameters();
 }
 
-class TemplateSubjects extends AnalyticsSubjects {}
+class TemplateSubjects extends LoglyticsSubjects {}
 
-class TemplateParameters extends AnalyticsParameters {}
+class TemplateParameters extends LoglyticsParameters {}

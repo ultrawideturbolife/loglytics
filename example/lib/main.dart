@@ -49,7 +49,7 @@ class _MyHomePageState extends State<MyHomePage>
   int _counter = 0;
 
   @override
-  AnalyticsWrapper<CounterSubjects, CounterParameters> get wrapper => CounterAnalytics();
+  LoglyticsWrapper<CounterSubjects, CounterParameters> get wrapper => CounterAnalytics();
 
   void _incrementCounter() {
     analytics.tap(subject: (subjects) => subjects.counterButton);

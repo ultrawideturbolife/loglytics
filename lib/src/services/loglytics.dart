@@ -22,23 +22,23 @@ enum LogType {
 /// If you want to make use of the analytic functionality use [Loglytics.setup] to provide your
 /// implementations of the [AnalyticsInterface] and [CrashReportsInterface]. After doing so you can
 /// add the [Loglytics] mixin to any class where you would like to add logging and/or analytics to.
-/// In order to have access to the appropriate [AnalyticsSubjects] and [AnalyticsParameters]
+/// In order to have access to the appropriate [LoglyticsSubjects] and [LoglyticsParameters]
 /// implementations for a specific feature you should add these as generic arguments to a
-/// [Loglytics] like Loglytics<AnalyticsSubjectsImplementation, AnalyticsParametersImplementation>.
+/// [Loglytics] like Loglytics<LoglyticsSubjectsImplementation, LoglyticsParametersImplementation>.
 /// Do remember to also override [Loglytics.wrapper] afterwards and provide your
-/// implementation of the [AnalyticsWrapper] that holds the former specified
-/// [AnalyticsSubjects] and [AnalyticsParameters] implementations to complete the setup. By doing so
+/// implementation of the [LoglyticsWrapper] that holds the former specified
+/// [LoglyticsSubjects] and [LoglyticsParameters] implementations to complete the setup. By doing so
 /// the [Loglytics.analytics] will provide you with access to these implementations inside the
 /// various [AnalyticsService] methods.
 ///
 /// Defining the former is optional however as the [Loglytics] will also work as a pure logging
 /// service. When using this mixing just for logging there is no need to define the
-/// [AnalyticsSubjects] and [AnalyticsParameters] as generic arguments. Just add the mixin and enjoy
+/// [LoglyticsSubjects] and [LoglyticsParameters] as generic arguments. Just add the mixin and enjoy
 /// the ride.
-mixin Loglytics<S extends AnalyticsSubjects, P extends AnalyticsParameters> {
+mixin Loglytics<S extends LoglyticsSubjects, P extends LoglyticsParameters> {
   late final AnalyticsService<S, P> _analyticsService = AnalyticsService<S, P>(
-    analyticsSubjects: wrapper!.subjects,
-    analyticsParameters: wrapper!.parameters,
+    loglyticsSubjects: wrapper!.subjects,
+    loglyticsParameters: wrapper!.parameters,
     analyticsImplementation: _analyticsImplementation,
     crashReportsImplementation: _crashReportsImplementation,
     loglytics: this,
@@ -46,8 +46,8 @@ mixin Loglytics<S extends AnalyticsSubjects, P extends AnalyticsParameters> {
 
   /// Provides the configured [AnalyticsService] functionality through the [Loglytics].
   ///
-  /// The [AnalyticsService] will have access to the specified [AnalyticsSubjects] and
-  /// [AnalyticsParameters] as specified in the [Loglytics.wrapper] method that you should
+  /// The [AnalyticsService] will have access to the specified [LoglyticsSubjects] and
+  /// [LoglyticsParameters] as specified in the [Loglytics.wrapper] method that you should
   /// override before using this method.
   AnalyticsService<S, P> get analytics {
     assert(wrapper != null, 'Override the wrapper getter first.');
@@ -56,8 +56,8 @@ mixin Loglytics<S extends AnalyticsSubjects, P extends AnalyticsParameters> {
 
   late final AnalyticsService<DefaultSubjects, DefaultParameters> _analyticsDefaultService =
       AnalyticsService<DefaultSubjects, DefaultParameters>(
-    analyticsSubjects: DefaultSubjects(),
-    analyticsParameters: DefaultParameters(),
+    loglyticsSubjects: DefaultSubjects(),
+    loglyticsParameters: DefaultParameters(),
     analyticsImplementation: _analyticsImplementation,
     crashReportsImplementation: _crashReportsImplementation,
     loglytics: this,
@@ -67,13 +67,13 @@ mixin Loglytics<S extends AnalyticsSubjects, P extends AnalyticsParameters> {
   ///
   /// The [AnalyticsService] will have access to the default subjects and parameters as specified
   /// in [DefaultSubjects] and [DefaultParameters]. If you want to use your own implementation have
-  /// a look at the [AnalyticsWrapper] and [Loglytics] class documentations.
+  /// a look at the [LoglyticsWrapper] and [Loglytics] class documentations.
   AnalyticsService<DefaultSubjects, DefaultParameters> get defaultAnalytics =>
       _analyticsDefaultService;
 
-  /// Override this method to provide the appropriate [AnalyticsWrapper] for a certain class.
+  /// Override this method to provide the appropriate [LoglyticsWrapper] for a certain class.
   @protected
-  AnalyticsWrapper<S, P>? get wrapper => null;
+  LoglyticsWrapper<S, P>? get wrapper => null;
 
   /// Used for showing the location (class) of a single log.
   String get logLocation => _logLocation;

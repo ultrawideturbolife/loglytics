@@ -1,10 +1,10 @@
 import 'package:loglytics/loglytics.dart';
 
-/// Default [AnalyticsWrapper] wrapper for providing default subjects and parameters.
+/// Default [LoglyticsWrapper] wrapper for providing default subjects and parameters.
 ///
 /// This class is used to provide default analytic functionality through [Loglytics.defaultAnalytics]
-/// when no [AnalyticsSubjects] or [AnalyticsParameters] are specified while using a [Loglytics] mixin.
-class DefaultAnalytics extends AnalyticsWrapper<DefaultSubjects, DefaultParameters> {
+/// when no [LoglyticsSubjects] or [LoglyticsParameters] are specified while using a [Loglytics] mixin.
+class DefaultAnalytics extends LoglyticsWrapper<DefaultSubjects, DefaultParameters> {
   @override
   DefaultSubjects get subjects => _defaultSubjects;
   late final DefaultSubjects _defaultSubjects = DefaultSubjects();
@@ -14,8 +14,8 @@ class DefaultAnalytics extends AnalyticsWrapper<DefaultSubjects, DefaultParamete
   late final DefaultParameters _defaultParameters = DefaultParameters();
 }
 
-/// [AnalyticsSubjects] implementation for [DefaultAnalytics].
-class DefaultSubjects extends AnalyticsSubjects {
+/// [LoglyticsSubjects] implementation for [DefaultAnalytics].
+class DefaultSubjects extends LoglyticsSubjects {
   final String form = 'form';
   final String screen = 'screen';
   final String button = 'button';
@@ -36,8 +36,8 @@ class DefaultSubjects extends AnalyticsSubjects {
   final String delete = 'delete';
 }
 
-/// [AnalyticsParameters] implementation for [DefaultAnalytics].
-class DefaultParameters extends AnalyticsParameters {
+/// [LoglyticsParameters] implementation for [DefaultAnalytics].
+class DefaultParameters extends LoglyticsParameters {
   final String id = 'id';
   final String name = 'name';
   final String duration = 'duration';
