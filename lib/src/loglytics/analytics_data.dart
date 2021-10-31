@@ -1,8 +1,13 @@
 import 'package:flutter/foundation.dart';
 
 @immutable
-class LoglyticsData {
-  const LoglyticsData();
+class AnalyticsData {
+  const AnalyticsData();
+  final _CoreData core = const _CoreData();
+}
+
+class _CoreData {
+  const _CoreData();
   final String form = 'form';
   final String screen = 'screen';
   final String button = 'button';

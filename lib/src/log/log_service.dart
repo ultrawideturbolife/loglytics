@@ -1,10 +1,8 @@
 import 'package:flutter/foundation.dart';
-import 'package:get_it/get_it.dart';
 import 'package:loglytics/loglytics.dart';
 import 'package:loglytics/src/enums/log_type.dart';
 import 'package:loglytics/src/extensions/date_time_extensions.dart';
 import 'package:loglytics/src/extensions/log_type_extensions.dart';
-import 'package:loglytics/src/loglytics/analytics_data.dart';
 
 import '../analytics/analytics_interface.dart';
 import '../analytics/analytics_service.dart';
@@ -28,65 +26,9 @@ import '../crash_reports/crash_reports_interface.dart';
 /// service. When using this mixing just for logging there is no need to define the
 /// [DefaultSubjects] and [DefaultParameters] as generic arguments. Just add the mixin and enjoy
 /// the ride.
-mixin Loglytics<D extends AnalyticsData> {
-  late final AnalyticsService<D> _analyticsService = AnalyticsService<D>(
-    analyticsData: GetIt.I.get<D>(),
-    analyticsImplementation: _analyticsImplementation,
-    crashReportsImplementation: _crashReportsImplementation,
-    loglytics: this,
-  );
-
-  /// Provides the configured [AnalyticsService] functionality through the [Loglytics] mixin.
-  ///
-  /// The [AnalyticsService] will have access to the specified [DefaultSubjects] and
-  /// [DefaultParameters] as specified in the [Loglytics.wrapper] method that you should
-  /// override before using this method.
-  AnalyticsService<D> get analytics => _analyticsService;
-
+mixin LogService {
   /// Used for showing the location (class) of a single log.
   late final String _logLocation = runtimeType.toString();
-
-  // --------------- SETUP --------------- SETUP --------------- SETUP --------------- \\
-
-  static AnalyticsInterface? _analyticsImplementation;
-  static CrashReportsInterface? _crashReportsImplementation;
-
-  static bool get isAnalyticsEnabled => _isAnalyticsEnabled;
-  static bool _isAnalyticsEnabled = false;
-  static bool get isCrashlyticsEnabled => _isCrashLyticsEnabled;
-  static bool _isCrashLyticsEnabled = false;
-  static bool get shouldLogAnalytics => _shouldLogAnalytics;
-  static bool _shouldLogAnalytics = true;
-
-  /// Used to configure the logging and analytic abilities of the [Loglytics].
-  static void setup<D extends AnalyticsData>({
-    AnalyticsInterface? analyticsImplementation,
-    CrashReportsInterface? crashReportsImplementation,
-    bool? shouldLogAnalytics,
-    List<D Function()>? analyticsData,
-  }) {
-    _analyticsImplementation = analyticsImplementation;
-    _isAnalyticsEnabled = _analyticsImplementation != null;
-    _crashReportsImplementation = crashReportsImplementation;
-    _isCrashLyticsEnabled = _crashReportsImplementation != null;
-    if (shouldLogAnalytics != null) _shouldLogAnalytics = shouldLogAnalytics;
-    if (analyticsData != null) {
-      for (final data in analyticsData) {
-        GetIt.instance.registerFactory(data);
-      }
-    }
-  }
-
-  /// Used to configure the logging and analytic abilities of the [Loglytics].
-  static Future<void> dispose({
-    bool disposeAnalyticsImplementation = true,
-    bool disposeCrashReportsImplementation = true,
-  }) async {
-    _analyticsImplementation = null;
-    _crashReportsImplementation = null;
-    _shouldLogAnalytics = true;
-    await GetIt.instance.reset();
-  }
 
   // --------------- REGULAR --------------- REGULAR --------------- REGULAR --------------- \\
 
@@ -119,11 +61,6 @@ mixin Loglytics<D extends AnalyticsData> {
     StackTrace? stack,
     bool fatal = false,
   }) {
-    _crashReportsImplementation?.recordError(
-      error,
-      stack ?? StackTrace.current,
-      fatal: fatal,
-    );
     _logMessage(
       message: message,
       logType: LogType.error,
@@ -156,24 +93,22 @@ mixin Loglytics<D extends AnalyticsData> {
     String? value,
     Map<String, Object?>? parameters,
   }) {
-    if (_shouldLogAnalytics) {
-      debugPrint(
-        '$time '
-        '[$_logLocation] '
-        '${LogType.analytic.icon} $name${value != null ? ' : $value' : ''}',
-      );
-      parameters?.forEach(
-        (key, value) {
-          debugPrint(
-            '$time '
-            '[$_logLocation] '
-            '${LogType.analytic.icon} '
-            '{ $key '
-            ': $value }',
-          );
-        },
-      );
-    }
+    debugPrint(
+      '$time '
+      '[$_logLocation] '
+      '${LogType.analytic.icon} $name${value != null ? ' : $value' : ''}',
+    );
+    parameters?.forEach(
+      (key, value) {
+        debugPrint(
+          '$time '
+          '[$_logLocation] '
+          '${LogType.analytic.icon} '
+          '{ $key '
+          ': $value }',
+        );
+      },
+    );
   }
 
   // --------------- VALUES --------------- VALUES --------------- VALUES --------------- \\
@@ -290,7 +225,6 @@ mixin Loglytics<D extends AnalyticsData> {
     required String message,
     required LogType logType,
   }) {
-    _tryLogCrashlyticsMessage(message, logType);
     debugPrint(
       '$time '
       '[$_logLocation] '
@@ -307,8 +241,6 @@ mixin Loglytics<D extends AnalyticsData> {
     required LogType logType,
     String? message,
   }) {
-    if (message != null) _tryLogCrashlyticsMessage(message, logType);
-    _tryLogCrashlyticsKey(key, logType);
     debugPrint(
       '$time '
       '[$_logLocation] '
@@ -326,8 +258,6 @@ mixin Loglytics<D extends AnalyticsData> {
     required LogType logType,
     String? message,
   }) {
-    if (message != null) _tryLogCrashlyticsMessage(message, logType);
-    _tryLogCrashlyticsValue(value, logType);
     final _time = time;
     if (message != null) debugPrint('$_time [$_logLocation] ${'${logType.icon} $message '}');
     debugPrint('$_time [$_logLocation] 💾 $value');
@@ -343,8 +273,6 @@ mixin Loglytics<D extends AnalyticsData> {
     required LogType logType,
     String? message,
   }) {
-    if (message != null) _tryLogCrashlyticsMessage(message, logType);
-    _tryLogCrashlyticsKeyValue(key, value, logType);
     debugPrint(
       '$time '
       '[$_logLocation] '
@@ -429,47 +357,4 @@ mixin Loglytics<D extends AnalyticsData> {
           );
         },
       );
-
-  // --------------- CRASHLYTICS --------------- CRASHLYTICS --------------- CRASHLYTICS --------------- \\
-
-  /// Used under the hood to try and log a crashlytics [message] with [logType].
-  void _tryLogCrashlyticsMessage(
-    String message,
-    LogType logType,
-  ) {
-    _crashReportsImplementation?.log('[$_logLocation] '
-        '${logType.name}: '
-        '$message');
-  }
-
-  /// Used under the hood to try and log a crashlytics [key] and [value] with [logType].
-  void _tryLogCrashlyticsKeyValue(
-    String key,
-    Object? value,
-    LogType logType,
-  ) {
-    _crashReportsImplementation?.log('[$_logLocation] '
-        '${logType.name}: '
-        '$key: $value');
-  }
-
-  /// Used under the hood to try and log a crashlytics [key] with [logType].
-  void _tryLogCrashlyticsKey(
-    Object? key,
-    LogType logType,
-  ) {
-    _crashReportsImplementation?.log('[$_logLocation] '
-        '${logType.name}: '
-        'key: $key');
-  }
-
-  /// Used under the hood to try and log a crashlytics [value] with [logType].
-  void _tryLogCrashlyticsValue(
-    Object? value,
-    LogType logType,
-  ) {
-    _crashReportsImplementation?.log('[$_logLocation] '
-        '${logType.name}: '
-        'value: $value');
-  }
 }

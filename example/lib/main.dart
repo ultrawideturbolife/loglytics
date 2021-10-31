@@ -16,7 +16,7 @@ void main() {
       FirebaseCrashlytics.instance,
     ),
     shouldLogAnalytics: true,
-    loglyticsData: [
+    analyticsData: [
       () => CounterAnalytics(),
     ],
   );
@@ -51,14 +51,14 @@ class _MyHomePageState extends State<MyHomePage> with Loglytics {
   int _counter = 0;
 
   void _incrementCounter() {
-    analytics.tap(subject: (data) => data.button);
+    analytics.tap(subject: (data) => data.core.button);
     setState(
       () {
         _counter++;
         analytics.increment(
-          subject: (data) => data.value,
+          subject: (data) => data.core.button,
           parameters: (data) => {
-            data.time: DateTime.now(),
+            data.core.time: DateTime.now(),
           },
         );
       },

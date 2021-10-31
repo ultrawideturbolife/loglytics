@@ -8,4 +8,4 @@ export 'src/analytics/analytics_service.dart';
 export 'src/crash_reports/crash_reports_interface.dart';
 // src/services
 export 'src/loglytics/loglytics.dart';
-export 'src/loglytics/loglytics_data.dart';
+export 'src/loglytics/analytics_data.dart';
