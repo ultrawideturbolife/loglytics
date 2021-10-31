@@ -167,8 +167,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: dev
-      resolved-ref: fb8c93c4625dc33cfb4391844fa8d360200bd11a
+      ref: main
+      resolved-ref: bb2783587b0fed04bec19427d5e7bf57bf25079b
       url: "https://github.com/codaveto/loglytics.git"
     source: git
     version: "0.1.1"
