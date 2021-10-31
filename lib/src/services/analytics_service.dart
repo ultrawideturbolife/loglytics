@@ -1,8 +1,8 @@
 import '../analytics/analytic.dart';
 import '../analytics/analytics_interface.dart';
 import '../analytics/feature_analytics.dart';
-import '../crashlytics/crashlytics_interface.dart';
-import 'log_service.dart';
+import '../crashlytics/crash_reports_interface.dart';
+import 'loglytics.dart';
 
 /// Used to provide an easy interface for sending analytics.
 ///
@@ -14,21 +14,21 @@ class AnalyticsService<S extends FeatureSubjects, P extends FeatureParameters> {
   AnalyticsService({
     required S featureSubjects,
     required P featureParameters,
-    LogService? logService,
+    Loglytics? loglytics,
     AnalyticsInterface? analyticsImplementation,
-    CrashlyticsInterface? crashlyticsImplementation,
+    CrashReportsInterface? crashReportsImplementation,
   })  : _featureSubjects = featureSubjects,
         _featureParameters = featureParameters,
-        _logService = logService,
+        _loglytics = loglytics,
         _analyticsImplementation = analyticsImplementation,
-        _crashlyticsImplementation = crashlyticsImplementation;
+        _crashReportsImplementation = crashReportsImplementation;
 
   final S _featureSubjects;
   final P _featureParameters;
 
-  final LogService? _logService;
+  final Loglytics? _loglytics;
   final AnalyticsInterface? _analyticsImplementation;
-  final CrashlyticsInterface? _crashlyticsImplementation;
+  final CrashReportsInterface? _crashReportsImplementation;
 
   /// Used to identify the first input when sending a stream of similar analytics.
   Analytic? _firstInput;
@@ -36,24 +36,23 @@ class AnalyticsService<S extends FeatureSubjects, P extends FeatureParameters> {
   /// Sets a [userId] that persists throughout the app.
   ///
   /// This applies to your possible [_analyticsImplementation] as well as your
-  /// [_crashlyticsImplementation].
+  /// [_crashReportsImplementation].
   void userId({required String userId}) {
     _analyticsImplementation?.setUserId(userId);
-    _crashlyticsImplementation?.setUserIdentifier(userId);
-    _logService?.logAnalytic(name: 'user_id', value: userId);
+    _crashReportsImplementation?.setUserIdentifier(userId);
+    _loglytics?.logAnalytic(name: 'user_id', value: userId);
   }
 
   /// Sets a user [property] and [value] that persists throughout the app.
   ///
   /// This applies to your possible [_analyticsImplementation] as well as your
-  /// [_crashlyticsImplementation].
-  void userProperty(
-      {required String Function(S subjects) property, required Object? value}) {
+  /// [_crashReportsImplementation].
+  void userProperty({required String Function(S subjects) property, required Object? value}) {
     final name = property(_featureSubjects);
     final _value = value?.toString() ?? '-';
     _analyticsImplementation?.setUserProperty(name: name, value: _value);
-    _crashlyticsImplementation?.setCustomKey(name, _value);
-    _logService?.logAnalytic(name: name, value: _value);
+    _crashReportsImplementation?.setCustomKey(name, _value);
+    _loglytics?.logAnalytic(name: name, value: _value);
   }
 
   /// Sends a custom analytic event by providing both [FeatureSubjects] and [FeatureParameters].
@@ -284,9 +283,7 @@ class AnalyticsService<S extends FeatureSubjects, P extends FeatureParameters> {
       parameters: parameters?.call(_featureParameters),
       type: AnalyticType.input,
     );
-    if (_firstInput == null ||
-        !onlyFirstValue ||
-        !analytic.equals(_firstInput)) {
+    if (_firstInput == null || !onlyFirstValue || !analytic.equals(_firstInput)) {
       _logEvent(analytic);
     }
     _firstInput = analytic;
@@ -327,7 +324,7 @@ class AnalyticsService<S extends FeatureSubjects, P extends FeatureParameters> {
       type: AnalyticType.screen,
     );
     _analyticsImplementation?.setCurrentScreen(name: analytic.name);
-    _logService?.logAnalytic(name: analytic.name);
+    _loglytics?.logAnalytic(name: analytic.name);
   }
 
   /// Resets all current analytics data.
@@ -341,6 +338,6 @@ class AnalyticsService<S extends FeatureSubjects, P extends FeatureParameters> {
     final name = analytic.name;
     final parameters = analytic.parameters;
     _analyticsImplementation?.logEvent(name: name, parameters: parameters);
-    _logService?.logAnalytic(name: name, parameters: parameters);
+    _loglytics?.logAnalytic(name: name, parameters: parameters);
   }
 }

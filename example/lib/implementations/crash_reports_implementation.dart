@@ -1,9 +1,9 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
-import 'package:loglytics/crashlytics/crashlytics_interface.dart';
+import 'package:loglytics/loglytics.dart';
 
-class CrashlyticsImplementation implements CrashlyticsInterface {
-  CrashlyticsImplementation(this._firebaseCrashlytics);
+class CrashReportsImplementation implements CrashReportsInterface {
+  CrashReportsImplementation(this._firebaseCrashlytics);
   final FirebaseCrashlytics _firebaseCrashlytics;
 
   @override
