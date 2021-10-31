@@ -1,3 +1,9 @@
+## 0.1.4
+
+* **⚠️ Breaking:** Renamed the following:
+  * `core_analytics.dart` to `default_analytics.dart`;
+  * `analytics_wrapper.dart` to `loglytics_wrapper.dart`.
+
 ## 0.1.3
 
 * **✨ New:** Added default analytics that are accessible trough `Loglytics.defaultAnalytics` and require no further configuration of the `Loglytics` mixin.

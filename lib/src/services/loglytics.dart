@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:loglytics/loglytics.dart';
 
 import '../analytics/analytics_interface.dart';
-import '../analytics/analytics_wrapper.dart';
+import '../analytics/loglytics_wrapper.dart';
 import '../crashlytics/crash_reports_interface.dart';
 import 'analytics_service.dart';
 

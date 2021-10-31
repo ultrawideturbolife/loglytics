@@ -1,6 +1,6 @@
 import '../analytics/analytic.dart';
 import '../analytics/analytics_interface.dart';
-import '../analytics/analytics_wrapper.dart';
+import '../analytics/loglytics_wrapper.dart';
 import '../crashlytics/crash_reports_interface.dart';
 import 'loglytics.dart';
 
