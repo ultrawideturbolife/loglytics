@@ -1,7 +1,6 @@
 import 'package:loglytics/loglytics.dart';
 
-class CounterAnalytics
-    extends FeatureAnalytics<CounterSubjects, CounterParameters> {
+class CounterAnalytics extends AnalyticsWrapper<CounterSubjects, CounterParameters> {
   @override
   CounterSubjects get subjects => _counterSubjects;
   late final CounterSubjects _counterSubjects = CounterSubjects();
@@ -11,11 +10,11 @@ class CounterAnalytics
   late final CounterParameters _counterParameters = CounterParameters();
 }
 
-class CounterSubjects extends FeatureSubjects {
+class CounterSubjects extends AnalyticsSubjects {
   final String counterButton = 'counter_button';
   final String incrementCounter = 'increment_counter';
 }
 
-class CounterParameters extends FeatureParameters {
+class CounterParameters extends AnalyticsParameters {
   final String amount = 'amount';
 }
