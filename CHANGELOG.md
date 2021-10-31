@@ -1,3 +1,5 @@
+* **🐛️ Bugfix:** Remove **required** *crashReportsInterface* when calling `customLog`.
+
 ## 0.1.4
 
 * **⚠️ Breaking:** Renamed the following:
