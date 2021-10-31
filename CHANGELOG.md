@@ -1,10 +1,17 @@
-* **🐛️ Bugfix:** Remove **required** *crashReportsInterface* when calling `customLog`.
+## 0.4.0+1
+
+* Fix changelog.
+
+## 0.4.0
+
+* **⛔️ NOTE:** Loglytics was unaware of the rules for semantic versioning. Please be aware that versions 0.1.2, 0.1.3 and 0.1.4 are not compatible with each other. Also, please be aware that from this day forth Loglytics will keep the semantic versioning rules in mind when specifying new versions 🙃.
 
 ## 0.1.4
 
 * **⚠️ Breaking:** Renamed the following:
   * `core_analytics.dart` to `default_analytics.dart`;
   * `analytics_wrapper.dart` to `loglytics_wrapper.dart`.
+* **🐛️ Bugfix:** Remove **required** *crashReportsInterface* when calling `customLog`.
 
 ## 0.1.3
 
