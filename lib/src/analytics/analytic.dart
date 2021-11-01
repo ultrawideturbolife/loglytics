@@ -1,4 +1,8 @@
-/// Wrapper class that's used to structure and provide analytics in the [AnalyticsService].
+import 'package:loglytics/loglytics.dart';
+
+/// Core class that's used to structure and provide analytics in the [AnalyticsService].
+///
+/// This is mostly used under the hood.
 class Analytic {
   const Analytic({
     required String subject,
@@ -22,7 +26,7 @@ class Analytic {
               parameters == other.parameters);
 }
 
-/// Every action or state that's applicable to a subject from [LoglyticsSubjects].
+/// Every action or state that's applicable to data from your [Analytics] implementations.
 enum AnalyticType {
   event,
   tap,
@@ -51,6 +55,9 @@ enum AnalyticType {
   accept,
   decline,
   alert,
+  scroll,
+  start,
+  stop,
 }
 
 /// Used to generate the proper String format when sending analytics to the analytics provider.
@@ -111,6 +118,12 @@ extension on AnalyticType {
         return 'decline';
       case AnalyticType.alert:
         return 'alert';
+      case AnalyticType.scroll:
+        return 'scroll';
+      case AnalyticType.start:
+        return 'start';
+      case AnalyticType.stop:
+        return 'stop';
     }
   }
 }

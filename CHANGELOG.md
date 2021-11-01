@@ -1,3 +1,12 @@
+## 0.5.0
+
+* **⚠️ Breaking:** Loglytics was completely refactored.
+  * `LoglyticsWrapper` was removed and doesn't have to be overridden anymore;
+  * `LoglyticsSubjects` was removed and doesn't have to be implemented anymore;
+  * `LoglyticsParameters` was removed and doesn't have to be implemented anymore;
+  * `Analytics` object was introduced and is now the only you have to add to `Loglytics` `mixin` for access to your custom analytics.
+  * Added a bunch of handy default analytics that are accessible through `analytics.core`.
+
 ## 0.4.0+1
 
 * Fix changelog.

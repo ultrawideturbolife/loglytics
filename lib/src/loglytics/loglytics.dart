@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:loglytics/loglytics.dart';
+import 'package:loglytics/src/analytics/analytics.dart';
 import 'package:loglytics/src/enums/log_type.dart';
 import 'package:loglytics/src/extensions/date_time_extensions.dart';
 import 'package:loglytics/src/extensions/log_type_extensions.dart';
-import 'package:loglytics/src/loglytics/analytics_data.dart';
 
 import '../analytics/analytics_interface.dart';
 import '../analytics/analytics_service.dart';
@@ -15,32 +15,36 @@ import '../crash_reports/crash_reports_interface.dart';
 /// If you want to make use of the analytic functionality use [Loglytics.setup] to provide your
 /// implementations of the [AnalyticsInterface] and [CrashReportsInterface]. After doing so you can
 /// add the [Loglytics] mixin to any class where you would like to add logging and/or analytics to.
-/// In order to have access to the appropriate [DefaultSubjects] and [DefaultParameters]
-/// implementations for a specific feature you should add these as generic arguments to a
-/// [Loglytics] like Loglytics<LoglyticsSubjectsImplementation, LoglyticsParametersImplementation>.
-/// Do remember to also override [Loglytics.wrapper] afterwards and provide your
-/// implementation of the [LoglyticsWrapper] that holds the former specified
-/// [DefaultSubjects] and [DefaultParameters] implementations to complete the setup. By doing so
-/// the [Loglytics.analytics] will provide you with access to these implementations inside the
-/// various [AnalyticsService] methods.
+/// In order to have access to the appropriate [Analytics] implementation for a specific
+/// feature or part of your project you should add the implementation as generic arguments to a
+/// [Loglytics] like Loglytics<CounterAnalytics>.
 ///
-/// Defining the former is optional however as the [Loglytics] will also work as a pure logging
-/// service. When using this mixing just for logging there is no need to define the
-/// [DefaultSubjects] and [DefaultParameters] as generic arguments. Just add the mixin and enjoy
-/// the ride.
-mixin Loglytics<D extends AnalyticsData> {
+/// Defining the generic [Analytics] is optional however as the [Loglytics] will also work without
+/// it. When no generic is specified you can even use our basic analytic functionality through the
+/// default [Analytics.core] getter that's accessible through [Loglytics.analytics].
+mixin Loglytics<D extends Analytics> {
   late final AnalyticsService<D> _analyticsService = AnalyticsService<D>(
-    analyticsData: GetIt.I.get<D>(),
+    analyticsData: _analyticsData,
     analyticsImplementation: _analyticsImplementation,
     crashReportsImplementation: _crashReportsImplementation,
     loglytics: this,
   );
 
+  // Used to register and provider the proper [Analytics]
+  static final GetIt _getIt = GetIt.asNewInstance();
+
+  /// Used to grab the proper [Analytics] implementation or provide a default one.
+  dynamic get _analyticsData {
+    try {
+      return _getIt.get<D>();
+    } catch (_) {
+      return const Analytics();
+    }
+  }
+
   /// Provides the configured [AnalyticsService] functionality through the [Loglytics] mixin.
   ///
-  /// The [AnalyticsService] will have access to the specified [DefaultSubjects] and
-  /// [DefaultParameters] as specified in the [Loglytics.wrapper] method that you should
-  /// override before using this method.
+  /// The [AnalyticsService] will have access to the specified [Analytics] or default to the basic one.
   AnalyticsService<D> get analytics => _analyticsService;
 
   /// Used for showing the location (class) of a single log.
@@ -59,20 +63,27 @@ mixin Loglytics<D extends AnalyticsData> {
   static bool _shouldLogAnalytics = true;
 
   /// Used to configure the logging and analytic abilities of the [Loglytics].
-  static void setup<D extends AnalyticsData>({
+  ///
+  /// Use the [analyticsImplementation] and [crashReportsImplementation] to specify your implementations
+  /// of both functionalities. This is optional as the [Loglytics] can also be used as a pure logger.
+  /// The [shouldLogAnalytics] boolean can be set to turn the debug logging of analytics on or off.
+  /// This does not turn your analytics off, it only disables the debug logging.
+  /// Populate the [analytics] parameter with callbacks to your [Analytics] implementations.
+  /// Example: [() => CounterAnalytics(), () => CookieAnalytics()].
+  static void setup<D extends Analytics>({
     AnalyticsInterface? analyticsImplementation,
     CrashReportsInterface? crashReportsImplementation,
     bool? shouldLogAnalytics,
-    List<D Function()>? analyticsData,
+    List<D Function()>? analytics,
   }) {
     _analyticsImplementation = analyticsImplementation;
     _isAnalyticsEnabled = _analyticsImplementation != null;
     _crashReportsImplementation = crashReportsImplementation;
     _isCrashLyticsEnabled = _crashReportsImplementation != null;
     if (shouldLogAnalytics != null) _shouldLogAnalytics = shouldLogAnalytics;
-    if (analyticsData != null) {
-      for (final data in analyticsData) {
-        GetIt.instance.registerFactory(data);
+    if (analytics != null) {
+      for (final data in analytics) {
+        _getIt.registerFactory(data);
       }
     }
   }
@@ -85,7 +96,7 @@ mixin Loglytics<D extends AnalyticsData> {
     _analyticsImplementation = null;
     _crashReportsImplementation = null;
     _shouldLogAnalytics = true;
-    await GetIt.instance.reset();
+    await _getIt.reset();
   }
 
   // --------------- REGULAR --------------- REGULAR --------------- REGULAR --------------- \\

@@ -1,5 +1,3 @@
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:loglytics/loglytics.dart';
 
@@ -8,18 +6,16 @@ import 'implementations/analytics_implementation.dart';
 import 'implementations/crash_reports_implementation.dart';
 
 void main() {
+  customLog(message: 'Setting up Loglytics', location: 'main()', logType: LogType.info);
   Loglytics.setup(
-    analyticsImplementation: AnalyticsImplementation(
-      FirebaseAnalytics(),
-    ),
-    crashReportsImplementation: CrashReportsImplementation(
-      FirebaseCrashlytics.instance,
-    ),
+    analyticsImplementation: AnalyticsImplementation(Object()),
+    crashReportsImplementation: CrashReportsImplementation(Object()),
     shouldLogAnalytics: true,
-    analyticsData: [
+    analytics: [
       () => CounterAnalytics(),
     ],
   );
+  customLog(message: 'Setting up Loglytics', location: 'main()', logType: LogType.info);
   runApp(MyApp());
 }
 
@@ -28,6 +24,9 @@ class MyApp extends StatelessWidget with Loglytics {
 
   @override
   Widget build(BuildContext context) {
+    logWarning('Starting app..');
+    logError('also logging from build method.. not a good idea!');
+    analytics.start(subject: (analytics) => analytics.core.app);
     return MaterialApp(
       title: 'Loglytics Demo',
       theme: ThemeData(
@@ -47,18 +46,20 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with Loglytics {
+class _MyHomePageState extends State<MyHomePage> with Loglytics<CounterAnalytics> {
   int _counter = 0;
 
   void _incrementCounter() {
-    analytics.tap(subject: (data) => data.core.button);
+    log('Pressing increment button..');
+    analytics.tap(subject: (analytics) => analytics.core.button);
     setState(
       () {
         _counter++;
+        logValue(_counter);
         analytics.increment(
-          subject: (data) => data.core.button,
-          parameters: (data) => {
-            data.core.time: DateTime.now(),
+          subject: (analytics) => analytics.core.button,
+          parameters: (analytics) => {
+            analytics.core.time: DateTime.now(),
           },
         );
       },
@@ -69,7 +70,15 @@ class _MyHomePageState extends State<MyHomePage> with Loglytics {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: GestureDetector(
+          child: Text(
+            widget.title,
+          ),
+          onTap: () {
+            log('What a weird thing to do..');
+            analytics.tap(subject: (analytics) => analytics.core.header);
+          },
+        ),
       ),
       body: Center(
         child: Column(

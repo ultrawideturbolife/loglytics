@@ -1,4 +1,4 @@
-/// Exposes all crash reports methods for own implementation.
+/// Exposes all crash reports methods for implementation.
 abstract class CrashReportsInterface {
   /// Logs an error by dynamic [exception] and possible [stack] and/or [fatal] boolean.
   Future<void> recordError(

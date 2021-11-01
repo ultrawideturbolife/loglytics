@@ -1,4 +1,4 @@
-/// Exposes all analytic methods for own implementation.
+/// Exposes all analytic methods for implementation.
 abstract class AnalyticsInterface {
   /// Logs an event by [name] and possible [parameters].
   Future<void> logEvent({

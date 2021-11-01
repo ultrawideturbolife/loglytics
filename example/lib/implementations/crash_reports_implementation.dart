@@ -1,13 +1,15 @@
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:loglytics/loglytics.dart';
 
 class CrashReportsImplementation implements CrashReportsInterface {
-  CrashReportsImplementation(this._firebaseCrashlytics);
-  final FirebaseCrashlytics _firebaseCrashlytics;
+  CrashReportsImplementation(this._yourCrashReportsProvider);
+  final Object _yourCrashReportsProvider;
 
   @override
-  Future<void> log(String message) => _firebaseCrashlytics.log(message);
+  Future<void> log(String message) {
+    // _yourCrashReportsProvider.log(message);
+    return Future.value(null); // Remove this.
+  }
 
   @override
   Future<void> recordError(
@@ -17,21 +19,27 @@ class CrashReportsImplementation implements CrashReportsInterface {
     Iterable<DiagnosticsNode> information = const [],
     bool? printDetails,
     bool fatal = false,
-  }) =>
-      _firebaseCrashlytics.recordError(
-        exception,
-        stack,
-        reason: reason,
-        information: information,
-        printDetails: printDetails,
-        fatal: fatal,
-      );
+  }) {
+    // _yourCrashReportsProvider.recordError(
+    //     exception,
+    //     stack,
+    //     reason: reason,
+    //     information: information,
+    //     printDetails: printDetails,
+    //     fatal: fatal,
+    //   );
+    return Future.value(null); // Remove this.
+  }
 
   @override
-  Future<void> setCustomKey(String key, Object value) =>
-      _firebaseCrashlytics.setCustomKey(key, value);
+  Future<void> setCustomKey(String key, Object value) {
+    // _yourCrashReportsProvider.setCustomKey(key, value);
+    return Future.value(null); // Remove this.
+  }
 
   @override
-  Future<void> setUserIdentifier(String identifier) =>
-      _firebaseCrashlytics.setUserIdentifier(identifier);
+  Future<void> setUserIdentifier(String identifier) {
+    // _yourCrashReportsProvider.setUserIdentifier(identifier);
+    return Future.value(null); // Remove this.
+  }
 }
