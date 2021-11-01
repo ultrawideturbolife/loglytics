@@ -4,8 +4,8 @@
   * `LoglyticsWrapper` was removed and doesn't have to be overridden anymore;
   * `LoglyticsSubjects` was removed and doesn't have to be implemented anymore;
   * `LoglyticsParameters` was removed and doesn't have to be implemented anymore;
-  * `Analytics` object was introduced and is now the only you have to add to `Loglytics` `mixin` for access to your custom analytics.
-  * Added a bunch of handy default analytics that are accessible through `analytics.core`.
+  * `Analytics` object was introduced and is now the only class you have to implement and add to `Loglytics` `mixin` (as a generic) for access to your custom analytics.
+  * Added a bunch of handy default analytics that are accessible through `analytics.core` (even without specifying a generic 🆒).
 
 ## 0.4.0+1
 
