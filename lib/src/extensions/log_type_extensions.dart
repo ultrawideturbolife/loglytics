@@ -5,15 +5,15 @@ extension LogTypeExtensions on LogType {
   String get name {
     switch (this) {
       case LogType.info:
-        return 'INFO';
+        return '[INFO]';
       case LogType.warning:
-        return 'WARNING';
+        return '[WARNING]';
       case LogType.error:
-        return 'ERROR';
+        return '[ERROR]';
       case LogType.success:
-        return 'SUCCESS';
+        return '[SUCCESS]';
       case LogType.analytic:
-        return 'ANALYTIC';
+        return '[ANALYTIC]';
     }
   }
 
@@ -21,15 +21,15 @@ extension LogTypeExtensions on LogType {
   String get icon {
     switch (this) {
       case LogType.info:
-        return '🗣';
+        return '🗣 $name';
       case LogType.warning:
-        return '⚠';
+        return '⚠ $name';
       case LogType.error:
-        return '❌';
+        return '❌ $name';
       case LogType.success:
-        return '✅';
+        return '✅ $name';
       case LogType.analytic:
-        return '📈';
+        return '📈 $name';
     }
   }
 }

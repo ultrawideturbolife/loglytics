@@ -129,6 +129,7 @@ mixin Loglytics<D extends Analytics> {
     Object? error,
     StackTrace? stack,
     bool fatal = false,
+    bool printStack = true,
   }) {
     _crashReportsImplementation?.recordError(
       error,
@@ -142,10 +143,12 @@ mixin Loglytics<D extends Analytics> {
     if (error != null) {
       _logMessage(message: error.toString(), logType: LogType.error);
     }
-    _logMessage(
-        message:
-            stack?.toString() ?? StackTrace.current.toString().split('\n').sublist(2, 8).join('\n'),
-        logType: LogType.error);
+    if (printStack) {
+      _logMessage(
+          message: stack?.toString() ??
+              StackTrace.current.toString().split('\n').sublist(2, 8).join('\n'),
+          logType: LogType.error);
+    }
   }
 
   /// Logs a success [message] with [LogType.success] as [debugPrint].
@@ -324,7 +327,7 @@ mixin Loglytics<D extends Analytics> {
       '$time '
       '[$_logLocation] '
       '${message != null ? '${logType.icon} $message ' : ''}'
-      '🔑 $key',
+      '🔑 [KEY] $key',
     );
   }
 
@@ -341,7 +344,7 @@ mixin Loglytics<D extends Analytics> {
     _tryLogCrashlyticsValue(value, logType);
     final _time = time;
     if (message != null) debugPrint('$_time [$_logLocation] ${'${logType.icon} $message '}');
-    debugPrint('$_time [$_logLocation] 💾 $value');
+    debugPrint('$_time [$_logLocation] 💾 [VALUE] $value');
   }
 
   /// Used under the hood to log a [key], [value] and [logType] with optional [message].
@@ -360,8 +363,8 @@ mixin Loglytics<D extends Analytics> {
       '$time '
       '[$_logLocation] '
       '${message != null ? '${logType.icon} $message ' : ''}'
-      '🔑 $key '
-      '💾 $value',
+      '🔑 [KEY] $key '
+      '💾 [VALUE] $value',
     );
   }
 

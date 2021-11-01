@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget with Loglytics {
   @override
   Widget build(BuildContext context) {
     logWarning('Starting app..');
-    logError('also logging from build method.. not a good idea!');
+    logError('also logging from build method.. not a good idea!', printStack: false);
     analytics.start(subject: (analytics) => analytics.core.app);
     return MaterialApp(
       title: 'Loglytics Demo',
