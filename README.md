@@ -113,17 +113,16 @@ class LoginAnalytics extends Analytics {
 ```
 
 
-After having specified the subject and parameter we now have to add the `LoginAnalytics` object to the `Loglytics.setup` call we mentioned earlier. This should look like a bit like this:
+After having specified the subject and parameter we now have to add the `LoginAnalytics` object to the `Loglytics.setup` call we mentioned earlier. We do this by registering the object inside the `AnalyticsFactory` via the `registerAnalytic` method. This method takes a callback that's used to provide the `Analytics` using dependency injection and the `get_it` package. Together it should look like a bit like this:
 
 ```dart
 Loglytics.setup(
     analyticsImplementation: AnalyticsImplementation(Object()),
     crashReportsImplementation: CrashReportsImplementation(Object()),
     shouldLogAnalytics: true,
-    analytics: [
-      () => CounterAnalytics(),
-      () => LoginAnalytics, // Added this one
-    ],
+    analytics: (analyticsFactory) {
+      analyticsFactory.registerAnalytic(() => LoginAnalytics());
+    },
   );
 ```
 

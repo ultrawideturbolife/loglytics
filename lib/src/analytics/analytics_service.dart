@@ -1,5 +1,3 @@
-import 'package:loglytics/src/analytics/analytics.dart';
-
 import '../../loglytics.dart';
 import '../loglytics/loglytics.dart';
 import 'analytic.dart';

@@ -1,4 +1,4 @@
-import 'package:loglytics/src/enums/log_type.dart';
+import '../enums/log_type.dart';
 
 /// Used to define a proper name per [LogType] when icons are not preferred.
 extension LogTypeExtensions on LogType {

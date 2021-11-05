@@ -1,14 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
-import 'package:loglytics/loglytics.dart';
-import 'package:loglytics/src/analytics/analytics.dart';
-import 'package:loglytics/src/enums/log_type.dart';
-import 'package:loglytics/src/extensions/date_time_extensions.dart';
-import 'package:loglytics/src/extensions/log_type_extensions.dart';
 
+import '../../loglytics.dart';
 import '../analytics/analytics_interface.dart';
 import '../analytics/analytics_service.dart';
 import '../crash_reports/crash_reports_interface.dart';
+import '../extensions/date_time_extensions.dart';
+import '../extensions/log_type_extensions.dart';
 
 /// Used to provide all logging, analytics and crashlytics functionality to a class of your choosing.
 ///
@@ -70,11 +68,11 @@ mixin Loglytics<D extends Analytics> {
   /// This does not turn your analytics off, it only disables the debug logging.
   /// Populate the [analytics] parameter with callbacks to your [Analytics] implementations.
   /// Example: [() => CounterAnalytics(), () => CookieAnalytics()].
-  static void setup<D extends Analytics>({
+  static void setup({
     AnalyticsInterface? analyticsImplementation,
     CrashReportsInterface? crashReportsImplementation,
     bool? shouldLogAnalytics,
-    List<D Function()>? analytics,
+    void Function(AnalyticsFactory analyticsFactory)? analytics,
   }) {
     _analyticsImplementation = analyticsImplementation;
     _isAnalyticsEnabled = _analyticsImplementation != null;
@@ -82,9 +80,7 @@ mixin Loglytics<D extends Analytics> {
     _isCrashLyticsEnabled = _crashReportsImplementation != null;
     if (shouldLogAnalytics != null) _shouldLogAnalytics = shouldLogAnalytics;
     if (analytics != null) {
-      for (final data in analytics) {
-        _getIt.registerFactory(data);
-      }
+      analytics(AnalyticsFactory(getIt: _getIt));
     }
   }
 

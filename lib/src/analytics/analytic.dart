@@ -1,5 +1,3 @@
-import 'package:loglytics/loglytics.dart';
-
 /// Core class that's used to structure and provide analytics in the [AnalyticsService].
 ///
 /// This is mostly used under the hood.

@@ -11,9 +11,9 @@ void main() {
     analyticsImplementation: AnalyticsImplementation(Object()),
     crashReportsImplementation: CrashReportsImplementation(Object()),
     shouldLogAnalytics: true,
-    analytics: [
-      () => CounterAnalytics(),
-    ],
+    analytics: (analyticsFactory) {
+      analyticsFactory.registerAnalytic(() => CounterAnalytics());
+    },
   );
   customLog(message: 'Setting up Loglytics', location: 'main()', logType: LogType.info);
   runApp(MyApp());

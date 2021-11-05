@@ -1,3 +1,9 @@
+
+## 0.6.0
+
+* **🐛️ Bugfix:** Setup method only allow one Analytics object to be passed due to wrong use of generics.
+* **⚠️ Breaking:** Setup method was refactored to pass an `AnalyticsFactory` to register all your analytics with.
+
 ## 0.5.0
 
 * **⚠️ Breaking:** Loglytics was completely refactored.
