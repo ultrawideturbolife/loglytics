@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 
@@ -55,10 +57,15 @@ mixin Loglytics<D extends Analytics> {
 
   static bool get isAnalyticsEnabled => _isAnalyticsEnabled;
   static bool _isAnalyticsEnabled = false;
-  static bool get isCrashlyticsEnabled => _isCrashLyticsEnabled;
+  static bool get isCrashReportEnabled => _isCrashLyticsEnabled;
   static bool _isCrashLyticsEnabled = false;
   static bool get shouldLogAnalytics => _shouldLogAnalytics;
   static bool _shouldLogAnalytics = true;
+
+  static int? _errorStackTraceStart;
+  static const int _errorStackTraceStartDefault = 0;
+  static int? _errorStackTraceEnd;
+  static const int _errorStackTraceEndDefault = 8;
 
   /// Used to configure the logging and analytic abilities of the [Loglytics].
   ///
@@ -73,6 +80,8 @@ mixin Loglytics<D extends Analytics> {
     CrashReportsInterface? crashReportsImplementation,
     bool? shouldLogAnalytics,
     void Function(AnalyticsFactory analyticsFactory)? analytics,
+    int? errorStackTraceStart,
+    int? errorStackTraceEnd,
   }) {
     _analyticsImplementation = analyticsImplementation;
     _isAnalyticsEnabled = _analyticsImplementation != null;
@@ -82,6 +91,8 @@ mixin Loglytics<D extends Analytics> {
     if (analytics != null) {
       analytics(AnalyticsFactory(getIt: _getIt));
     }
+    _errorStackTraceStart = errorStackTraceStart ?? _errorStackTraceStartDefault;
+    _errorStackTraceEnd = errorStackTraceEnd ?? _errorStackTraceEndDefault;
   }
 
   /// Used to configure the logging and analytic abilities of the [Loglytics].
@@ -92,6 +103,8 @@ mixin Loglytics<D extends Analytics> {
     _analyticsImplementation = null;
     _crashReportsImplementation = null;
     _shouldLogAnalytics = true;
+    _errorStackTraceStart = null;
+    _errorStackTraceEnd = null;
     await _getIt.reset();
   }
 
@@ -101,59 +114,88 @@ mixin Loglytics<D extends Analytics> {
   ///
   /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
   /// configured one with the [Loglytics.setup] method.
-  void log(String message) => _logMessage(
+  void log(
+    String message, {
+    bool addToCrashReports = true,
+  }) =>
+      _logMessage(
         message: message,
         logType: LogType.info,
+        addToCrashReports: addToCrashReports,
       );
 
   /// Logs a warning [message] with [LogType.warning] as [debugPrint].
   ///
   /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
   /// configured one with the [Loglytics.setup] method.
-  void logWarning(String message) => _logMessage(
+  void logWarning(
+    String message, {
+    bool addToCrashReports = true,
+  }) =>
+      _logMessage(
         message: message,
         logType: LogType.warning,
+        addToCrashReports: addToCrashReports,
       );
 
   /// Logs an error [message] with [LogType.error] as [debugPrint].
   ///
-  /// Also tries to send the log with optional [error], [stack] and [fatal] boolean to your
+  /// Also tries to send the log with optional [error], [stackTrace] and [fatal] boolean to your
   /// [CrashReportsInterface] implementation should you have configured one with the
   /// [Loglytics.setup] method.
   void logError(
     String message, {
     Object? error,
-    StackTrace? stack,
+    StackTrace? stackTrace,
     bool fatal = false,
     bool printStack = true,
+    bool addToCrashReports = true,
   }) {
-    _crashReportsImplementation?.recordError(
-      error,
-      stack ?? StackTrace.current,
-      fatal: fatal,
-    );
+    var _stackTrace = stackTrace ?? StackTrace.current;
+    var hasError = error != null;
+    if (hasError) {
+      _crashReportsImplementation?.recordError(
+        error,
+        _stackTrace,
+        fatal: fatal,
+      );
+    }
     _logMessage(
       message: message,
       logType: LogType.error,
+      addToCrashReports: addToCrashReports,
     );
-    if (error != null) {
-      _logMessage(message: error.toString(), logType: LogType.error);
+    if (hasError) {
+      _logMessage(
+        message: error.toString(),
+        logType: LogType.error,
+        addToCrashReports: false,
+      );
     }
     if (printStack) {
-      _logMessage(
-          message: stack?.toString() ??
-              StackTrace.current.toString().split('\n').sublist(2, 8).join('\n'),
-          logType: LogType.error);
+      debugPrint(_shortenStackTrace(_stackTrace));
     }
+  }
+
+  /// Shortens the given [StackTrace] per configured [_errorStackTraceStart] and [_errorStackTraceEnd].
+  String _shortenStackTrace(StackTrace stackTrace) {
+    final stackTraceSplit = stackTrace.toString().split('\n');
+    return '\n'
+        '${stackTraceSplit.sublist(max(_errorStackTraceStart!, 0), min(_errorStackTraceEnd!, stackTraceSplit.length)).join('\n')}';
   }
 
   /// Logs a success [message] with [LogType.success] as [debugPrint].
   ///
   /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
   /// configured one with the [Loglytics.setup] method.
-  void logSuccess(String message) => _logMessage(
+  void logSuccess(
+    String message, {
+    bool addToCrashReports = true,
+  }) =>
+      _logMessage(
         message: message,
         logType: LogType.success,
+        addToCrashReports: addToCrashReports,
       );
 
   /// Logs (does not send!) an analytic [name] with [LogType.analytic] as [debugPrint].
@@ -196,11 +238,13 @@ mixin Loglytics<D extends Analytics> {
     Object? value, {
     String? message,
     LogType logType = LogType.info,
+    bool addToCrashReports = true,
   }) =>
       _logValue(
         message: message,
         value: value,
         logType: logType,
+        addToCrashReports: addToCrashReports,
       );
 
   /// Logs a [list] and optional [message] with a default [LogType.info] as [debugPrint].
@@ -212,11 +256,13 @@ mixin Loglytics<D extends Analytics> {
     List<T> list, {
     String? message,
     LogType logType = LogType.info,
+    bool addToCrashReports = true,
   }) =>
       _logIterable(
         iterable: list,
         message: message,
         logType: logType,
+        addToCrashReports: addToCrashReports,
       );
 
   /// Logs a [set] and optional [message] with a default [LogType.info] as [debugPrint].
@@ -228,11 +274,13 @@ mixin Loglytics<D extends Analytics> {
     Set<T> set, {
     String? message,
     LogType logType = LogType.info,
+    bool addToCrashReports = true,
   }) =>
       _logIterable(
         iterable: set,
         message: message,
         logType: logType,
+        addToCrashReports: addToCrashReports,
       );
 
   /// Logs a [map] and optional [message] with a default [LogType.info] as [debugPrint].
@@ -244,11 +292,13 @@ mixin Loglytics<D extends Analytics> {
     Map<String, Object?> map, {
     String? message,
     LogType logType = LogType.info,
+    bool addToCrashReports = true,
   }) =>
       _logMap(
         map: map,
         message: message,
         logType: logType,
+        addToCrashReports: addToCrashReports,
       );
 
   /// Logs a [map]'s keys and optional [message] with a default [LogType.info] as [debugPrint].
@@ -260,11 +310,13 @@ mixin Loglytics<D extends Analytics> {
     Map<T, E> map, {
     String? message,
     LogType logType = LogType.info,
+    bool addToCrashReports = true,
   }) =>
       _logKeys(
         map: map,
         message: message,
         logType: logType,
+        addToCrashReports: addToCrashReports,
       );
 
   /// Logs a [map]'s values and optional [message] with a default [LogType.info] as [debugPrint].
@@ -276,10 +328,12 @@ mixin Loglytics<D extends Analytics> {
     Map<T, E> map, {
     String? message,
     LogType logType = LogType.info,
+    bool addToCrashReports = true,
   }) =>
       _logValues(
         map: map,
         message: message,
+        addToCrashReports: addToCrashReports,
       );
 
   // --------------- CONVENIENCE --------------- CONVENIENCE --------------- CONVENIENCE --------------- \\
@@ -299,8 +353,9 @@ mixin Loglytics<D extends Analytics> {
   void _logMessage({
     required String message,
     required LogType logType,
+    bool addToCrashReports = true,
   }) {
-    _tryLogCrashlyticsMessage(message, logType);
+    if (addToCrashReports) _tryLogCrashReportMessage(message, logType);
     debugPrint(
       '$time '
       '[$_logLocation] '
@@ -315,10 +370,11 @@ mixin Loglytics<D extends Analytics> {
   void _logKey({
     required Object? key,
     required LogType logType,
+    required bool addToCrashReports,
     String? message,
   }) {
-    if (message != null) _tryLogCrashlyticsMessage(message, logType);
-    _tryLogCrashlyticsKey(key, logType);
+    if (message != null && addToCrashReports) _tryLogCrashReportMessage(message, logType);
+    if (addToCrashReports) _tryLogCrashReportKey(key, logType);
     debugPrint(
       '$time '
       '[$_logLocation] '
@@ -334,10 +390,11 @@ mixin Loglytics<D extends Analytics> {
   void _logValue({
     required Object? value,
     required LogType logType,
+    required addToCrashReports,
     String? message,
   }) {
-    if (message != null) _tryLogCrashlyticsMessage(message, logType);
-    _tryLogCrashlyticsValue(value, logType);
+    if (message != null && addToCrashReports) _tryLogCrashReportMessage(message, logType);
+    if (addToCrashReports) _tryLogCrashReportValue(value, logType);
     final _time = time;
     if (message != null) debugPrint('$_time [$_logLocation] ${'${logType.icon} $message '}');
     debugPrint('$_time [$_logLocation] 💾 [VALUE] $value');
@@ -351,10 +408,11 @@ mixin Loglytics<D extends Analytics> {
     required String key,
     required Object? value,
     required LogType logType,
+    required addToCrashReports,
     String? message,
   }) {
-    if (message != null) _tryLogCrashlyticsMessage(message, logType);
-    _tryLogCrashlyticsKeyValue(key, value, logType);
+    if (message != null) _tryLogCrashReportMessage(message, logType);
+    _tryLogCrashReportKeyValue(key, value, logType);
     debugPrint(
       '$time '
       '[$_logLocation] '
@@ -371,6 +429,7 @@ mixin Loglytics<D extends Analytics> {
   void _logIterable<T extends Object?>({
     required Iterable<T> iterable,
     LogType logType = LogType.info,
+    required addToCrashReports,
     String? message,
   }) {
     for (T value in iterable) {
@@ -378,6 +437,7 @@ mixin Loglytics<D extends Analytics> {
         value: value,
         logType: logType,
         message: message,
+        addToCrashReports: addToCrashReports,
       );
     }
   }
@@ -389,6 +449,7 @@ mixin Loglytics<D extends Analytics> {
   void _logMap({
     required Map<String, Object?> map,
     LogType logType = LogType.info,
+    required addToCrashReports,
     String? message,
   }) =>
       map.forEach(
@@ -398,6 +459,7 @@ mixin Loglytics<D extends Analytics> {
             value: value,
             logType: logType,
             message: message,
+            addToCrashReports: addToCrashReports,
           );
         },
       );
@@ -410,6 +472,7 @@ mixin Loglytics<D extends Analytics> {
     required Map<K, V> map,
     String? message,
     LogType logType = LogType.info,
+    required addToCrashReports,
   }) =>
       map.forEach(
         (key, _) {
@@ -417,6 +480,7 @@ mixin Loglytics<D extends Analytics> {
             key: key,
             logType: logType,
             message: message,
+            addToCrashReports: addToCrashReports,
           );
         },
       );
@@ -429,6 +493,7 @@ mixin Loglytics<D extends Analytics> {
     required Map<K, V> map,
     String? message,
     LogType logType = LogType.info,
+    required addToCrashReports,
   }) =>
       map.forEach(
         (_, value) {
@@ -436,6 +501,7 @@ mixin Loglytics<D extends Analytics> {
             value: value,
             logType: logType,
             message: message,
+            addToCrashReports: addToCrashReports,
           );
         },
       );
@@ -443,7 +509,7 @@ mixin Loglytics<D extends Analytics> {
   // --------------- CRASHLYTICS --------------- CRASHLYTICS --------------- CRASHLYTICS --------------- \\
 
   /// Used under the hood to try and log a crashlytics [message] with [logType].
-  void _tryLogCrashlyticsMessage(
+  void _tryLogCrashReportMessage(
     String message,
     LogType logType,
   ) {
@@ -453,7 +519,7 @@ mixin Loglytics<D extends Analytics> {
   }
 
   /// Used under the hood to try and log a crashlytics [key] and [value] with [logType].
-  void _tryLogCrashlyticsKeyValue(
+  void _tryLogCrashReportKeyValue(
     String key,
     Object? value,
     LogType logType,
@@ -464,7 +530,7 @@ mixin Loglytics<D extends Analytics> {
   }
 
   /// Used under the hood to try and log a crashlytics [key] with [logType].
-  void _tryLogCrashlyticsKey(
+  void _tryLogCrashReportKey(
     Object? key,
     LogType logType,
   ) {
@@ -474,7 +540,7 @@ mixin Loglytics<D extends Analytics> {
   }
 
   /// Used under the hood to try and log a crashlytics [value] with [logType].
-  void _tryLogCrashlyticsValue(
+  void _tryLogCrashReportValue(
     Object? value,
     LogType logType,
   ) {

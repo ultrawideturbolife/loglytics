@@ -9,7 +9,10 @@ export 'src/analytics/analytics_service.dart';
 // src/crashlytics
 export 'src/crash_reports/crash_reports_interface.dart';
 // src/enums
+export 'src/enums/analytics_types.dart';
 export 'src/enums/log_type.dart';
+// src/extensions
+export 'src/extensions/log_type_extensions.dart';
 // src/log
 export 'src/log/custom_log.dart';
 // src/loglytics

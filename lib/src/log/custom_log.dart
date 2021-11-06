@@ -10,10 +10,13 @@ void customLog({
   required String location,
   required LogType logType,
   CrashReportsInterface? crashReportsInterface,
+  bool addToCrashReports = true,
 }) {
-  crashReportsInterface?.log('[$location] '
-      '${logType.name}: '
-      '$message');
+  if (addToCrashReports) {
+    crashReportsInterface?.log('[$location] '
+        '${logType.name}: '
+        '$message');
+  }
   debugPrint(
     '$_time '
     '[$location] '

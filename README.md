@@ -138,10 +138,10 @@ That's it, now we have everything at our disposal to log and send analytics for 
 class LoginClass with Loglytics<LoginAnalytics> {
   void login() {
     // Let's log the tap of the button here.
-    analytics.tap(subject: (analytics) => analytics.loginButton);
+    analytics.tapped(subject: (analytics) => analytics.loginButton);
     // Do your regular code here.
     // Let's assume the login succeeds.
-    analytics.success(
+    analytics.succeeded(
       subject: (analytics) => analytics.login,
       parameters: (analytics) => {
         // That took a while
@@ -158,6 +158,8 @@ If you have any suggestions for default subjects/parameters and/or ideas for thi
 
 **Todo:**
 
-- Add logSum functionality (logging of events that won't send until signaled to do so).  
+- Add logSum functionality (logging of events that won't send until signaled to do so). 
+- Add annotations for flexible creation of events.
+- Add tests.
 - Improve example project with comments and more examples.
 - ✅ ~~Find a way to easier facilitate access to subjects and parameters (2 generics + override is a bit heavy).~~

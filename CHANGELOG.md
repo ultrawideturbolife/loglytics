@@ -1,3 +1,18 @@
+## 0.7.2
+
+* **🐛️ Bugfix:** Remove `AnalyticsService.input` method unwanted change.
+
+## 0.7.1
+
+* **🐛️ Bugfix:** Remove `logError` method unwanted change.
+
+## 0.7.0
+
+* **⚠️ Breaking:** Most events are now past tense and have refactored methods.
+* **✨ New:** Added new events.
+* **✨ New:** Added new `addToCrashReports` boolean to each log to facilitate hiding sensitive info from crash reports.
+* **✨ New:** Added new `errorStackTraceStart` and `errorStackTraceEnd` ints to allow for StackTrace printing length configuration.
+* **✨ New:** Changed `AnalyticsService.reset` to `AnalyticsService.resetAnalytics`.
 
 ## 0.6.0
 

@@ -14,6 +14,8 @@ void main() {
     analytics: (analyticsFactory) {
       analyticsFactory.registerAnalytic(() => CounterAnalytics());
     },
+    errorStackTraceEnd: 1000,
+    errorStackTraceStart: -15,
   );
   customLog(message: 'Setting up Loglytics', location: 'main()', logType: LogType.info);
   runApp(MyApp());
@@ -25,8 +27,7 @@ class MyApp extends StatelessWidget with Loglytics {
   @override
   Widget build(BuildContext context) {
     logWarning('Starting app..');
-    logError('also logging from build method.. not a good idea!', printStack: false);
-    analytics.start(subject: (analytics) => analytics.core.app);
+    analytics.initialised(subject: (analytics) => analytics.core.app);
     return MaterialApp(
       title: 'Loglytics Demo',
       theme: ThemeData(
@@ -49,15 +50,17 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> with Loglytics<CounterAnalytics> {
   int _counter = 0;
 
+  int? wtf;
+
   void _incrementCounter() {
     log('Pressing increment button..');
-    analytics.tap(subject: (analytics) => analytics.core.button);
+    analytics.tapped(subject: (analytics) => analytics.core.button);
     setState(
       () {
         _counter++;
         logValue(_counter);
-        analytics.increment(
-          subject: (analytics) => analytics.core.button,
+        analytics.incremented(
+          subject: (analytics) => analytics.counterButton,
           parameters: (analytics) => {
             analytics.core.time: DateTime.now(),
           },
@@ -76,7 +79,7 @@ class _MyHomePageState extends State<MyHomePage> with Loglytics<CounterAnalytics
           ),
           onTap: () {
             log('What a weird thing to do..');
-            analytics.tap(subject: (analytics) => analytics.core.header);
+            analytics.tapped(subject: (analytics) => analytics.core.header);
           },
         ),
       ),

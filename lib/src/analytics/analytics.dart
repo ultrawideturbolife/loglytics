@@ -48,6 +48,9 @@ class _CoreData {
   final String table = 'table';
   final String grid = 'grid';
   final String app = 'app';
+  final String view = 'view';
+  final String viewModel = 'view_model';
+  final String bloc = 'bloc';
 
   final String id = 'id';
   final String name = 'name';
@@ -64,10 +67,5 @@ class _CoreData {
   final String source = 'source';
   final String sourceId = 'sourceId';
   final String info = 'info';
-
-  final String login = 'login';
-  final String logout = 'logout';
-  final String create = 'create';
-  final String update = 'update';
-  final String delete = 'delete';
+  final String category = 'category';
 }

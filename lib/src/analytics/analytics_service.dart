@@ -5,9 +5,9 @@ import 'analytics_interface.dart';
 
 /// Used to provide an easy interface for sending analytics.
 ///
-/// Each [AnalyticType] has its own method that exposes implementations of predefined
+/// Each [AnalyticsTypes] has its own method that exposes implementations of predefined
 /// [Analytics].
-/// example you can use [AnalyticsService.tap] and it the will automatically provide you with the
+/// example you can use [AnalyticsService.tapped] and it the will automatically provide you with the
 /// proper [Analytics].
 class AnalyticsService<A extends Analytics> {
   AnalyticsService({
@@ -58,8 +58,8 @@ class AnalyticsService<A extends Analytics> {
   void event({required Analytic Function(A analytics) analytic}) =>
       _logEvent(analytic(_analyticsData));
 
-  /// Sends an [AnalyticType.tap] and provides the appropriate [Analytics].
-  void tap({
+  /// Sends an [AnalyticsTypes.tapped] and provides the appropriate [Analytics].
+  void tapped({
     required String Function(A analytics) subject,
     Map<String, Object?>? Function(A analytics)? parameters,
   }) =>
@@ -67,12 +67,12 @@ class AnalyticsService<A extends Analytics> {
         Analytic(
           subject: subject(_analyticsData),
           parameters: parameters?.call(_analyticsData),
-          type: AnalyticType.tap,
+          type: AnalyticsTypes.tapped,
         ),
       );
 
-  /// Sends an [AnalyticType.click] and provides the appropriate [Analytics].
-  void click({
+  /// Sends an [AnalyticsTypes.clicked] and provides the appropriate [Analytics].
+  void clicked({
     required String Function(A analytics) subject,
     Map<String, Object?>? Function(A analytics)? parameters,
   }) =>
@@ -80,12 +80,12 @@ class AnalyticsService<A extends Analytics> {
         Analytic(
           subject: subject(_analyticsData),
           parameters: parameters?.call(_analyticsData),
-          type: AnalyticType.click,
+          type: AnalyticsTypes.clicked,
         ),
       );
 
-  /// Sends an [AnalyticType.focus] and provides the appropriate [Analytics].
-  void focus({
+  /// Sends an [AnalyticsTypes.focussed] and provides the appropriate [Analytics].
+  void focussed({
     required String Function(A analytics) subject,
     Map<String, Object?>? Function(A analytics)? parameters,
   }) =>
@@ -93,12 +93,12 @@ class AnalyticsService<A extends Analytics> {
         Analytic(
           subject: subject(_analyticsData),
           parameters: parameters?.call(_analyticsData),
-          type: AnalyticType.focus,
+          type: AnalyticsTypes.focussed,
         ),
       );
 
-  /// Sends an [AnalyticType.select] and provides the appropriate [Analytics].
-  void select({
+  /// Sends an [AnalyticsTypes.selected] and provides the appropriate [Analytics].
+  void selected({
     required String Function(A analytics) subject,
     Map<String, Object?>? Function(A analytics)? parameters,
   }) =>
@@ -106,12 +106,12 @@ class AnalyticsService<A extends Analytics> {
         Analytic(
           subject: subject(_analyticsData),
           parameters: parameters?.call(_analyticsData),
-          type: AnalyticType.select,
+          type: AnalyticsTypes.selected,
         ),
       );
 
-  /// Sends an [AnalyticType.connect] and provides the appropriate [Analytics].
-  void connect({
+  /// Sends an [AnalyticsTypes.connected] and provides the appropriate [Analytics].
+  void connected({
     required String Function(A analytics) subject,
     Map<String, Object?>? Function(A analytics)? parameters,
   }) =>
@@ -119,12 +119,12 @@ class AnalyticsService<A extends Analytics> {
         Analytic(
           subject: subject(_analyticsData),
           parameters: parameters?.call(_analyticsData),
-          type: AnalyticType.connect,
+          type: AnalyticsTypes.connected,
         ),
       );
 
-  /// Sends an [AnalyticType.connect] and provides the appropriate [Analytics].
-  void disconnect({
+  /// Sends an [AnalyticsTypes.disconnected] and provides the appropriate [Analytics].
+  void disconnected({
     required String Function(A analytics) subject,
     Map<String, Object?>? Function(A analytics)? parameters,
   }) =>
@@ -132,12 +132,12 @@ class AnalyticsService<A extends Analytics> {
         Analytic(
           subject: subject(_analyticsData),
           parameters: parameters?.call(_analyticsData),
-          type: AnalyticType.connect,
+          type: AnalyticsTypes.disconnected,
         ),
       );
 
-  /// Sends an [AnalyticType.view] and provides the appropriate [Analytics].
-  void view({
+  /// Sends an [AnalyticsTypes.viewed] and provides the appropriate [Analytics].
+  void viewed({
     required String Function(A analytics) subject,
     Map<String, Object?>? Function(A analytics)? parameters,
   }) =>
@@ -145,12 +145,12 @@ class AnalyticsService<A extends Analytics> {
         Analytic(
           subject: subject(_analyticsData),
           parameters: parameters?.call(_analyticsData),
-          type: AnalyticType.view,
+          type: AnalyticsTypes.viewed,
         ),
       );
 
-  /// Sends an [AnalyticType.hide] and provides the appropriate [Analytics].
-  void hide({
+  /// Sends an [AnalyticsTypes.hidden] and provides the appropriate [Analytics].
+  void hidden({
     required String Function(A analytics) subject,
     Map<String, Object?>? Function(A analytics)? parameters,
   }) =>
@@ -158,12 +158,12 @@ class AnalyticsService<A extends Analytics> {
         Analytic(
           subject: subject(_analyticsData),
           parameters: parameters?.call(_analyticsData),
-          type: AnalyticType.hide,
+          type: AnalyticsTypes.hidden,
         ),
       );
 
-  /// Sends an [AnalyticType.open] and provides the appropriate [Analytics].
-  void open({
+  /// Sends an [AnalyticsTypes.opened] and provides the appropriate [Analytics].
+  void opened({
     required String Function(A analytics) subject,
     Map<String, Object?>? Function(A analytics)? parameters,
   }) =>
@@ -171,12 +171,12 @@ class AnalyticsService<A extends Analytics> {
         Analytic(
           subject: subject(_analyticsData),
           parameters: parameters?.call(_analyticsData),
-          type: AnalyticType.open,
+          type: AnalyticsTypes.opened,
         ),
       );
 
-  /// Sends an [AnalyticType.close] and provides the appropriate [Analytics].
-  void close({
+  /// Sends an [AnalyticsTypes.closed] and provides the appropriate [Analytics].
+  void closed({
     required String Function(A analytics) subject,
     Map<String, Object?>? Function(A analytics)? parameters,
   }) =>
@@ -184,12 +184,12 @@ class AnalyticsService<A extends Analytics> {
         Analytic(
           subject: subject(_analyticsData),
           parameters: parameters?.call(_analyticsData),
-          type: AnalyticType.close,
+          type: AnalyticsTypes.closed,
         ),
       );
 
-  /// Sends an [AnalyticType.fail] and provides the appropriate [Analytics].
-  void fail({
+  /// Sends an [AnalyticsTypes.failed] and provides the appropriate [Analytics].
+  void failed({
     required String Function(A analytics) subject,
     Map<String, Object?>? Function(A analytics)? parameters,
   }) =>
@@ -197,12 +197,12 @@ class AnalyticsService<A extends Analytics> {
         Analytic(
           subject: subject(_analyticsData),
           parameters: parameters?.call(_analyticsData),
-          type: AnalyticType.fail,
+          type: AnalyticsTypes.failed,
         ),
       );
 
-  /// Sends an [AnalyticType.success] and provides the appropriate [Analytics].
-  void success({
+  /// Sends an [AnalyticsTypes.succeeded] and provides the appropriate [Analytics].
+  void succeeded({
     required String Function(A analytics) subject,
     Map<String, Object?>? Function(A analytics)? parameters,
   }) =>
@@ -210,12 +210,12 @@ class AnalyticsService<A extends Analytics> {
         Analytic(
           subject: subject(_analyticsData),
           parameters: parameters?.call(_analyticsData),
-          type: AnalyticType.success,
+          type: AnalyticsTypes.succeeded,
         ),
       );
 
-  /// Sends an [AnalyticType.send] and provides the appropriate [Analytics].
-  void send({
+  /// Sends an [AnalyticsTypes.sent] and provides the appropriate [Analytics].
+  void sent({
     required String Function(A analytics) subject,
     Map<String, Object?>? Function(A analytics)? parameters,
   }) =>
@@ -223,12 +223,12 @@ class AnalyticsService<A extends Analytics> {
         Analytic(
           subject: subject(_analyticsData),
           parameters: parameters?.call(_analyticsData),
-          type: AnalyticType.send,
+          type: AnalyticsTypes.sent,
         ),
       );
 
-  /// Sends an [AnalyticType.receive] and provides the appropriate [Analytics].
-  void receive({
+  /// Sends an [AnalyticsTypes.received] and provides the appropriate [Analytics].
+  void received({
     required String Function(A analytics) subject,
     Map<String, Object?>? Function(A analytics)? parameters,
   }) =>
@@ -236,12 +236,12 @@ class AnalyticsService<A extends Analytics> {
         Analytic(
           subject: subject(_analyticsData),
           parameters: parameters?.call(_analyticsData),
-          type: AnalyticType.receive,
+          type: AnalyticsTypes.received,
         ),
       );
 
-  /// Sends an [AnalyticType.valid] and provides the appropriate [Analytics].
-  void valid({
+  /// Sends an [AnalyticsTypes.validated] and provides the appropriate [Analytics].
+  void validated({
     required String Function(A analytics) subject,
     Map<String, Object?>? Function(A analytics)? parameters,
   }) =>
@@ -249,12 +249,12 @@ class AnalyticsService<A extends Analytics> {
         Analytic(
           subject: subject(_analyticsData),
           parameters: parameters?.call(_analyticsData),
-          type: AnalyticType.valid,
+          type: AnalyticsTypes.validated,
         ),
       );
 
-  /// Sends an [AnalyticType.invalid] and provides the appropriate [Analytics].
-  void invalid({
+  /// Sends an [AnalyticsTypes.invalidated] and provides the appropriate [Analytics].
+  void invalidated({
     required String Function(A analytics) subject,
     Map<String, Object?>? Function(A analytics)? parameters,
   }) =>
@@ -262,12 +262,12 @@ class AnalyticsService<A extends Analytics> {
         Analytic(
           subject: subject(_analyticsData),
           parameters: parameters?.call(_analyticsData),
-          type: AnalyticType.invalid,
+          type: AnalyticsTypes.invalidated,
         ),
       );
 
-  /// Sends an [AnalyticType.search] and provides the appropriate [Analytics].
-  void search({
+  /// Sends an [AnalyticsTypes.searched] and provides the appropriate [Analytics].
+  void searched({
     required String Function(A analytics) subject,
     Map<String, Object?>? Function(A analytics)? parameters,
   }) =>
@@ -275,12 +275,12 @@ class AnalyticsService<A extends Analytics> {
         Analytic(
           subject: subject(_analyticsData),
           parameters: parameters?.call(_analyticsData),
-          type: AnalyticType.search,
+          type: AnalyticsTypes.searched,
         ),
       );
 
-  /// Sends an [AnalyticType.like] and provides the appropriate [Analytics].
-  void like({
+  /// Sends an [AnalyticsTypes.liked] and provides the appropriate [Analytics].
+  void liked({
     required String Function(A analytics) subject,
     Map<String, Object?>? Function(A analytics)? parameters,
   }) =>
@@ -288,12 +288,12 @@ class AnalyticsService<A extends Analytics> {
         Analytic(
           subject: subject(_analyticsData),
           parameters: parameters?.call(_analyticsData),
-          type: AnalyticType.like,
+          type: AnalyticsTypes.liked,
         ),
       );
 
-  /// Sends an [AnalyticType.share] and provides the appropriate [Analytics].
-  void share({
+  /// Sends an [AnalyticsTypes.shared] and provides the appropriate [Analytics].
+  void shared({
     required String Function(A analytics) subject,
     Map<String, Object?>? Function(A analytics)? parameters,
   }) =>
@@ -301,12 +301,12 @@ class AnalyticsService<A extends Analytics> {
         Analytic(
           subject: subject(_analyticsData),
           parameters: parameters?.call(_analyticsData),
-          type: AnalyticType.share,
+          type: AnalyticsTypes.shared,
         ),
       );
 
-  /// Sends an [AnalyticType.comment] and provides the appropriate [Analytics].
-  void comment({
+  /// Sends an [AnalyticsTypes.commented] and provides the appropriate [Analytics].
+  void commented({
     required String Function(A analytics) subject,
     Map<String, Object?>? Function(A analytics)? parameters,
   }) =>
@@ -314,11 +314,11 @@ class AnalyticsService<A extends Analytics> {
         Analytic(
           subject: subject(_analyticsData),
           parameters: parameters?.call(_analyticsData),
-          type: AnalyticType.comment,
+          type: AnalyticsTypes.commented,
         ),
       );
 
-  /// Sends an [AnalyticType.input] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.input] and provides the appropriate [Analytics].
   ///
   /// Defaults to only sending the first analytic by settings [onlyFirstValue] to true.
   void input({
@@ -329,7 +329,7 @@ class AnalyticsService<A extends Analytics> {
     final analytic = Analytic(
       subject: subject(_analyticsData),
       parameters: parameters?.call(_analyticsData),
-      type: AnalyticType.input,
+      type: AnalyticsTypes.input,
     );
     if (_firstInput == null || !onlyFirstValue || !analytic.equals(_firstInput)) {
       _logEvent(analytic);
@@ -337,8 +337,8 @@ class AnalyticsService<A extends Analytics> {
     _firstInput = analytic;
   }
 
-  /// Sends an [AnalyticType.increment] and provides the appropriate [Analytics].
-  void increment({
+  /// Sends an [AnalyticsTypes.incremented] and provides the appropriate [Analytics].
+  void incremented({
     required String Function(A analytics) subject,
     Map<String, Object?>? Function(A analytics)? parameters,
   }) =>
@@ -346,12 +346,12 @@ class AnalyticsService<A extends Analytics> {
         Analytic(
           subject: subject(_analyticsData),
           parameters: parameters?.call(_analyticsData),
-          type: AnalyticType.increment,
+          type: AnalyticsTypes.incremented,
         ),
       );
 
-  /// Sends an [AnalyticType.decrement] and provides the appropriate [Analytics].
-  void decrement({
+  /// Sends an [AnalyticsTypes.decremented] and provides the appropriate [Analytics].
+  void decremented({
     required String Function(A analytics) subject,
     Map<String, Object?>? Function(A analytics)? parameters,
   }) =>
@@ -359,12 +359,12 @@ class AnalyticsService<A extends Analytics> {
         Analytic(
           subject: subject(_analyticsData),
           parameters: parameters?.call(_analyticsData),
-          type: AnalyticType.decrement,
+          type: AnalyticsTypes.decremented,
         ),
       );
 
-  /// Sends an [AnalyticType.accept] and provides the appropriate [Analytics].
-  void accept({
+  /// Sends an [AnalyticsTypes.accepted] and provides the appropriate [Analytics].
+  void accepted({
     required String Function(A analytics) subject,
     Map<String, Object?>? Function(A analytics)? parameters,
   }) =>
@@ -372,12 +372,12 @@ class AnalyticsService<A extends Analytics> {
         Analytic(
           subject: subject(_analyticsData),
           parameters: parameters?.call(_analyticsData),
-          type: AnalyticType.accept,
+          type: AnalyticsTypes.accepted,
         ),
       );
 
-  /// Sends an [AnalyticType.decline] and provides the appropriate [Analytics].
-  void decline({
+  /// Sends an [AnalyticsTypes.declined] and provides the appropriate [Analytics].
+  void declined({
     required String Function(A analytics) subject,
     Map<String, Object?>? Function(A analytics)? parameters,
   }) =>
@@ -385,12 +385,12 @@ class AnalyticsService<A extends Analytics> {
         Analytic(
           subject: subject(_analyticsData),
           parameters: parameters?.call(_analyticsData),
-          type: AnalyticType.decline,
+          type: AnalyticsTypes.declined,
         ),
       );
 
-  /// Sends an [AnalyticType.scroll] and provides the appropriate [Analytics].
-  void scroll({
+  /// Sends an [AnalyticsTypes.alert] and provides the appropriate [Analytics].
+  void alert({
     required String Function(A analytics) subject,
     Map<String, Object?>? Function(A analytics)? parameters,
   }) =>
@@ -398,12 +398,12 @@ class AnalyticsService<A extends Analytics> {
         Analytic(
           subject: subject(_analyticsData),
           parameters: parameters?.call(_analyticsData),
-          type: AnalyticType.scroll,
+          type: AnalyticsTypes.alert,
         ),
       );
 
-  /// Sends an [AnalyticType.start] and provides the appropriate [Analytics].
-  void start({
+  /// Sends an [AnalyticsTypes.scrolled] and provides the appropriate [Analytics].
+  void scrolled({
     required String Function(A analytics) subject,
     Map<String, Object?>? Function(A analytics)? parameters,
   }) =>
@@ -411,12 +411,12 @@ class AnalyticsService<A extends Analytics> {
         Analytic(
           subject: subject(_analyticsData),
           parameters: parameters?.call(_analyticsData),
-          type: AnalyticType.start,
+          type: AnalyticsTypes.scrolled,
         ),
       );
 
-  /// Sends an [AnalyticType.stop] and provides the appropriate [Analytics].
-  void stop({
+  /// Sends an [AnalyticsTypes.started] and provides the appropriate [Analytics].
+  void started({
     required String Function(A analytics) subject,
     Map<String, Object?>? Function(A analytics)? parameters,
   }) =>
@@ -424,7 +424,462 @@ class AnalyticsService<A extends Analytics> {
         Analytic(
           subject: subject(_analyticsData),
           parameters: parameters?.call(_analyticsData),
-          type: AnalyticType.stop,
+          type: AnalyticsTypes.started,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.stopped] and provides the appropriate [Analytics].
+  void stopped({
+    required String Function(A analytics) subject,
+    Map<String, Object?>? Function(A analytics)? parameters,
+  }) =>
+      _logEvent(
+        Analytic(
+          subject: subject(_analyticsData),
+          parameters: parameters?.call(_analyticsData),
+          type: AnalyticsTypes.stopped,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.initialised] and provides the appropriate [Analytics].
+  void initialised({
+    required String Function(A analytics) subject,
+    Map<String, Object?>? Function(A analytics)? parameters,
+  }) =>
+      _logEvent(
+        Analytic(
+          subject: subject(_analyticsData),
+          parameters: parameters?.call(_analyticsData),
+          type: AnalyticsTypes.initialised,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.disposed] and provides the appropriate [Analytics].
+  void disposed({
+    required String Function(A analytics) subject,
+    Map<String, Object?>? Function(A analytics)? parameters,
+  }) =>
+      _logEvent(
+        Analytic(
+          subject: subject(_analyticsData),
+          parameters: parameters?.call(_analyticsData),
+          type: AnalyticsTypes.disposed,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.fetched] and provides the appropriate [Analytics].
+  void fetched({
+    required String Function(A analytics) subject,
+    Map<String, Object?>? Function(A analytics)? parameters,
+  }) =>
+      _logEvent(
+        Analytic(
+          subject: subject(_analyticsData),
+          parameters: parameters?.call(_analyticsData),
+          type: AnalyticsTypes.fetched,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.set] and provides the appropriate [Analytics].
+  void set({
+    required String Function(A analytics) subject,
+    Map<String, Object?>? Function(A analytics)? parameters,
+  }) =>
+      _logEvent(
+        Analytic(
+          subject: subject(_analyticsData),
+          parameters: parameters?.call(_analyticsData),
+          type: AnalyticsTypes.set,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.get] and provides the appropriate [Analytics].
+  void get({
+    required String Function(A analytics) subject,
+    Map<String, Object?>? Function(A analytics)? parameters,
+  }) =>
+      _logEvent(
+        Analytic(
+          subject: subject(_analyticsData),
+          parameters: parameters?.call(_analyticsData),
+          type: AnalyticsTypes.get,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.foreground] and provides the appropriate [Analytics].
+  void foreground({
+    required String Function(A analytics) subject,
+    Map<String, Object?>? Function(A analytics)? parameters,
+  }) =>
+      _logEvent(
+        Analytic(
+          subject: subject(_analyticsData),
+          parameters: parameters?.call(_analyticsData),
+          type: AnalyticsTypes.foreground,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.background] and provides the appropriate [Analytics].
+  void background({
+    required String Function(A analytics) subject,
+    Map<String, Object?>? Function(A analytics)? parameters,
+  }) =>
+      _logEvent(
+        Analytic(
+          subject: subject(_analyticsData),
+          parameters: parameters?.call(_analyticsData),
+          type: AnalyticsTypes.background,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.purchased] and provides the appropriate [Analytics].
+  void purchased({
+    required String Function(A analytics) subject,
+    Map<String, Object?>? Function(A analytics)? parameters,
+  }) =>
+      _logEvent(
+        Analytic(
+          subject: subject(_analyticsData),
+          parameters: parameters?.call(_analyticsData),
+          type: AnalyticsTypes.purchased,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.dismissed] and provides the appropriate [Analytics].
+  void dismissed({
+    required String Function(A analytics) subject,
+    Map<String, Object?>? Function(A analytics)? parameters,
+  }) =>
+      _logEvent(
+        Analytic(
+          subject: subject(_analyticsData),
+          parameters: parameters?.call(_analyticsData),
+          type: AnalyticsTypes.dismissed,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.upgraded] and provides the appropriate [Analytics].
+  void upgraded({
+    required String Function(A analytics) subject,
+    Map<String, Object?>? Function(A analytics)? parameters,
+  }) =>
+      _logEvent(
+        Analytic(
+          subject: subject(_analyticsData),
+          parameters: parameters?.call(_analyticsData),
+          type: AnalyticsTypes.upgraded,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.downgraded] and provides the appropriate [Analytics].
+  void downgraded({
+    required String Function(A analytics) subject,
+    Map<String, Object?>? Function(A analytics)? parameters,
+  }) =>
+      _logEvent(
+        Analytic(
+          subject: subject(_analyticsData),
+          parameters: parameters?.call(_analyticsData),
+          type: AnalyticsTypes.downgraded,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.interaction] and provides the appropriate [Analytics].
+  void interaction({
+    required String Function(A analytics) subject,
+    Map<String, Object?>? Function(A analytics)? parameters,
+  }) =>
+      _logEvent(
+        Analytic(
+          subject: subject(_analyticsData),
+          parameters: parameters?.call(_analyticsData),
+          type: AnalyticsTypes.interaction,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.query] and provides the appropriate [Analytics].
+  void query({
+    required String Function(A analytics) subject,
+    Map<String, Object?>? Function(A analytics)? parameters,
+  }) =>
+      _logEvent(
+        Analytic(
+          subject: subject(_analyticsData),
+          parameters: parameters?.call(_analyticsData),
+          type: AnalyticsTypes.query,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.confirmed] and provides the appropriate [Analytics].
+  void confirmed({
+    required String Function(A analytics) subject,
+    Map<String, Object?>? Function(A analytics)? parameters,
+  }) =>
+      _logEvent(
+        Analytic(
+          subject: subject(_analyticsData),
+          parameters: parameters?.call(_analyticsData),
+          type: AnalyticsTypes.confirmed,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.canceled] and provides the appropriate [Analytics].
+  void canceled({
+    required String Function(A analytics) subject,
+    Map<String, Object?>? Function(A analytics)? parameters,
+  }) =>
+      _logEvent(
+        Analytic(
+          subject: subject(_analyticsData),
+          parameters: parameters?.call(_analyticsData),
+          type: AnalyticsTypes.canceled,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.created] and provides the appropriate [Analytics].
+  void created({
+    required String Function(A analytics) subject,
+    Map<String, Object?>? Function(A analytics)? parameters,
+  }) =>
+      _logEvent(
+        Analytic(
+          subject: subject(_analyticsData),
+          parameters: parameters?.call(_analyticsData),
+          type: AnalyticsTypes.created,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.read] and provides the appropriate [Analytics].
+  void read({
+    required String Function(A analytics) subject,
+    Map<String, Object?>? Function(A analytics)? parameters,
+  }) =>
+      _logEvent(
+        Analytic(
+          subject: subject(_analyticsData),
+          parameters: parameters?.call(_analyticsData),
+          type: AnalyticsTypes.read,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.updated] and provides the appropriate [Analytics].
+  void updated({
+    required String Function(A analytics) subject,
+    Map<String, Object?>? Function(A analytics)? parameters,
+  }) =>
+      _logEvent(
+        Analytic(
+          subject: subject(_analyticsData),
+          parameters: parameters?.call(_analyticsData),
+          type: AnalyticsTypes.updated,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.deleted] and provides the appropriate [Analytics].
+  void deleted({
+    required String Function(A analytics) subject,
+    Map<String, Object?>? Function(A analytics)? parameters,
+  }) =>
+      _logEvent(
+        Analytic(
+          subject: subject(_analyticsData),
+          parameters: parameters?.call(_analyticsData),
+          type: AnalyticsTypes.deleted,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.added] and provides the appropriate [Analytics].
+  void added({
+    required String Function(A analytics) subject,
+    Map<String, Object?>? Function(A analytics)? parameters,
+  }) =>
+      _logEvent(
+        Analytic(
+          subject: subject(_analyticsData),
+          parameters: parameters?.call(_analyticsData),
+          type: AnalyticsTypes.added,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.removed] and provides the appropriate [Analytics].
+  void removed({
+    required String Function(A analytics) subject,
+    Map<String, Object?>? Function(A analytics)? parameters,
+  }) =>
+      _logEvent(
+        Analytic(
+          subject: subject(_analyticsData),
+          parameters: parameters?.call(_analyticsData),
+          type: AnalyticsTypes.removed,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.subscribed] and provides the appropriate [Analytics].
+  void subscribed({
+    required String Function(A analytics) subject,
+    Map<String, Object?>? Function(A analytics)? parameters,
+  }) =>
+      _logEvent(
+        Analytic(
+          subject: subject(_analyticsData),
+          parameters: parameters?.call(_analyticsData),
+          type: AnalyticsTypes.subscribed,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.unsubscribed] and provides the appropriate [Analytics].
+  void unsubscribed({
+    required String Function(A analytics) subject,
+    Map<String, Object?>? Function(A analytics)? parameters,
+  }) =>
+      _logEvent(
+        Analytic(
+          subject: subject(_analyticsData),
+          parameters: parameters?.call(_analyticsData),
+          type: AnalyticsTypes.unsubscribed,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.changed] and provides the appropriate [Analytics].
+  void changed({
+    required String Function(A analytics) subject,
+    Map<String, Object?>? Function(A analytics)? parameters,
+  }) =>
+      _logEvent(
+        Analytic(
+          subject: subject(_analyticsData),
+          parameters: parameters?.call(_analyticsData),
+          type: AnalyticsTypes.changed,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.denied] and provides the appropriate [Analytics].
+  void denied({
+    required String Function(A analytics) subject,
+    Map<String, Object?>? Function(A analytics)? parameters,
+  }) =>
+      _logEvent(
+        Analytic(
+          subject: subject(_analyticsData),
+          parameters: parameters?.call(_analyticsData),
+          type: AnalyticsTypes.denied,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.skipped] and provides the appropriate [Analytics].
+  void skipped({
+    required String Function(A analytics) subject,
+    Map<String, Object?>? Function(A analytics)? parameters,
+  }) =>
+      _logEvent(
+        Analytic(
+          subject: subject(_analyticsData),
+          parameters: parameters?.call(_analyticsData),
+          type: AnalyticsTypes.skipped,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.checked] and provides the appropriate [Analytics].
+  void checked({
+    required String Function(A analytics) subject,
+    Map<String, Object?>? Function(A analytics)? parameters,
+  }) =>
+      _logEvent(
+        Analytic(
+          subject: subject(_analyticsData),
+          parameters: parameters?.call(_analyticsData),
+          type: AnalyticsTypes.checked,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.unchecked] and provides the appropriate [Analytics].
+  void unchecked({
+    required String Function(A analytics) subject,
+    Map<String, Object?>? Function(A analytics)? parameters,
+  }) =>
+      _logEvent(
+        Analytic(
+          subject: subject(_analyticsData),
+          parameters: parameters?.call(_analyticsData),
+          type: AnalyticsTypes.unchecked,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.attempted] and provides the appropriate [Analytics].
+  void attempted({
+    required String Function(A analytics) subject,
+    Map<String, Object?>? Function(A analytics)? parameters,
+  }) =>
+      _logEvent(
+        Analytic(
+          subject: subject(_analyticsData),
+          parameters: parameters?.call(_analyticsData),
+          type: AnalyticsTypes.attempted,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.reset] and provides the appropriate [Analytics].
+  void reset({
+    required String Function(A analytics) subject,
+    Map<String, Object?>? Function(A analytics)? parameters,
+  }) =>
+      _logEvent(
+        Analytic(
+          subject: subject(_analyticsData),
+          parameters: parameters?.call(_analyticsData),
+          type: AnalyticsTypes.reset,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.enabled] and provides the appropriate [Analytics].
+  void enabled({
+    required String Function(A analytics) subject,
+    Map<String, Object?>? Function(A analytics)? parameters,
+  }) =>
+      _logEvent(
+        Analytic(
+          subject: subject(_analyticsData),
+          parameters: parameters?.call(_analyticsData),
+          type: AnalyticsTypes.enabled,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.disabled] and provides the appropriate [Analytics].
+  void disabled({
+    required String Function(A analytics) subject,
+    Map<String, Object?>? Function(A analytics)? parameters,
+  }) =>
+      _logEvent(
+        Analytic(
+          subject: subject(_analyticsData),
+          parameters: parameters?.call(_analyticsData),
+          type: AnalyticsTypes.disabled,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.began] and provides the appropriate [Analytics].
+  void began({
+    required String Function(A analytics) subject,
+    Map<String, Object?>? Function(A analytics)? parameters,
+  }) =>
+      _logEvent(
+        Analytic(
+          subject: subject(_analyticsData),
+          parameters: parameters?.call(_analyticsData),
+          type: AnalyticsTypes.began,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.ended] and provides the appropriate [Analytics].
+  void ended({
+    required String Function(A analytics) subject,
+    Map<String, Object?>? Function(A analytics)? parameters,
+  }) =>
+      _logEvent(
+        Analytic(
+          subject: subject(_analyticsData),
+          parameters: parameters?.call(_analyticsData),
+          type: AnalyticsTypes.ended,
         ),
       );
 
@@ -438,7 +893,7 @@ class AnalyticsService<A extends Analytics> {
   }
 
   /// Resets all current analytics data.
-  Future<void> reset() async => _analyticsImplementation?.resetAnalyticsData();
+  Future<void> resetAnalytics() async => _analyticsImplementation?.resetAnalyticsData();
 
   /// Resets the [_firstInput] used by [AnalyticsService.input].
   void resetFirstInput() => _firstInput = null;
