@@ -1,3 +1,7 @@
+## 0.7.3
+
+* **🐛️ Bugfix:** Fix `Logservice.value` print.
+
 ## 0.7.2
 
 * **🐛️ Bugfix:** Remove `AnalyticsService.input` method unwanted change.
