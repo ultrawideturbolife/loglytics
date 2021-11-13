@@ -400,7 +400,7 @@ mixin Loglytics<D extends Analytics> {
     if (addToCrashReports) _tryLogCrashReportValue(value, logType);
     final _time = time;
     if (message != null) debugPrint('$_time [$_logLocation] ${'${logType.icon} $message'}');
-    debugPrint('$_time [$_logLocation] 💾 [VALUE] ${message != null ? '$message: ' : ''}$value');
+    debugPrint('$_time [$_logLocation] 💾 [VALUE] $value');
   }
 
   /// Used under the hood to log a [key], [value] and [logType] with optional [message].
