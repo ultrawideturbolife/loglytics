@@ -239,12 +239,31 @@ mixin Loglytics<D extends Analytics> {
   /// configured one with the [Loglytics.setup] method.
   void logValue(
     Object? value, {
-    String? message,
+    String? description,
     LogType logType = LogType.info,
     bool addToCrashReports = true,
   }) =>
       _logValue(
-        message: message,
+        description: description,
+        value: value,
+        logType: logType,
+        addToCrashReports: addToCrashReports,
+      );
+
+  /// Logs a [key], [value] and optional [message] with a default [LogType.info] as [debugPrint].
+  ///
+  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
+  /// configured one with the [Loglytics.setup] method.
+  void logKeyValue(
+    String key,
+    Object? value, {
+    String? message,
+    LogType logType = LogType.info,
+    bool addToCrashReports = true,
+  }) =>
+      _logKeyValue(
+        key: key,
+        description: message,
         value: value,
         logType: logType,
         addToCrashReports: addToCrashReports,
@@ -263,7 +282,7 @@ mixin Loglytics<D extends Analytics> {
   }) =>
       _logIterable(
         iterable: list,
-        message: message,
+        description: message,
         logType: logType,
         addToCrashReports: addToCrashReports,
       );
@@ -281,7 +300,7 @@ mixin Loglytics<D extends Analytics> {
   }) =>
       _logIterable(
         iterable: set,
-        message: message,
+        description: message,
         logType: logType,
         addToCrashReports: addToCrashReports,
       );
@@ -299,25 +318,7 @@ mixin Loglytics<D extends Analytics> {
   }) =>
       _logMap(
         map: map,
-        message: message,
-        logType: logType,
-        addToCrashReports: addToCrashReports,
-      );
-
-  /// Logs a [map]'s keys and optional [message] with a default [LogType.info] as [debugPrint].
-  ///
-  /// Iterates over the given [map] and uses the [_logKey] method under the hood to log each item.
-  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setup] method.
-  void logKeys<T extends Object?, E extends Object?>(
-    Map<T, E> map, {
-    String? message,
-    LogType logType = LogType.info,
-    bool addToCrashReports = true,
-  }) =>
-      _logKeys(
-        map: map,
-        message: message,
+        description: message,
         logType: logType,
         addToCrashReports: addToCrashReports,
       );
@@ -335,7 +336,7 @@ mixin Loglytics<D extends Analytics> {
   }) =>
       _logValues(
         map: map,
-        message: message,
+        description: message,
         addToCrashReports: addToCrashReports,
       );
 
@@ -358,7 +359,7 @@ mixin Loglytics<D extends Analytics> {
     required LogType logType,
     bool addToCrashReports = true,
   }) {
-    if (addToCrashReports) _tryLogCrashReportMessage(message, logType);
+    if (addToCrashReports) _tryLogCrashReportMessage(message);
     debugPrint(
       '$time '
       '[$_logLocation] '
@@ -366,27 +367,7 @@ mixin Loglytics<D extends Analytics> {
     );
   }
 
-  /// Used under the hood to log a [key] and [logType] with optional [message].
-  ///
-  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setup] method.
-  void _logKey({
-    required Object? key,
-    required LogType logType,
-    required bool addToCrashReports,
-    String? message,
-  }) {
-    if (message != null && addToCrashReports) _tryLogCrashReportMessage(message, logType);
-    if (addToCrashReports) _tryLogCrashReportKey(key, logType);
-    debugPrint(
-      '$time '
-      '[$_logLocation] '
-      '${message != null ? '${logType.icon} $message ' : ''}'
-      '🔑 [KEY] $key',
-    );
-  }
-
-  /// Used under the hood to log a [value] and [logType] with optional [message].
+  /// Used under the hood to log a [value] and [logType] with optional [description].
   ///
   /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
   /// configured one with the [Loglytics.setup] method.
@@ -394,16 +375,15 @@ mixin Loglytics<D extends Analytics> {
     required Object? value,
     required LogType logType,
     required addToCrashReports,
-    String? message,
+    required String? description,
   }) {
-    if (message != null && addToCrashReports) _tryLogCrashReportMessage(message, logType);
     if (addToCrashReports) _tryLogCrashReportValue(value, logType);
     final _time = time;
-    if (message != null) debugPrint('$_time [$_logLocation] ${'${logType.icon} $message'}');
-    debugPrint('$_time [$_logLocation] 💾 [VALUE] $value');
+    debugPrint(
+        '$_time [$_logLocation] 💾 [VALUE] ${description != null ? '$description: ' : ''}$value');
   }
 
-  /// Used under the hood to log a [key], [value] and [logType] with optional [message].
+  /// Used under the hood to log a [key], [value] and [logType] with optional [description].
   ///
   /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
   /// configured one with the [Loglytics.setup] method.
@@ -412,20 +392,19 @@ mixin Loglytics<D extends Analytics> {
     required Object? value,
     required LogType logType,
     required addToCrashReports,
-    String? message,
+    required String? description,
   }) {
-    if (message != null) _tryLogCrashReportMessage(message, logType);
-    _tryLogCrashReportKeyValue(key, value, logType);
+    _tryLogCrashReportKeyValue(key, value, description);
     debugPrint(
       '$time '
       '[$_logLocation] '
-      '${message != null ? '${logType.icon} $message ' : ''}'
+      '${description != null ? '${logType.icon} $description ' : ''}'
       '🔑 [KEY] $key '
       '💾 [VALUE] $value',
     );
   }
 
-  /// Used under the hood to log an [iterable] and [logType] with optional [message].
+  /// Used under the hood to log an [iterable] and [logType] with optional [description].
   ///
   /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
   /// configured one with the [Loglytics.setup] method.
@@ -433,19 +412,19 @@ mixin Loglytics<D extends Analytics> {
     required Iterable<T> iterable,
     LogType logType = LogType.info,
     required addToCrashReports,
-    String? message,
+    String? description,
   }) {
     for (T value in iterable) {
       _logValue(
         value: value,
         logType: logType,
-        message: message,
+        description: description,
         addToCrashReports: addToCrashReports,
       );
     }
   }
 
-  /// Used under the hood to log a [map] and [logType] with optional [message].
+  /// Used under the hood to log a [map] and [logType] with optional [description].
   ///
   /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
   /// configured one with the [Loglytics.setup] method.
@@ -453,7 +432,7 @@ mixin Loglytics<D extends Analytics> {
     required Map<String, Object?> map,
     LogType logType = LogType.info,
     required addToCrashReports,
-    String? message,
+    String? description,
   }) =>
       map.forEach(
         (key, value) {
@@ -461,40 +440,19 @@ mixin Loglytics<D extends Analytics> {
             key: key,
             value: value,
             logType: logType,
-            message: message,
+            description: description,
             addToCrashReports: addToCrashReports,
           );
         },
       );
 
-  /// Used under the hood to log a [map]'s keys and [logType] with optional [message].
-  ///
-  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setup] method.
-  void _logKeys<K extends Object?, V extends Object?>({
-    required Map<K, V> map,
-    String? message,
-    LogType logType = LogType.info,
-    required addToCrashReports,
-  }) =>
-      map.forEach(
-        (key, _) {
-          _logKey(
-            key: key,
-            logType: logType,
-            message: message,
-            addToCrashReports: addToCrashReports,
-          );
-        },
-      );
-
-  /// Used under the hood to log a [map]'s values and [logType] with optional [message].
+  /// Used under the hood to log a [map]'s values and [logType] with optional [description].
   ///
   /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
   /// configured one with the [Loglytics.setup] method.
   void _logValues<K extends Object?, V extends Object?>({
     required Map<K, V> map,
-    String? message,
+    String? description,
     LogType logType = LogType.info,
     required addToCrashReports,
   }) =>
@@ -503,7 +461,7 @@ mixin Loglytics<D extends Analytics> {
           _logValue(
             value: value,
             logType: logType,
-            message: message,
+            description: description,
             addToCrashReports: addToCrashReports,
           );
         },
@@ -512,43 +470,23 @@ mixin Loglytics<D extends Analytics> {
   // --------------- CRASHLYTICS --------------- CRASHLYTICS --------------- CRASHLYTICS --------------- \\
 
   /// Used under the hood to try and log a crashlytics [message] with [logType].
-  void _tryLogCrashReportMessage(
-    String message,
-    LogType logType,
-  ) {
-    _crashReportsImplementation?.log('[$_logLocation] '
-        '${logType.name}: '
-        '$message');
-  }
+  void _tryLogCrashReportMessage(String message) => _crashReportsImplementation?.log(message);
 
   /// Used under the hood to try and log a crashlytics [key] and [value] with [logType].
   void _tryLogCrashReportKeyValue(
     String key,
     Object? value,
-    LogType logType,
-  ) {
-    _crashReportsImplementation?.log('[$_logLocation] '
-        '${logType.name}: '
-        '$key: $value');
-  }
-
-  /// Used under the hood to try and log a crashlytics [key] with [logType].
-  void _tryLogCrashReportKey(
-    Object? key,
-    LogType logType,
-  ) {
-    _crashReportsImplementation?.log('[$_logLocation] '
-        '${logType.name}: '
-        'key: $key');
-  }
+    Object? description,
+  ) =>
+      _crashReportsImplementation
+          ?.log('${description != null ? '$description: ' : ''}{ $key: $value }');
 
   /// Used under the hood to try and log a crashlytics [value] with [logType].
   void _tryLogCrashReportValue(
     Object? value,
-    LogType logType,
+    Object? description,
   ) {
-    _crashReportsImplementation?.log('[$_logLocation] '
-        '${logType.name}: '
-        'value: $value');
+    _crashReportsImplementation
+        ?.log('${description != null ? '$description: ' : 'value: '} $value');
   }
 }

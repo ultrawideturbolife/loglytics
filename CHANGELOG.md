@@ -1,10 +1,15 @@
+## 0.7.4
+
+* **✨ New:** Added new `Loglytics.logKeyValue` method.
+* Refactored `message` to `description` and added `description` to some log methods.
+
 ## 0.7.3+1
 
-* **🐛️ Bugfix:** Fix `Logservice.value` print again.
+* **🐛️ Bugfix:** Fix `Loglytics.value` print again.
 
 ## 0.7.3
 
-* **🐛️ Bugfix:** Fix `Logservice.value` print.
+* **🐛️ Bugfix:** Fix `Loglytics.value` print.
 
 ## 0.7.2
 
