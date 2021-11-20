@@ -14,8 +14,6 @@ void main() {
     analytics: (analyticsFactory) {
       analyticsFactory.registerAnalytic(() => CounterAnalytics());
     },
-    errorStackTraceEnd: 1000,
-    errorStackTraceStart: -15,
   );
   customLog(message: 'Setting up Loglytics', location: 'main()', logType: LogType.info);
   runApp(MyApp());
@@ -49,8 +47,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> with Loglytics<CounterAnalytics> {
   int _counter = 0;
-
-  int? wtf;
 
   void _incrementCounter() {
     log('Pressing increment button..');
