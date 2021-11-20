@@ -5,10 +5,9 @@ import 'analytics_interface.dart';
 
 /// Used to provide an easy interface for sending analytics.
 ///
-/// Each [AnalyticsTypes] has its own method that exposes implementations of predefined
-/// [Analytics].
-/// example you can use [AnalyticsService.tapped] and it the will automatically provide you with the
-/// proper [Analytics].
+/// Each [AnalyticsTypes] has its own method that exposes implementations of predefined [Analytics].
+/// For example you can use [AnalyticsService.tapped] and it will automatically provide you with the
+/// proper [Analytics] and a '_tapped' event.
 class AnalyticsService<A extends Analytics> {
   AnalyticsService({
     required A analyticsData,
@@ -43,7 +42,9 @@ class AnalyticsService<A extends Analytics> {
   ///
   /// This applies to your possible [_analyticsImplementation] as well as your
   /// [_crashReportsImplementation].
-  void userProperty({required String Function(A analytics) property, required Object? value}) {
+  void userProperty(
+      {required String Function(A analytics) property,
+      required Object? value}) {
     final name = property(_analyticsData);
     final _value = value?.toString() ?? '-';
     _analyticsImplementation?.setUserProperty(name: name, value: _value);
@@ -333,7 +334,9 @@ class AnalyticsService<A extends Analytics> {
       parameters: parameters?.call(_analyticsData),
       type: AnalyticsTypes.input,
     );
-    if (_firstInput == null || !onlyFirstValue || !analytic.equals(_firstInput)) {
+    if (_firstInput == null ||
+        !onlyFirstValue ||
+        !analytic.equals(_firstInput)) {
       _logEvent(analytic);
     }
     _firstInput = analytic;
@@ -895,7 +898,8 @@ class AnalyticsService<A extends Analytics> {
   }
 
   /// Resets all current analytics data.
-  Future<void> resetAnalytics() async => _analyticsImplementation?.resetAnalyticsData();
+  Future<void> resetAnalytics() async =>
+      _analyticsImplementation?.resetAnalyticsData();
 
   /// Resets the [_firstInput] used by [AnalyticsService.input].
   void resetFirstInput() => _firstInput = null;

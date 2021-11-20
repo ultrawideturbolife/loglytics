@@ -1,3 +1,7 @@
+## 0.8.0+1
+
+* Fix example project and formatting.
+
 ## 0.8.0
 
 * **✨ New:** Added a `CustomAnalytic` object to allow for custom methods in your `Analytics` implementations.
