@@ -22,6 +22,8 @@ class Analytic {
               _subject == other._subject &&
               _type == other._type &&
               parameters == other.parameters);
+
+  CustomAnalytic get toCustomAnalytic => CustomAnalytic(name: name);
 }
 
 /// Custom variation on the [Analytic] that allows for more flexibility when sending analytics.
@@ -32,7 +34,7 @@ class CustomAnalytic extends Analytic {
   }) : super(
           subject: name,
           parameters: parameters,
-          type: AnalyticsTypes.custom,
+          type: AnalyticsTypes.none,
         );
 
   @override

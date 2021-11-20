@@ -158,15 +158,19 @@ Should we want to use our own methods inside our `Analytics` implementations (in
 
 ```dart
 class ExampleAnalytics extends Analytics {
-  final eventName = 'button_viewed';
-  final eventArgument = 'button_name';
+  final buttonViewed = 'button_viewed';
+  final name = 'name';
+  final examplePage = 'example_page';
 
+  CustomAnalytic pageViewed() => AnalyticsTypes.viewed.toCustomAnalytic(subject: examplePage);
+  
   CustomAnalytic buttonViewed(String buttonName) => CustomAnalytic(
-        name: eventName,
-        parameters: {
-          eventArgument: buttonName,
-        },
-      );
+    name: buttonViewed,
+    parameters: {
+      name: buttonName,
+    },
+  );
+  
 }
 ```
 
@@ -174,6 +178,7 @@ Using it could look like this:
 
 ```dart
 void _doSomething() {
+    analytics.pageViewed();
     analytics.event(analytic: (analytics) => analytics.buttonViewed('something'));
   }
 ```

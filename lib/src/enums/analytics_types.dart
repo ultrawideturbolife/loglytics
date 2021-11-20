@@ -1,3 +1,5 @@
+import 'package:loglytics/loglytics.dart';
+
 /// Every action or state that's applicable to data from your [Analytics] implementations.
 enum AnalyticsTypes {
   event,
@@ -64,11 +66,11 @@ enum AnalyticsTypes {
   disabled,
   began,
   ended,
-  custom,
+  none,
 }
 
 /// Used to generate the proper String format when sending analytics to the analytics provider.
-extension AnalyticsTypesNames on AnalyticsTypes {
+extension AnalyticsTypesHelpers on AnalyticsTypes {
   String get name {
     switch (this) {
       case AnalyticsTypes.event:
@@ -199,8 +201,12 @@ extension AnalyticsTypesNames on AnalyticsTypes {
         return 'began';
       case AnalyticsTypes.ended:
         return 'ended';
-      case AnalyticsTypes.custom:
+      case AnalyticsTypes.none:
         return '';
     }
   }
+
+  /// Used to generate [CustomAnalytic] objects based on [AnalyticsTypes].
+  CustomAnalytic toCustomAnalytic({required String subject, Map<String, Object?>? parameters}) =>
+      Analytic(subject: subject, type: this, parameters: parameters).toCustomAnalytic;
 }
