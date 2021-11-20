@@ -1,3 +1,7 @@
+## 0.8.1+1
+
+* Fix readme.
+
 ## 0.8.1
 
 * **✨ New:** Add `toCustomAnalytic` extension method to all `AnalyticsTypes` enums to allow for more flexible custom analytics creations.

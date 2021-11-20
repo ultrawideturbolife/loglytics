@@ -178,7 +178,7 @@ Using it could look like this:
 
 ```dart
 void _doSomething() {
-    analytics.pageViewed();
+    analytics.event(analytic: (analytics) => analytics.pageViewed());
     analytics.event(analytic: (analytics) => analytics.buttonViewed('something'));
   }
 ```
