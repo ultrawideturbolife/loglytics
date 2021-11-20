@@ -42,7 +42,9 @@ class AnalyticsService<A extends Analytics> {
   ///
   /// This applies to your possible [_analyticsImplementation] as well as your
   /// [_crashReportsImplementation].
-  void userProperty({required String Function(A analytics) property, required Object? value}) {
+  void userProperty(
+      {required String Function(A analytics) property,
+      required Object? value}) {
     final name = property(_analyticsData);
     final _value = value?.toString() ?? '-';
     _analyticsImplementation?.setUserProperty(name: name, value: _value);
@@ -332,7 +334,9 @@ class AnalyticsService<A extends Analytics> {
       parameters: parameters?.call(_analyticsData),
       type: AnalyticsTypes.input,
     );
-    if (_firstInput == null || !onlyFirstValue || !analytic.equals(_firstInput)) {
+    if (_firstInput == null ||
+        !onlyFirstValue ||
+        !analytic.equals(_firstInput)) {
       _logEvent(analytic);
     }
     _firstInput = analytic;
@@ -894,7 +898,8 @@ class AnalyticsService<A extends Analytics> {
   }
 
   /// Resets all current analytics data.
-  Future<void> resetAnalytics() async => _analyticsImplementation?.resetAnalyticsData();
+  Future<void> resetAnalytics() async =>
+      _analyticsImplementation?.resetAnalyticsData();
 
   /// Resets the [_firstInput] used by [AnalyticsService.input].
   void resetFirstInput() => _firstInput = null;
