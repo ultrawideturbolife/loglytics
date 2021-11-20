@@ -51,11 +51,13 @@ class AnalyticsService<A extends Analytics> {
     _loglytics?.logAnalytic(name: name, value: _value);
   }
 
-  /// Sends a custom analytic event by providing both [Analytics].
+  /// Provides a callback to send a [CustomAnalytic] while providing your [Analytics] implementation.
   ///
-  /// This method may be used to log anything that is not covered by any other method in this class
-  /// and expects an [Analytic] in return from the [analytic] callback.
-  void event({required Analytic Function(A analytics) analytic}) =>
+  /// This method should be used when you decide to specify your analytics not per subject, but per
+  /// specific methods. Each of your methods should return a [CustomAnalytic]. Whenever you would
+  /// want to access your specific methods you should call this [event] method and they will be
+  /// provided to you through the callback that exposes your [Analytics] implementation.
+  void event({required CustomAnalytic Function(A analytics) analytic}) =>
       _logEvent(analytic(_analyticsData));
 
   /// Sends an [AnalyticsTypes.tapped] and provides the appropriate [Analytics].
@@ -902,6 +904,14 @@ class AnalyticsService<A extends Analytics> {
   void _logEvent(Analytic analytic) {
     final name = analytic.name;
     final parameters = analytic.parameters;
+    _analyticsImplementation?.logEvent(name: name, parameters: parameters);
+    _loglytics?.logAnalytic(name: name, parameters: parameters);
+  }
+
+  /// Alternate method used for sending [CustomAnalytic]s.
+  void _logCustomEvent(CustomAnalytic customAnalytic) {
+    final name = customAnalytic.name;
+    final parameters = customAnalytic.parameters;
     _analyticsImplementation?.logEvent(name: name, parameters: parameters);
     _loglytics?.logAnalytic(name: name, parameters: parameters);
   }

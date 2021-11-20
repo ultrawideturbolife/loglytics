@@ -64,6 +64,7 @@ enum AnalyticsTypes {
   disabled,
   began,
   ended,
+  custom,
 }
 
 /// Used to generate the proper String format when sending analytics to the analytics provider.
@@ -198,6 +199,8 @@ extension AnalyticsTypesNames on AnalyticsTypes {
         return 'began';
       case AnalyticsTypes.ended:
         return 'ended';
+      case AnalyticsTypes.custom:
+        return '';
     }
   }
 }

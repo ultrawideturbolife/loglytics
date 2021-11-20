@@ -1,3 +1,8 @@
+## 0.8.0
+
+* **✨ New:** Added a `CustomAnalytic` object to allow for custom methods in your `Analytics` implementations.
+* **⚠️ Breaking:** Refactored the `AnalyticsService.event` method.
+
 ## 0.7.4
 
 * **✨ New:** Added new `Loglytics.logKeyValue` method.

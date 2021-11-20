@@ -93,9 +93,9 @@ Loglytics.setup(
     analyticsImplementation: AnalyticsImplementation(Object()),
     crashReportsImplementation: CrashReportsImplementation(Object()),
     shouldLogAnalytics: true,
-    analytics: [
-      () => CounterAnalytics(),
-    ],
+    analytics: (analyticsFactory) {
+      analyticsFactory.registerAnalytic(() => CounterAnalytics());
+    },
   );
 ```
 
@@ -150,6 +150,32 @@ class LoginClass with Loglytics<LoginAnalytics> {
     );
   }
 }
+```
+
+## 🔧 Custom Analytics
+
+Should we want to use our own methods inside our `Analytics` implementations (instead of subject `String`s), then we can use the `CustomAnalytic` object. This is a simple wrapper that takes an event name and optional parameters. In order to send it we must call the event method. This method will behave similarly as the other methods except that it has only one callback, and it expects a `CustomAnalytic` object as return value (which you will be able to pass down from your `Analytics` implementation with specific methods). Implementing it could look like this:
+
+```dart
+class ExampleAnalytics extends Analytics {
+  final eventName = 'button_viewed';
+  final eventArgument = 'button_name';
+
+  CustomAnalytic buttonViewed(String buttonName) => CustomAnalytic(
+        name: eventName,
+        parameters: {
+          eventArgument: buttonName,
+        },
+      );
+}
+```
+
+Using it could look like this:
+
+```dart
+void _doSomething() {
+    analytics.event(analytic: (analytics) => analytics.buttonViewed('something'));
+  }
 ```
 
 # 🥑 Additional information

@@ -1,8 +1,6 @@
 import '../enums/analytics_types.dart';
 
 /// Core class that's used to structure and provide analytics in the [AnalyticsService].
-///
-/// This is mostly used under the hood.
 class Analytic {
   const Analytic({
     required String subject,
@@ -24,4 +22,19 @@ class Analytic {
               _subject == other._subject &&
               _type == other._type &&
               parameters == other.parameters);
+}
+
+/// Custom variation on the [Analytic] that allows for more flexibility when sending analytics.
+class CustomAnalytic extends Analytic {
+  CustomAnalytic({
+    required String name,
+    Map<String, Object?>? parameters,
+  }) : super(
+          subject: name,
+          parameters: parameters,
+          type: AnalyticsTypes.custom,
+        );
+
+  @override
+  String get name => _subject;
 }
