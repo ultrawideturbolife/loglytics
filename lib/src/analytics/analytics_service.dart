@@ -51,7 +51,7 @@ class AnalyticsService {
   }
 
   /// Main method used for sending for the more flexible [CustomAnalytic]s.
-  void event({required CustomAnalytic customAnalytic}) => _logCustomAnalytic(customAnalytic);
+  void custom({required CustomAnalytic analytic}) => _logCustomAnalytic(analytic);
 
   /// Sends an [AnalyticsTypes.tapped] based on given [subject] and possible [parameters].
   void tapped({

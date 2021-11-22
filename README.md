@@ -107,8 +107,13 @@ Next we need to determine how we want to implement the feature-like way of speci
 import 'package:loglytics/loglytics.dart';
 
 class LoginAnalytics extends Analytics {
+  final CoreSubjects core = const CoreSubjects();
   final String loginButton = 'login_button';
   final String timeOnPage = 'time_on_page';
+  
+  final String _loginView = 'login_view';
+
+  void viewPage() => service.viewed(subject: _loginView);
 }
 ```
 
@@ -126,7 +131,7 @@ Loglytics.setup(
   );
 ```
 
-Now we can now move on to our fist usage of a `Loglytics` `mixin`. As mentioned earlier, the `Loglytics` can be used without analytics. We do this by simply adding the `Loglytics` as a `mixin` to a class. Et voilá now we have all the log capabilities this package has to offer along with some very good basic default analytics. However, we want to use our own implementation in this example so we specify a generic argument for the `Loglytics` `mixin`. We use the name of the login `Analytics` implementation we jut made. This looks like the following:
+Now we can move on to our fist usage of a `Loglytics` `mixin`. As mentioned earlier, the `Loglytics` can be used without analytics. We do this by simply adding the `Loglytics` as a `mixin` to a class. Et voilá now we have all the log capabilities this package has to offer along with some very good basic default analytics. However, we want to use our own implementation in this example so we specify a generic argument for the `Loglytics` `mixin`. We use the name of the login `Analytics` implementation we jut made. This looks like the following:
 
 ```dart
 class LoginClass with Loglytics<LoginAnalytics> {}
@@ -136,14 +141,20 @@ That's it, now we have everything at our disposal to log and send analytics for 
 
 ```dart
 class LoginClass with Loglytics<LoginAnalytics> {
+  
+  void initialise() {
+    // Other code here
+    analytics.viewPage();
+  }
+  
   void login() {
     // Let's log the tap of the button here.
-    analytics.tapped(subject: (analytics) => analytics.loginButton);
+    analytics.tapped(subject: analytics.loginButton);
     // Do your regular code here.
     // Let's assume the login succeeds.
     analytics.succeeded(
-      subject: (analytics) => analytics.login,
-      parameters: (analytics) => {
+      subject: analytics.login,
+      parameters: {
         // That took a while
         analytics.timeOnPage: 123,
       },
@@ -158,14 +169,13 @@ Should we want to use our own methods inside our `Analytics` implementations (in
 
 ```dart
 class ExampleAnalytics extends Analytics {
-  final buttonViewed = 'button_viewed';
+  // Event names
+  final buttonViewedWithSomeMagic = 'button_viewed_with_some_magic';
+  // Parameters
   final name = 'name';
-  final examplePage = 'example_page';
 
-  CustomAnalytic pageViewed() => AnalyticsTypes.viewed.toCustomAnalytic(subject: examplePage);
-  
-  CustomAnalytic buttonViewed(String buttonName) => CustomAnalytic(
-    name: buttonViewed,
+  CustomAnalytic buttonViewedWithSomeMagic(String buttonName) => CustomAnalytic(
+    name: buttonViewedWithSomeMagic,
     parameters: {
       name: buttonName,
     },
@@ -178,8 +188,7 @@ Using it could look like this:
 
 ```dart
 void _doSomething() {
-    analytics.event(analytic: (analytics) => analytics.pageViewed());
-    analytics.event(analytic: (analytics) => analytics.buttonViewed('something'));
+    analytics.custom(analytic: analytics.buttonViewedWithSomeMagic('magic_button'));
   }
 ```
 
