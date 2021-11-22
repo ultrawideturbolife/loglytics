@@ -1,3 +1,9 @@
+## 0.9.0
+
+* **✨ New:** Added the `AnalyticsService` to each `Analytics` object, grab it with the `service` getter.
+* **⚠️ Breaking:** Removed the `_CoreData` from the `Analytics` object. It is still available so just add it manually when you see fit in your own implementations.
+* **⚠️ Breaking:** Removed the `AnalyticsService` from the `Loglytics` object. The `analytics` getter will now pass you your `Analytics` implementation directly (which holds the `AnalyticsService`).
+
 ## 0.8.1+1
 
 * Fix readme.
