@@ -1,3 +1,7 @@
+## 0.9.0+1
+
+* Fix readme
+
 ## 0.9.0
 
 * **✨ New:** Added the `AnalyticsService` to each `Analytics` object, grab it with the `service` getter.

@@ -149,10 +149,10 @@ class LoginClass with Loglytics<LoginAnalytics> {
   
   void login() {
     // Let's log the tap of the button here.
-    analytics.tapped(subject: analytics.loginButton);
+    analytics.service.tapped(subject: analytics.loginButton);
     // Do your regular code here.
     // Let's assume the login succeeds.
-    analytics.succeeded(
+    analytics.service.succeeded(
       subject: analytics.login,
       parameters: {
         // That took a while
@@ -188,7 +188,7 @@ Using it could look like this:
 
 ```dart
 void _doSomething() {
-    analytics.custom(analytic: analytics.buttonViewedWithSomeMagic('magic_button'));
+    analytics.service.custom(analytic: analytics.buttonViewedWithSomeMagic('magic_button'));
   }
 ```
 
