@@ -211,6 +211,8 @@ extension AnalyticsTypesHelpers on AnalyticsTypes {
   }
 
   /// Used to generate [CustomAnalytic] objects based on [AnalyticsTypes].
-  CustomAnalytic toCustomAnalytic({required String subject, Map<String, Object?>? parameters}) =>
-      Analytic(subject: subject, type: this, parameters: parameters).toCustomAnalytic;
+  CustomAnalytic toCustomAnalytic(
+          {required String subject, Map<String, Object?>? parameters}) =>
+      Analytic(subject: subject, type: this, parameters: parameters)
+          .toCustomAnalytic;
 }

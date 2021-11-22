@@ -51,7 +51,8 @@ class AnalyticsService {
   }
 
   /// Main method used for sending for the more flexible [CustomAnalytic]s.
-  void custom({required CustomAnalytic analytic}) => _logCustomAnalytic(analytic);
+  void custom({required CustomAnalytic analytic}) =>
+      _logCustomAnalytic(analytic);
 
   /// Sends an [AnalyticsTypes.tapped] based on given [subject] and possible [parameters].
   void tapped({
@@ -326,7 +327,9 @@ class AnalyticsService {
       parameters: parameters,
       type: AnalyticsTypes.input,
     );
-    if (_firstInput == null || !onlyFirstValue || !analytic.equals(_firstInput)) {
+    if (_firstInput == null ||
+        !onlyFirstValue ||
+        !analytic.equals(_firstInput)) {
       _logAnalytic(analytic);
     }
     _firstInput = analytic;
@@ -901,7 +904,8 @@ class AnalyticsService {
   }
 
   /// Resets all current analytics data.
-  Future<void> resetAnalytics() async => _analyticsImplementation?.resetAnalyticsData();
+  Future<void> resetAnalytics() async =>
+      _analyticsImplementation?.resetAnalyticsData();
 
   /// Resets the [_firstInput] used by [AnalyticsService.input].
   void resetFirstInput() => _firstInput = null;

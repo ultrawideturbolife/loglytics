@@ -43,7 +43,9 @@ mixin Loglytics<D extends Analytics> {
           crashReportsImplementation: _crashReportsImplementation,
         )) as D;
     } catch (error) {
-      logError('Something went wrong grabbing the analytics data for $runtimeType.', error: error);
+      logError(
+          'Something went wrong grabbing the analytics data for $runtimeType.',
+          error: error);
       return _analytics ??= (Analytics()
         ..initialise(
           loglytics: this,
@@ -102,7 +104,8 @@ mixin Loglytics<D extends Analytics> {
     if (analytics != null) {
       analytics(AnalyticsFactory(getIt: _getIt));
     }
-    _errorStackTraceStart = errorStackTraceStart ?? _errorStackTraceStartDefault;
+    _errorStackTraceStart =
+        errorStackTraceStart ?? _errorStackTraceStartDefault;
     _errorStackTraceEnd = errorStackTraceEnd ?? _errorStackTraceEndDefault;
   }
 
@@ -478,7 +481,8 @@ mixin Loglytics<D extends Analytics> {
   // --------------- CRASHLYTICS --------------- CRASHLYTICS --------------- CRASHLYTICS --------------- \\
 
   /// Used under the hood to try and log a crashlytics [message] with [logType].
-  void _tryLogCrashReportMessage(String message) => _crashReportsImplementation?.log(message);
+  void _tryLogCrashReportMessage(String message) =>
+      _crashReportsImplementation?.log(message);
 
   /// Used under the hood to try and log a crashlytics [key] and [value] with [logType].
   void _tryLogCrashReportKeyValue(
@@ -486,8 +490,8 @@ mixin Loglytics<D extends Analytics> {
     Object? value,
     Object? description,
   ) =>
-      _crashReportsImplementation
-          ?.log('${description != null ? '$description: ' : ''}{ $key: $value }');
+      _crashReportsImplementation?.log(
+          '${description != null ? '$description: ' : ''}{ $key: $value }');
 
   /// Used under the hood to try and log a crashlytics [value] with [logType].
   void _tryLogCrashReportValue(
