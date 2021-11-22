@@ -66,6 +66,7 @@ enum AnalyticsTypes {
   disabled,
   began,
   ended,
+  refreshed,
   none,
 }
 
@@ -201,14 +202,15 @@ extension AnalyticsTypesHelpers on AnalyticsTypes {
         return 'began';
       case AnalyticsTypes.ended:
         return 'ended';
+      case AnalyticsTypes.refreshed:
+        return 'refreshed';
+        break;
       case AnalyticsTypes.none:
         return '';
     }
   }
 
   /// Used to generate [CustomAnalytic] objects based on [AnalyticsTypes].
-  CustomAnalytic toCustomAnalytic(
-          {required String subject, Map<String, Object?>? parameters}) =>
-      Analytic(subject: subject, type: this, parameters: parameters)
-          .toCustomAnalytic;
+  CustomAnalytic toCustomAnalytic({required String subject, Map<String, Object?>? parameters}) =>
+      Analytic(subject: subject, type: this, parameters: parameters).toCustomAnalytic;
 }

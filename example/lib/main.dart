@@ -15,7 +15,6 @@ void main() {
       analyticsFactory.registerAnalytic(() => CounterAnalytics());
     },
   );
-  customLog(message: 'Setting up Loglytics', location: 'main()', logType: LogType.info);
   runApp(MyApp());
 }
 
@@ -25,7 +24,6 @@ class MyApp extends StatelessWidget with Loglytics {
   @override
   Widget build(BuildContext context) {
     logWarning('Starting app..');
-    analytics.initialised(subject: (analytics) => analytics.core.app);
     return MaterialApp(
       title: 'Loglytics Demo',
       theme: ThemeData(
@@ -48,16 +46,22 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> with Loglytics<CounterAnalytics> {
   int _counter = 0;
 
+  @override
+  void initState() {
+    analytics.viewPage();
+    super.initState();
+  }
+
   void _incrementCounter() {
     log('Pressing increment button..');
-    analytics.tapped(subject: (analytics) => analytics.core.button);
+    analytics.service.tapped(subject: analytics.core.button);
     setState(
       () {
         _counter++;
         logValue(_counter);
-        analytics.incremented(
-          subject: (analytics) => analytics.counterButton,
-          parameters: (analytics) => {
+        analytics.service.incremented(
+          subject: analytics.counterButton,
+          parameters: {
             analytics.core.time: DateTime.now(),
           },
         );
@@ -75,7 +79,7 @@ class _MyHomePageState extends State<MyHomePage> with Loglytics<CounterAnalytics
           ),
           onTap: () {
             log('What a weird thing to do..');
-            analytics.tapped(subject: (analytics) => analytics.core.header);
+            analytics.service.tapped(subject: analytics.core.header);
           },
         ),
       ),

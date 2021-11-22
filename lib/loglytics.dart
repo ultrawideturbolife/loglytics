@@ -6,6 +6,7 @@ export 'src/analytics/analytics.dart';
 export 'src/analytics/analytics_factory.dart';
 export 'src/analytics/analytics_interface.dart';
 export 'src/analytics/analytics_service.dart';
+export 'src/analytics/core_subjects.dart';
 // src/crashlytics
 export 'src/crash_reports/crash_reports_interface.dart';
 // src/enums

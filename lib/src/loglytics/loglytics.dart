@@ -23,34 +23,41 @@ import '../extensions/log_type_extensions.dart';
 /// it. When no generic is specified you can even use our basic analytic functionality through the
 /// default [Analytics.core] getter that's accessible through [Loglytics.analytics].
 mixin Loglytics<D extends Analytics> {
-  late final AnalyticsService<D> _analyticsService = AnalyticsService<D>(
-    analyticsData: _analyticsData,
-    analyticsImplementation: _analyticsImplementation,
-    crashReportsImplementation: _crashReportsImplementation,
-    loglytics: this,
-  );
-
   // Used to register and provider the proper [Analytics]
   static final GetIt _getIt = GetIt.asNewInstance();
 
   /// Used to grab the proper [Analytics] implementation or provide a default one.
-  dynamic get _analyticsData {
+  dynamic get _getOrInitAnalytics {
     try {
-      return _getIt.get<D>();
+      return _analytics ??= _getIt.get<D>()
+        ..initialise(
+          loglytics: this,
+          analyticsImplementation: _analyticsImplementation,
+          crashReportsImplementation: _crashReportsImplementation,
+        );
     } on Error catch (_) {
-      return const Analytics();
+      return _analytics ??= Analytics()
+        ..initialise(
+          loglytics: this,
+          analyticsImplementation: _analyticsImplementation,
+          crashReportsImplementation: _crashReportsImplementation,
+        );
     } catch (error) {
-      logError(
-          'Something went wrong grabbing the analytics data for $runtimeType.',
-          error: error);
-      return const Analytics();
+      logError('Something went wrong grabbing the analytics data for $runtimeType.', error: error);
+      return _analytics ??= Analytics()
+        ..initialise(
+          loglytics: this,
+          analyticsImplementation: _analyticsImplementation,
+          crashReportsImplementation: _crashReportsImplementation,
+        );
     }
   }
 
   /// Provides the configured [AnalyticsService] functionality through the [Loglytics] mixin.
   ///
   /// The [AnalyticsService] will have access to the specified [Analytics] or default to the basic one.
-  AnalyticsService<D> get analytics => _analyticsService;
+  D get analytics => _getOrInitAnalytics;
+  dynamic _analytics;
 
   /// Used for showing the location (class) of a single log.
   late final String _logLocation = runtimeType.toString();
@@ -96,8 +103,7 @@ mixin Loglytics<D extends Analytics> {
     if (analytics != null) {
       analytics(AnalyticsFactory(getIt: _getIt));
     }
-    _errorStackTraceStart =
-        errorStackTraceStart ?? _errorStackTraceStartDefault;
+    _errorStackTraceStart = errorStackTraceStart ?? _errorStackTraceStartDefault;
     _errorStackTraceEnd = errorStackTraceEnd ?? _errorStackTraceEndDefault;
   }
 
@@ -473,8 +479,7 @@ mixin Loglytics<D extends Analytics> {
   // --------------- CRASHLYTICS --------------- CRASHLYTICS --------------- CRASHLYTICS --------------- \\
 
   /// Used under the hood to try and log a crashlytics [message] with [logType].
-  void _tryLogCrashReportMessage(String message) =>
-      _crashReportsImplementation?.log(message);
+  void _tryLogCrashReportMessage(String message) => _crashReportsImplementation?.log(message);
 
   /// Used under the hood to try and log a crashlytics [key] and [value] with [logType].
   void _tryLogCrashReportKeyValue(
@@ -482,8 +487,8 @@ mixin Loglytics<D extends Analytics> {
     Object? value,
     Object? description,
   ) =>
-      _crashReportsImplementation?.log(
-          '${description != null ? '$description: ' : ''}{ $key: $value }');
+      _crashReportsImplementation
+          ?.log('${description != null ? '$description: ' : ''}{ $key: $value }');
 
   /// Used under the hood to try and log a crashlytics [value] with [logType].
   void _tryLogCrashReportValue(
@@ -492,5 +497,18 @@ mixin Loglytics<D extends Analytics> {
   ) {
     _crashReportsImplementation
         ?.log('${description != null ? '$description: ' : 'value: '} $value');
+  }
+}
+
+extension on Analytics {
+  void initialise({
+    required Loglytics? loglytics,
+    required AnalyticsInterface? analyticsImplementation,
+    required CrashReportsInterface? crashReportsImplementation,
+  }) {
+    AnalyticsService(
+        loglytics: loglytics,
+        analyticsImplementation: analyticsImplementation,
+        crashReportsImplementation: crashReportsImplementation);
   }
 }
