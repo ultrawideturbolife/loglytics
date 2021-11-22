@@ -5,9 +5,10 @@ import 'analytics_interface.dart';
 
 /// Used to provide an easy interface for sending analytics.
 ///
-/// Each [AnalyticsTypes] has its own method that exposes implementations of predefined [Analytics].
-/// For example you can use [AnalyticsService.tapped] and it will automatically provide you with the
-/// proper [Analytics] and a '_tapped' event.
+/// Each [AnalyticsTypes] has its own method that receives a subject and possible parameters.
+/// For example when using the [AnalyticsService.viewed] method with given subject 'counter_page'
+/// your [AnalyticsService._analyticsImplementation] will attempt to send a 'counter_page_viewed'
+/// event.
 class AnalyticsService {
   AnalyticsService({
     Loglytics? loglytics,
@@ -49,15 +50,10 @@ class AnalyticsService {
     }
   }
 
-  /// Provides a callback to send a [CustomAnalytic] while providing your [Analytics] implementation.
-  ///
-  /// This method should be used when you decide to specify your analytics not per subject, but per
-  /// specific methods. Each of your methods should return a [CustomAnalytic]. Whenever you would
-  /// want to access your specific methods you should call this [event] method and they will be
-  /// provided to you through the callback that exposes your [Analytics] implementation.
+  /// Main method used for sending for the more flexible [CustomAnalytic]s.
   void event({required CustomAnalytic customAnalytic}) => _logCustomAnalytic(customAnalytic);
 
-  /// Sends an [AnalyticsTypes.tapped] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.tapped] based on given [subject] and possible [parameters].
   void tapped({
     required String subject,
     Map<String, Object?>? parameters,
@@ -70,7 +66,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.clicked] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.clicked] based on given [subject] and possible [parameters].
   void clicked({
     required String subject,
     Map<String, Object?>? parameters,
@@ -83,7 +79,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.focussed] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.focussed] based on given [subject] and possible [parameters].
   void focussed({
     required String subject,
     Map<String, Object?>? parameters,
@@ -96,7 +92,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.selected] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.selected] based on given [subject] and possible [parameters].
   void selected({
     required String subject,
     Map<String, Object?>? parameters,
@@ -109,7 +105,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.connected] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.connected] based on given [subject] and possible [parameters].
   void connected({
     required String subject,
     Map<String, Object?>? parameters,
@@ -122,7 +118,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.disconnected] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.disconnected] based on given [subject] and possible [parameters].
   void disconnected({
     required String subject,
     Map<String, Object?>? parameters,
@@ -135,7 +131,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.viewed] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.viewed] based on given [subject] and possible [parameters].
   void viewed({
     required String subject,
     Map<String, Object?>? parameters,
@@ -148,7 +144,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.hidden] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.hidden] based on given [subject] and possible [parameters].
   void hidden({
     required String subject,
     Map<String, Object?>? parameters,
@@ -161,7 +157,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.opened] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.opened] based on given [subject] and possible [parameters].
   void opened({
     required String subject,
     Map<String, Object?>? parameters,
@@ -174,7 +170,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.closed] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.closed] based on given [subject] and possible [parameters].
   void closed({
     required String subject,
     Map<String, Object?>? parameters,
@@ -187,7 +183,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.failed] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.failed] based on given [subject] and possible [parameters].
   void failed({
     required String subject,
     Map<String, Object?>? parameters,
@@ -200,7 +196,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.succeeded] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.succeeded] based on given [subject] and possible [parameters].
   void succeeded({
     required String subject,
     Map<String, Object?>? parameters,
@@ -213,7 +209,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.sent] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.sent] based on given [subject] and possible [parameters].
   void sent({
     required String subject,
     Map<String, Object?>? parameters,
@@ -226,7 +222,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.received] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.received] based on given [subject] and possible [parameters].
   void received({
     required String subject,
     Map<String, Object?>? parameters,
@@ -239,7 +235,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.validated] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.validated] based on given [subject] and possible [parameters].
   void validated({
     required String subject,
     Map<String, Object?>? parameters,
@@ -252,7 +248,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.invalidated] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.invalidated] based on given [subject] and possible [parameters].
   void invalidated({
     required String subject,
     Map<String, Object?>? parameters,
@@ -265,7 +261,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.searched] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.searched] based on given [subject] and possible [parameters].
   void searched({
     required String subject,
     Map<String, Object?>? parameters,
@@ -278,7 +274,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.liked] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.liked] based on given [subject] and possible [parameters].
   void liked({
     required String subject,
     Map<String, Object?>? parameters,
@@ -291,7 +287,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.shared] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.shared] based on given [subject] and possible [parameters].
   void shared({
     required String subject,
     Map<String, Object?>? parameters,
@@ -304,7 +300,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.commented] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.commented] based on given [subject] and possible [parameters].
   void commented({
     required String subject,
     Map<String, Object?>? parameters,
@@ -317,7 +313,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.input] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.input] based on given [subject] and possible [parameters].
   ///
   /// Defaults to only sending the first analytic by settings [onlyFirstValue] to true.
   void input({
@@ -336,7 +332,7 @@ class AnalyticsService {
     _firstInput = analytic;
   }
 
-  /// Sends an [AnalyticsTypes.incremented] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.incremented] based on given [subject] and possible [parameters].
   void incremented({
     required String subject,
     Map<String, Object?>? parameters,
@@ -349,7 +345,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.decremented] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.decremented] based on given [subject] and possible [parameters].
   void decremented({
     required String subject,
     Map<String, Object?>? parameters,
@@ -362,7 +358,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.accepted] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.accepted] based on given [subject] and possible [parameters].
   void accepted({
     required String subject,
     Map<String, Object?>? parameters,
@@ -375,7 +371,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.declined] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.declined] based on given [subject] and possible [parameters].
   void declined({
     required String subject,
     Map<String, Object?>? parameters,
@@ -388,7 +384,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.alert] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.alert] based on given [subject] and possible [parameters].
   void alert({
     required String subject,
     Map<String, Object?>? parameters,
@@ -401,7 +397,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.scrolled] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.scrolled] based on given [subject] and possible [parameters].
   void scrolled({
     required String subject,
     Map<String, Object?>? parameters,
@@ -414,7 +410,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.started] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.started] based on given [subject] and possible [parameters].
   void started({
     required String subject,
     Map<String, Object?>? parameters,
@@ -427,7 +423,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.stopped] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.stopped] based on given [subject] and possible [parameters].
   void stopped({
     required String subject,
     Map<String, Object?>? parameters,
@@ -440,7 +436,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.initialised] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.initialised] based on given [subject] and possible [parameters].
   void initialised({
     required String subject,
     Map<String, Object?>? parameters,
@@ -453,7 +449,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.disposed] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.disposed] based on given [subject] and possible [parameters].
   void disposed({
     required String subject,
     Map<String, Object?>? parameters,
@@ -466,7 +462,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.fetched] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.fetched] based on given [subject] and possible [parameters].
   void fetched({
     required String subject,
     Map<String, Object?>? parameters,
@@ -479,7 +475,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.set] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.set] based on given [subject] and possible [parameters].
   void set({
     required String subject,
     Map<String, Object?>? parameters,
@@ -492,7 +488,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.get] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.get] based on given [subject] and possible [parameters].
   void get({
     required String subject,
     Map<String, Object?>? parameters,
@@ -505,7 +501,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.foreground] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.foreground] based on given [subject] and possible [parameters].
   void foreground({
     required String subject,
     Map<String, Object?>? parameters,
@@ -518,7 +514,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.background] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.background] based on given [subject] and possible [parameters].
   void background({
     required String subject,
     Map<String, Object?>? parameters,
@@ -531,7 +527,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.purchased] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.purchased] based on given [subject] and possible [parameters].
   void purchased({
     required String subject,
     Map<String, Object?>? parameters,
@@ -544,7 +540,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.dismissed] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.dismissed] based on given [subject] and possible [parameters].
   void dismissed({
     required String subject,
     Map<String, Object?>? parameters,
@@ -557,7 +553,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.upgraded] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.upgraded] based on given [subject] and possible [parameters].
   void upgraded({
     required String subject,
     Map<String, Object?>? parameters,
@@ -570,7 +566,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.downgraded] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.downgraded] based on given [subject] and possible [parameters].
   void downgraded({
     required String subject,
     Map<String, Object?>? parameters,
@@ -583,7 +579,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.interaction] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.interaction] based on given [subject] and possible [parameters].
   void interaction({
     required String subject,
     Map<String, Object?>? parameters,
@@ -596,7 +592,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.query] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.query] based on given [subject] and possible [parameters].
   void query({
     required String subject,
     Map<String, Object?>? parameters,
@@ -609,7 +605,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.confirmed] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.confirmed] based on given [subject] and possible [parameters].
   void confirmed({
     required String subject,
     Map<String, Object?>? parameters,
@@ -622,7 +618,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.canceled] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.canceled] based on given [subject] and possible [parameters].
   void canceled({
     required String subject,
     Map<String, Object?>? parameters,
@@ -635,7 +631,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.created] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.created] based on given [subject] and possible [parameters].
   void created({
     required String subject,
     Map<String, Object?>? parameters,
@@ -648,7 +644,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.read] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.read] based on given [subject] and possible [parameters].
   void read({
     required String subject,
     Map<String, Object?>? parameters,
@@ -661,7 +657,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.updated] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.updated] based on given [subject] and possible [parameters].
   void updated({
     required String subject,
     Map<String, Object?>? parameters,
@@ -674,7 +670,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.deleted] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.deleted] based on given [subject] and possible [parameters].
   void deleted({
     required String subject,
     Map<String, Object?>? parameters,
@@ -687,7 +683,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.added] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.added] based on given [subject] and possible [parameters].
   void added({
     required String subject,
     Map<String, Object?>? parameters,
@@ -700,7 +696,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.removed] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.removed] based on given [subject] and possible [parameters].
   void removed({
     required String subject,
     Map<String, Object?>? parameters,
@@ -713,7 +709,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.subscribed] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.subscribed] based on given [subject] and possible [parameters].
   void subscribed({
     required String subject,
     Map<String, Object?>? parameters,
@@ -726,7 +722,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.unsubscribed] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.unsubscribed] based on given [subject] and possible [parameters].
   void unsubscribed({
     required String subject,
     Map<String, Object?>? parameters,
@@ -739,7 +735,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.changed] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.changed] based on given [subject] and possible [parameters].
   void changed({
     required String subject,
     Map<String, Object?>? parameters,
@@ -752,7 +748,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.denied] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.denied] based on given [subject] and possible [parameters].
   void denied({
     required String subject,
     Map<String, Object?>? parameters,
@@ -765,7 +761,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.skipped] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.skipped] based on given [subject] and possible [parameters].
   void skipped({
     required String subject,
     Map<String, Object?>? parameters,
@@ -778,7 +774,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.checked] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.checked] based on given [subject] and possible [parameters].
   void checked({
     required String subject,
     Map<String, Object?>? parameters,
@@ -791,7 +787,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.unchecked] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.unchecked] based on given [subject] and possible [parameters].
   void unchecked({
     required String subject,
     Map<String, Object?>? parameters,
@@ -804,7 +800,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.attempted] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.attempted] based on given [subject] and possible [parameters].
   void attempted({
     required String subject,
     Map<String, Object?>? parameters,
@@ -817,7 +813,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.reset] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.reset] based on given [subject] and possible [parameters].
   void reset({
     required String subject,
     Map<String, Object?>? parameters,
@@ -830,7 +826,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.enabled] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.enabled] based on given [subject] and possible [parameters].
   void enabled({
     required String subject,
     Map<String, Object?>? parameters,
@@ -843,7 +839,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.disabled] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.disabled] based on given [subject] and possible [parameters].
   void disabled({
     required String subject,
     Map<String, Object?>? parameters,
@@ -856,7 +852,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.began] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.began] based on given [subject] and possible [parameters].
   void began({
     required String subject,
     Map<String, Object?>? parameters,
@@ -869,7 +865,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.ended] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.ended] based on given [subject] and possible [parameters].
   void ended({
     required String subject,
     Map<String, Object?>? parameters,
@@ -882,7 +878,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends an [AnalyticsTypes.refreshed] and provides the appropriate [Analytics].
+  /// Sends an [AnalyticsTypes.refreshed] based on given [subject] and possible [parameters].
   void refreshed({
     required String subject,
     Map<String, Object?>? parameters,
@@ -895,7 +891,7 @@ class AnalyticsService {
         ),
       );
 
-  /// Sends the current screen and provides the appropriate [Analytics].
+  /// Sends the current screen based on given [subject] and possible [parameters].
   void screen({
     required String subject,
   }) {
