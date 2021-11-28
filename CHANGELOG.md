@@ -1,6 +1,10 @@
+## 0.9.0+2
+
+* **🐛️ Bugfix:** Made `Loglytics.analytics` final.
+
 ## 0.9.0+1
 
-* Fix readme
+* Fix readme.
 
 ## 0.9.0
 

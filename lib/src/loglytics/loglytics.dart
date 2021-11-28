@@ -27,26 +27,24 @@ mixin Loglytics<D extends Analytics> {
   static final GetIt _getIt = GetIt.asNewInstance();
 
   /// Used to grab the proper [Analytics] implementation or provide a default one.
-  D get _getOrInitAnalytics {
+  D get _getAnalytics {
     try {
-      return _analytics ??= _getIt.get<D>()
+      return _getIt.get<D>()
         ..initialise(
           loglytics: this,
           analyticsImplementation: _analyticsImplementation,
           crashReportsImplementation: _crashReportsImplementation,
         );
     } on Error catch (_) {
-      return _analytics ??= (Analytics()
+      return (Analytics()
         ..initialise(
           loglytics: this,
           analyticsImplementation: _analyticsImplementation,
           crashReportsImplementation: _crashReportsImplementation,
         )) as D;
     } catch (error) {
-      logError(
-          'Something went wrong grabbing the analytics data for $runtimeType.',
-          error: error);
-      return _analytics ??= (Analytics()
+      logError('Something went wrong grabbing the analytics data for $runtimeType.', error: error);
+      return (Analytics()
         ..initialise(
           loglytics: this,
           analyticsImplementation: _analyticsImplementation,
@@ -55,13 +53,11 @@ mixin Loglytics<D extends Analytics> {
     }
   }
 
-  D? _analytics;
-
   /// Provides the configured [Analytics] functionality through the [Loglytics] mixin.
-  D get analytics => _getOrInitAnalytics;
+  late final D analytics = _getAnalytics;
 
   /// Used for showing the location (class) of a single log.
-  late final String _logLocation = runtimeType.toString();
+  late final _logLocation = runtimeType.toString();
 
   // --------------- SETUP --------------- SETUP --------------- SETUP --------------- \\
 
@@ -104,8 +100,7 @@ mixin Loglytics<D extends Analytics> {
     if (analytics != null) {
       analytics(AnalyticsFactory(getIt: _getIt));
     }
-    _errorStackTraceStart =
-        errorStackTraceStart ?? _errorStackTraceStartDefault;
+    _errorStackTraceStart = errorStackTraceStart ?? _errorStackTraceStartDefault;
     _errorStackTraceEnd = errorStackTraceEnd ?? _errorStackTraceEndDefault;
   }
 
@@ -481,8 +476,7 @@ mixin Loglytics<D extends Analytics> {
   // --------------- CRASHLYTICS --------------- CRASHLYTICS --------------- CRASHLYTICS --------------- \\
 
   /// Used under the hood to try and log a crashlytics [message] with [logType].
-  void _tryLogCrashReportMessage(String message) =>
-      _crashReportsImplementation?.log(message);
+  void _tryLogCrashReportMessage(String message) => _crashReportsImplementation?.log(message);
 
   /// Used under the hood to try and log a crashlytics [key] and [value] with [logType].
   void _tryLogCrashReportKeyValue(
@@ -490,8 +484,8 @@ mixin Loglytics<D extends Analytics> {
     Object? value,
     Object? description,
   ) =>
-      _crashReportsImplementation?.log(
-          '${description != null ? '$description: ' : ''}{ $key: $value }');
+      _crashReportsImplementation
+          ?.log('${description != null ? '$description: ' : ''}{ $key: $value }');
 
   /// Used under the hood to try and log a crashlytics [value] with [logType].
   void _tryLogCrashReportValue(
