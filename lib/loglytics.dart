@@ -16,5 +16,6 @@ export 'src/enums/log_type.dart';
 export 'src/extensions/log_type_extensions.dart';
 // src/log
 export 'src/log/custom_log.dart';
+export 'src/loglytics/const_loglytics.dart';
 // src/loglytics
 export 'src/loglytics/loglytics.dart';

@@ -1,3 +1,7 @@
+## 0.9.1
+
+* **✨ New:** Added const version of `Loglytics` => `ConstLoglytics`.
+
 ## 0.9.0+2
 
 * **🐛️ Bugfix:** Made `Loglytics.analytics` final.

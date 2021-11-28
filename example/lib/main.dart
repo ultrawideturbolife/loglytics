@@ -94,6 +94,7 @@ class _MyHomePageState extends State<MyHomePage> with Loglytics<CounterAnalytics
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
             ),
+            const ConstClass(),
           ],
         ),
       ),
@@ -102,6 +103,18 @@ class _MyHomePageState extends State<MyHomePage> with Loglytics<CounterAnalytics
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ),
+    );
+  }
+}
+
+class ConstClass extends StatelessWidget with ConstLoglytics<CounterAnalytics> {
+  const ConstClass({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    analytics.service.began(subject: 'apocalypse');
+    return GestureDetector(
+      onTap: () => analytics.service.tapped(subject: 'cool_text'),
+      child: const Text('wow, cool'),
     );
   }
 }

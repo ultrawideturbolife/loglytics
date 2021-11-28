@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
-import 'package:loglytics/src/loglytics/const_loglytics.dart';
 
 import '../../loglytics.dart';
 import '../analytics/analytics_interface.dart';
@@ -13,17 +12,17 @@ import '../extensions/log_type_extensions.dart';
 
 /// Used to provide all logging, analytics and crashlytics functionality to a class of your choosing.
 ///
-/// If you want to make use of the analytic functionality use [Loglytics.setup] to provide your
+/// If you want to make use of the analytic functionality use [ConstLoglytics.setup] to provide your
 /// implementations of the [AnalyticsInterface] and [CrashReportsInterface]. After doing so you can
-/// add the [Loglytics] mixin to any class where you would like to add logging and/or analytics to.
+/// add the [ConstLoglytics] mixin to any class where you would like to add logging and/or analytics to.
 /// In order to have access to the appropriate [Analytics] implementation for a specific
 /// feature or part of your project you should add the implementation as generic arguments to a
-/// [Loglytics] like Loglytics<CounterAnalytics>.
+/// [ConstLoglytics] like ConstLoglytics<CounterAnalytics>.
 ///
-/// Defining the generic [Analytics] is optional however as the [Loglytics] will also work without
+/// Defining the generic [Analytics] is optional however as the [ConstLoglytics] will also work without
 /// it. When no generic is specified you can even use our basic analytic functionality through the
-/// default [Analytics.core] getter that's accessible through [Loglytics.analytics].
-mixin Loglytics<D extends Analytics> {
+/// default [Analytics.core] getter that's accessible through [ConstLoglytics.analytics].
+mixin ConstLoglytics<D extends Analytics> implements Loglytics {
   // Used to register and provider the proper [Analytics]
   static final GetIt _getIt = GetIt.instance;
 
@@ -54,30 +53,29 @@ mixin Loglytics<D extends Analytics> {
     }
   }
 
-  /// Provides the configured [Analytics] functionality through the [Loglytics] mixin.
-  late final D analytics = _getAnalytics;
+  /// Provides the configured [Analytics] functionality through the [ConstLoglytics] mixin.
+  @override
+  D get analytics => _getAnalytics;
 
   /// Used for showing the location (class) of a single log.
-  late final _logLocation = runtimeType.toString();
+  String get _logLocation => runtimeType.toString();
 
   // --------------- SETUP --------------- SETUP --------------- SETUP --------------- \\
 
-  @protected
   static AnalyticsInterface? _analyticsImplementation;
   static CrashReportsInterface? _crashReportsImplementation;
 
   static bool _shouldLogAnalytics = true;
-  static bool _setupConstLoglytics = true;
 
   static int? _errorStackTraceStart;
   static const int _errorStackTraceStartDefault = 0;
   static int? _errorStackTraceEnd;
   static const int _errorStackTraceEndDefault = 8;
 
-  /// Used to configure the logging and analytic abilities of the [Loglytics].
+  /// Used to configure the logging and analytic abilities of the [ConstLoglytics].
   ///
   /// Use the [analyticsImplementation] and [crashReportsImplementation] to specify your implementations
-  /// of both functionalities. This is optional as the [Loglytics] can also be used as a pure logger.
+  /// of both functionalities. This is optional as the [ConstLoglytics] can also be used as a pure logger.
   /// The [shouldLogAnalytics] boolean can be set to turn the debug logging of analytics on or off.
   /// This does not turn your analytics off, it only disables the debug logging.
   /// Populate the [analytics] parameter with callbacks to your [Analytics] implementations.
@@ -86,39 +84,23 @@ mixin Loglytics<D extends Analytics> {
     AnalyticsInterface? analyticsImplementation,
     CrashReportsInterface? crashReportsImplementation,
     bool? shouldLogAnalytics,
-    void Function(AnalyticsFactory analyticsFactory)? analytics,
     int? errorStackTraceStart,
     int? errorStackTraceEnd,
-    bool setupConstLoglytics = true,
   }) {
     _analyticsImplementation = analyticsImplementation;
     _crashReportsImplementation = crashReportsImplementation;
     if (shouldLogAnalytics != null) _shouldLogAnalytics = shouldLogAnalytics;
-    if (analytics != null) {
-      analytics(AnalyticsFactory(getIt: _getIt));
-    }
     _errorStackTraceStart = errorStackTraceStart ?? _errorStackTraceStartDefault;
     _errorStackTraceEnd = errorStackTraceEnd ?? _errorStackTraceEndDefault;
-    _setupConstLoglytics = setupConstLoglytics;
-    if (_setupConstLoglytics) {
-      ConstLoglytics.setup(
-        crashReportsImplementation: crashReportsImplementation,
-        analyticsImplementation: analyticsImplementation,
-        errorStackTraceStart: errorStackTraceStart,
-        errorStackTraceEnd: errorStackTraceEnd,
-        shouldLogAnalytics: shouldLogAnalytics,
-      );
-    }
   }
 
-  /// Used to configure the logging and analytic abilities of the [Loglytics].
-  static void dispose() {
+  /// Used to configure the logging and analytic abilities of the [ConstLoglytics].
+  static void dispose() async {
     _analyticsImplementation = null;
     _crashReportsImplementation = null;
     _shouldLogAnalytics = true;
     _errorStackTraceStart = null;
     _errorStackTraceEnd = null;
-    if (_setupConstLoglytics) ConstLoglytics.dispose();
   }
 
   // --------------- REGULAR --------------- REGULAR --------------- REGULAR --------------- \\
@@ -126,7 +108,8 @@ mixin Loglytics<D extends Analytics> {
   /// Logs a regular [message] with [LogType.info] as [debugPrint].
   ///
   /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setup] method.
+  /// configured one with the [ConstLoglytics.setup] method.
+  @override
   void log(
     String message, {
     bool addToCrashReports = true,
@@ -140,7 +123,8 @@ mixin Loglytics<D extends Analytics> {
   /// Logs a warning [message] with [LogType.warning] as [debugPrint].
   ///
   /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setup] method.
+  /// configured one with the [ConstLoglytics.setup] method.
+  @override
   void logWarning(
     String message, {
     bool addToCrashReports = true,
@@ -155,7 +139,8 @@ mixin Loglytics<D extends Analytics> {
   ///
   /// Also tries to send the log with optional [error], [stackTrace] and [fatal] boolean to your
   /// [CrashReportsInterface] implementation should you have configured one with the
-  /// [Loglytics.setup] method.
+  /// [ConstLoglytics.setup] method.
+  @override
   void logError(
     String message, {
     Object? error,
@@ -200,7 +185,8 @@ mixin Loglytics<D extends Analytics> {
   /// Logs a success [message] with [LogType.success] as [debugPrint].
   ///
   /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setup] method.
+  /// configured one with the [ConstLoglytics.setup] method.
+  @override
   void logSuccess(
     String message, {
     bool addToCrashReports = true,
@@ -215,7 +201,8 @@ mixin Loglytics<D extends Analytics> {
   ///
   /// Also accepts logs an optional [value] or [parameters] and tries to send the message to your
   /// [CrashReportsInterface] implementation should you have configured one with the
-  /// [Loglytics.setup] method.
+  /// [ConstLoglytics.setup] method.
+  @override
   void logAnalytic({
     required String name,
     String? value,
@@ -246,7 +233,8 @@ mixin Loglytics<D extends Analytics> {
   /// Logs a [value] and optional [message] with a default [LogType.info] as [debugPrint].
   ///
   /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setup] method.
+  /// configured one with the [ConstLoglytics.setup] method.
+  @override
   void logValue(
     Object? value, {
     String? description,
@@ -263,7 +251,8 @@ mixin Loglytics<D extends Analytics> {
   /// Logs a [key], [value] and optional [message] with a default [LogType.info] as [debugPrint].
   ///
   /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setup] method.
+  /// configured one with the [ConstLoglytics.setup] method.
+  @override
   void logKeyValue(
     String key,
     Object? value, {
@@ -283,7 +272,8 @@ mixin Loglytics<D extends Analytics> {
   ///
   /// Iterates over the given [list] and uses the [_logValue] method under the hood to log each item.
   /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setup] method.
+  /// configured one with the [ConstLoglytics.setup] method.
+  @override
   void logList<T extends Object?>(
     List<T> list, {
     String? message,
@@ -301,7 +291,8 @@ mixin Loglytics<D extends Analytics> {
   ///
   /// Iterates over the given [set] and uses the [_logValue] method under the hood to log each item.
   /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setup] method.
+  /// configured one with the [ConstLoglytics.setup] method.
+  @override
   void logSet<T extends Object?>(
     Set<T> set, {
     String? message,
@@ -319,7 +310,8 @@ mixin Loglytics<D extends Analytics> {
   ///
   /// Iterates over the given [map] and uses the [_logKeyValue] method under the hood to log each item.
   /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setup] method.
+  /// configured one with the [ConstLoglytics.setup] method.
+  @override
   void logMap(
     Map<String, Object?> map, {
     String? message,
@@ -337,7 +329,8 @@ mixin Loglytics<D extends Analytics> {
   ///
   /// Iterates over the given [map] and uses the [_logValue] method under the hood to log each item.
   /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setup] method.
+  /// configured one with the [ConstLoglytics.setup] method.
+  @override
   void logValues<T extends Object?, E extends Object?>(
     Map<T, E> map, {
     String? message,
@@ -353,9 +346,11 @@ mixin Loglytics<D extends Analytics> {
   // --------------- CONVENIENCE --------------- CONVENIENCE --------------- CONVENIENCE --------------- \\
 
   /// Enables easy logging of class initialization.
+  @override
   void logInit() => log('I am Initialized!');
 
   /// Enables easy logging of disposing classes.
+  @override
   void logDispose() => log('I am Disposed!');
 
   // --------------- PRINTERS --------------- PRINTERS --------------- PRINTERS --------------- \\
@@ -363,7 +358,7 @@ mixin Loglytics<D extends Analytics> {
   /// Used under the hood to log a [message] with [logType].
   ///
   /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setup] method.
+  /// configured one with the [ConstLoglytics.setup] method.
   void _logMessage({
     required String message,
     required LogType logType,
@@ -380,7 +375,7 @@ mixin Loglytics<D extends Analytics> {
   /// Used under the hood to log a [value] and [logType] with optional [description].
   ///
   /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setup] method.
+  /// configured one with the [ConstLoglytics.setup] method.
   void _logValue({
     required Object? value,
     required LogType logType,
@@ -396,7 +391,7 @@ mixin Loglytics<D extends Analytics> {
   /// Used under the hood to log a [key], [value] and [logType] with optional [description].
   ///
   /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setup] method.
+  /// configured one with the [ConstLoglytics.setup] method.
   void _logKeyValue({
     required String key,
     required Object? value,
@@ -417,7 +412,7 @@ mixin Loglytics<D extends Analytics> {
   /// Used under the hood to log an [iterable] and [logType] with optional [description].
   ///
   /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setup] method.
+  /// configured one with the [ConstLoglytics.setup] method.
   void _logIterable<T extends Object?>({
     required Iterable<T> iterable,
     LogType logType = LogType.info,
@@ -437,7 +432,7 @@ mixin Loglytics<D extends Analytics> {
   /// Used under the hood to log a [map] and [logType] with optional [description].
   ///
   /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setup] method.
+  /// configured one with the [ConstLoglytics.setup] method.
   void _logMap({
     required Map<String, Object?> map,
     LogType logType = LogType.info,
@@ -459,7 +454,7 @@ mixin Loglytics<D extends Analytics> {
   /// Used under the hood to log a [map]'s values and [logType] with optional [description].
   ///
   /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setup] method.
+  /// configured one with the [ConstLoglytics.setup] method.
   void _logValues<K extends Object?, V extends Object?>({
     required Map<K, V> map,
     String? description,
