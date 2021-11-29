@@ -1,3 +1,11 @@
+## 0.9.1+6
+
+- Improve logging
+
+## 0.9.1+5
+
+- Improve logging
+
 ## 0.9.1+4
 
 - Expose implementations in both const and regular loglytics.
