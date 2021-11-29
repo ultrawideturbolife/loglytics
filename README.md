@@ -202,4 +202,5 @@ If you have any suggestions for default subjects/parameters and/or ideas for thi
 - Add annotations for flexible creation of events.
 - Add tests.
 - Improve example project with comments and more examples.
+- Improve ConstLoglytics solution to be more efficient.
 - ✅ ~~Find a way to easier facilitate access to subjects and parameters (2 generics + override is a bit heavy).~~

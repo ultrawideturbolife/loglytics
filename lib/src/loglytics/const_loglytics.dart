@@ -43,7 +43,9 @@ mixin ConstLoglytics<D extends Analytics> implements Loglytics {
           crashReportsImplementation: _crashReportsImplementation,
         )) as D;
     } catch (error) {
-      logError('Something went wrong grabbing the analytics data for $runtimeType.', error: error);
+      logError(
+          'Something went wrong grabbing the analytics data for $runtimeType.',
+          error: error);
       return (Analytics()
         ..initialise(
           loglytics: this,
@@ -90,7 +92,8 @@ mixin ConstLoglytics<D extends Analytics> implements Loglytics {
     _analyticsImplementation = analyticsImplementation;
     _crashReportsImplementation = crashReportsImplementation;
     if (shouldLogAnalytics != null) _shouldLogAnalytics = shouldLogAnalytics;
-    _errorStackTraceStart = errorStackTraceStart ?? _errorStackTraceStartDefault;
+    _errorStackTraceStart =
+        errorStackTraceStart ?? _errorStackTraceStartDefault;
     _errorStackTraceEnd = errorStackTraceEnd ?? _errorStackTraceEndDefault;
   }
 
@@ -475,7 +478,8 @@ mixin ConstLoglytics<D extends Analytics> implements Loglytics {
   // --------------- CRASHLYTICS --------------- CRASHLYTICS --------------- CRASHLYTICS --------------- \\
 
   /// Used under the hood to try and log a crashlytics [message] with [logType].
-  void _tryLogCrashReportMessage(String message) => _crashReportsImplementation?.log(message);
+  void _tryLogCrashReportMessage(String message) =>
+      _crashReportsImplementation?.log(message);
 
   /// Used under the hood to try and log a crashlytics [key] and [value] with [logType].
   void _tryLogCrashReportKeyValue(
@@ -483,8 +487,8 @@ mixin ConstLoglytics<D extends Analytics> implements Loglytics {
     Object? value,
     Object? description,
   ) =>
-      _crashReportsImplementation
-          ?.log('${description != null ? '$description: ' : ''}{ $key: $value }');
+      _crashReportsImplementation?.log(
+          '${description != null ? '$description: ' : ''}{ $key: $value }');
 
   /// Used under the hood to try and log a crashlytics [value] with [logType].
   void _tryLogCrashReportValue(

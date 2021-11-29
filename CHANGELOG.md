@@ -1,3 +1,11 @@
+## 0.9.1+2
+
+- Update debug print statement of analytics parameters.
+
+## 0.9.1+1
+
+- Update debug print statement of analytics parameters.
+
 ## 0.9.1
 
 * **✨ New:** Added const version of `Loglytics` => `ConstLoglytics`.

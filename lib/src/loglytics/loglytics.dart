@@ -225,18 +225,9 @@ mixin Loglytics<D extends Analytics> {
       debugPrint(
         '$time '
         '[$_logLocation] '
-        '${LogType.analytic.icon} $name${value != null ? ' : $value' : ''}',
-      );
-      parameters?.forEach(
-        (key, value) {
-          debugPrint(
-            '$time '
-            '[$_logLocation] '
-            '${LogType.analytic.icon} '
-            '{ $key '
-            ': $value }',
-          );
-        },
+        '${LogType.analytic.icon} '
+        '$name${value != null ? ' : $value' : ''}'
+        '${parameters != null ? ' : $parameters' : ''}',
       );
     }
   }
