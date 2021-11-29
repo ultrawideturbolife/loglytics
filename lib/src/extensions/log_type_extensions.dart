@@ -21,7 +21,7 @@ extension LogTypeExtensions on LogType {
   String get icon {
     switch (this) {
       case LogType.info:
-        return '💡 $name';
+        return '🗣 $name';
       case LogType.warning:
         return '⚠ $name';
       case LogType.error:
