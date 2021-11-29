@@ -1,3 +1,8 @@
+## 0.9.1+8
+
+- Fix another crash reporting bug
+
+
 ## 0.9.1+7
 
 - Fix crash reporting bug

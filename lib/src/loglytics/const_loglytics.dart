@@ -407,13 +407,14 @@ mixin ConstLoglytics<D extends Analytics> implements Loglytics {
     required addToCrashReports,
     required String? description,
   }) {
-    _tryLogCrashReportKeyValue(key, value, description);
+    if (addToCrashReports) _tryLogCrashReportKeyValue(key, value, description);
     debugPrint(
       '$time '
       '[$_logLocation] '
       '${description != null ? '${logType.icon} $description ' : ''}'
       '🔑 [KEY] $key '
-      '💾 [VALUE] $value',
+      '💾 [VALUE] $value'
+      '${addToCrashReports ? ' 🤐' : ''}',
     );
   }
 
