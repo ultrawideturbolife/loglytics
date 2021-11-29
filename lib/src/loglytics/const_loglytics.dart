@@ -65,7 +65,12 @@ mixin ConstLoglytics<D extends Analytics> implements Loglytics {
   // --------------- SETUP --------------- SETUP --------------- SETUP --------------- \\
 
   static AnalyticsInterface? _analyticsImplementation;
+  static AnalyticsInterface? get getAnalyticsInterface =>
+      _analyticsImplementation;
+
   static CrashReportsInterface? _crashReportsImplementation;
+  static CrashReportsInterface? get getCrashReportsInterface =>
+      _crashReportsImplementation;
 
   static bool _shouldLogAnalytics = true;
 

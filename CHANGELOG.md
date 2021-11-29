@@ -1,3 +1,7 @@
+## 0.9.1+3
+
+- Expose implementations.
+
 ## 0.9.1+2
 
 - Update debug print statement of analytics parameters.
