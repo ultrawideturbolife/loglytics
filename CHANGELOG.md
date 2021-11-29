@@ -1,3 +1,7 @@
+## 0.9.1+4
+
+- Expose implementations in both const and regular loglytics.
+
 ## 0.9.1+3
 
 - Expose implementations.
