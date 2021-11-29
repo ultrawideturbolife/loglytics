@@ -385,7 +385,7 @@ mixin Loglytics<D extends Analytics> {
     required addToCrashReports,
     required String? description,
   }) {
-    if (addToCrashReports) _tryLogCrashReportValue(value, logType);
+    if (addToCrashReports) _tryLogCrashReportValue(value, description);
     final _time = time;
     debugPrint(
         '$_time [$_logLocation] 💾 [VALUE] ${description != null ? '$description: ' : ''}$value');

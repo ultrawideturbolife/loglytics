@@ -1,3 +1,7 @@
+## 0.9.1+7
+
+- Fix crash reporting bug
+
 ## 0.9.1+6
 
 - Improve logging
