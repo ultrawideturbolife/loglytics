@@ -1,7 +1,10 @@
+## 0.9.2
+
+- Update stack trace debug print and config.
+
 ## 0.9.1+8
 
 - Fix another crash reporting bug
-
 
 ## 0.9.1+7
 

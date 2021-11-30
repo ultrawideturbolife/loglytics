@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 
@@ -43,9 +41,7 @@ mixin ConstLoglytics<D extends Analytics> implements Loglytics {
           crashReportsImplementation: _crashReportsImplementation,
         )) as D;
     } catch (error) {
-      logError(
-          'Something went wrong grabbing the analytics data for $runtimeType.',
-          error: error);
+      logError('Something went wrong grabbing the analytics data for $runtimeType.', error: error);
       return (Analytics()
         ..initialise(
           loglytics: this,
@@ -65,17 +61,13 @@ mixin ConstLoglytics<D extends Analytics> implements Loglytics {
   // --------------- SETUP --------------- SETUP --------------- SETUP --------------- \\
 
   static AnalyticsInterface? _analyticsImplementation;
-  static AnalyticsInterface? get getAnalyticsInterface =>
-      _analyticsImplementation;
+  static AnalyticsInterface? get getAnalyticsInterface => _analyticsImplementation;
 
   static CrashReportsInterface? _crashReportsImplementation;
-  static CrashReportsInterface? get getCrashReportsInterface =>
-      _crashReportsImplementation;
+  static CrashReportsInterface? get getCrashReportsInterface => _crashReportsImplementation;
 
   static bool _shouldLogAnalytics = true;
 
-  static int? _errorStackTraceStart;
-  static const int _errorStackTraceStartDefault = 0;
   static int? _errorStackTraceEnd;
   static const int _errorStackTraceEndDefault = 8;
 
@@ -91,14 +83,11 @@ mixin ConstLoglytics<D extends Analytics> implements Loglytics {
     AnalyticsInterface? analyticsImplementation,
     CrashReportsInterface? crashReportsImplementation,
     bool? shouldLogAnalytics,
-    int? errorStackTraceStart,
     int? errorStackTraceEnd,
   }) {
     _analyticsImplementation = analyticsImplementation;
     _crashReportsImplementation = crashReportsImplementation;
     if (shouldLogAnalytics != null) _shouldLogAnalytics = shouldLogAnalytics;
-    _errorStackTraceStart =
-        errorStackTraceStart ?? _errorStackTraceStartDefault;
     _errorStackTraceEnd = errorStackTraceEnd ?? _errorStackTraceEndDefault;
   }
 
@@ -107,7 +96,6 @@ mixin ConstLoglytics<D extends Analytics> implements Loglytics {
     _analyticsImplementation = null;
     _crashReportsImplementation = null;
     _shouldLogAnalytics = true;
-    _errorStackTraceStart = null;
     _errorStackTraceEnd = null;
   }
 
@@ -179,15 +167,9 @@ mixin ConstLoglytics<D extends Analytics> implements Loglytics {
       );
     }
     if (printStack) {
-      debugPrint(_shortenStackTrace(_stackTrace));
+      debugPrintStack(
+          stackTrace: stackTrace, maxFrames: _errorStackTraceEnd ?? _errorStackTraceEndDefault);
     }
-  }
-
-  /// Shortens the given [StackTrace] per configured [_errorStackTraceStart] and [_errorStackTraceEnd].
-  String _shortenStackTrace(StackTrace stackTrace) {
-    final stackTraceSplit = stackTrace.toString().split('\n');
-    return '\n'
-        '${stackTraceSplit.sublist(max(_errorStackTraceStart!, 0), min(_errorStackTraceEnd!, stackTraceSplit.length)).join('\n')}';
   }
 
   /// Logs a success [message] with [LogType.success] as [debugPrint].
@@ -484,8 +466,7 @@ mixin ConstLoglytics<D extends Analytics> implements Loglytics {
   // --------------- CRASHLYTICS --------------- CRASHLYTICS --------------- CRASHLYTICS --------------- \\
 
   /// Used under the hood to try and log a crashlytics [message] with [logType].
-  void _tryLogCrashReportMessage(String message) =>
-      _crashReportsImplementation?.log(message);
+  void _tryLogCrashReportMessage(String message) => _crashReportsImplementation?.log(message);
 
   /// Used under the hood to try and log a crashlytics [key] and [value] with [logType].
   void _tryLogCrashReportKeyValue(
@@ -493,8 +474,8 @@ mixin ConstLoglytics<D extends Analytics> implements Loglytics {
     Object? value,
     Object? description,
   ) =>
-      _crashReportsImplementation?.log(
-          '${description != null ? '$description: ' : ''}{ $key: $value }');
+      _crashReportsImplementation
+          ?.log('${description != null ? '$description: ' : ''}{ $key: $value }');
 
   /// Used under the hood to try and log a crashlytics [value] with [logType].
   void _tryLogCrashReportValue(
