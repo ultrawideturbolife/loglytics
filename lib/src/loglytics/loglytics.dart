@@ -42,7 +42,9 @@ mixin Loglytics<D extends Analytics> {
           crashReportsImplementation: _crashReportsImplementation,
         )) as D;
     } catch (error) {
-      logError('Something went wrong grabbing the analytics data for $runtimeType.', error: error);
+      logError(
+          'Something went wrong grabbing the analytics data for $runtimeType.',
+          error: error);
       return (Analytics()
         ..initialise(
           loglytics: this,
@@ -61,10 +63,12 @@ mixin Loglytics<D extends Analytics> {
   // --------------- SETUP --------------- SETUP --------------- SETUP --------------- \\
 
   static AnalyticsInterface? _analyticsImplementation;
-  static AnalyticsInterface? get getAnalyticsInterface => _analyticsImplementation;
+  static AnalyticsInterface? get getAnalyticsInterface =>
+      _analyticsImplementation;
 
   static CrashReportsInterface? _crashReportsImplementation;
-  static CrashReportsInterface? get getCrashReportsInterface => _crashReportsImplementation;
+  static CrashReportsInterface? get getCrashReportsInterface =>
+      _crashReportsImplementation;
 
   static bool _shouldLogAnalytics = true;
   static bool _setupConstLoglytics = true;
@@ -181,7 +185,8 @@ mixin Loglytics<D extends Analytics> {
     }
     if (printStack) {
       debugPrintStack(
-          stackTrace: stackTrace, maxFrames: _errorStackTraceEnd ?? _errorStackTraceEndDefault);
+          stackTrace: stackTrace,
+          maxFrames: _errorStackTraceEnd ?? _errorStackTraceEndDefault);
     }
   }
 
@@ -459,7 +464,8 @@ mixin Loglytics<D extends Analytics> {
   // --------------- CRASHLYTICS --------------- CRASHLYTICS --------------- CRASHLYTICS --------------- \\
 
   /// Used under the hood to try and log a crashlytics [message] with [logType].
-  void _tryLogCrashReportMessage(String message) => _crashReportsImplementation?.log(message);
+  void _tryLogCrashReportMessage(String message) =>
+      _crashReportsImplementation?.log(message);
 
   /// Used under the hood to try and log a crashlytics [key] and [value] with [logType].
   void _tryLogCrashReportKeyValue(
@@ -467,8 +473,8 @@ mixin Loglytics<D extends Analytics> {
     Object? value,
     Object? description,
   ) =>
-      _crashReportsImplementation
-          ?.log('${description != null ? '$description: ' : ''}{ $key: $value }');
+      _crashReportsImplementation?.log(
+          '${description != null ? '$description: ' : ''}{ $key: $value }');
 
   /// Used under the hood to try and log a crashlytics [value] with [logType].
   void _tryLogCrashReportValue(

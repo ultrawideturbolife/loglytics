@@ -1,3 +1,7 @@
+## 0.9.2+1
+
+- Update stack trace debug print and config.
+
 ## 0.9.2
 
 - Update stack trace debug print and config.
