@@ -67,6 +67,7 @@ enum AnalyticsTypes {
   began,
   ended,
   refreshed,
+  generated,
   none,
 }
 
@@ -204,7 +205,8 @@ extension AnalyticsTypesHelpers on AnalyticsTypes {
         return 'ended';
       case AnalyticsTypes.refreshed:
         return 'refreshed';
-        break;
+      case AnalyticsTypes.generated:
+        return 'generated';
       case AnalyticsTypes.none:
         return '';
     }

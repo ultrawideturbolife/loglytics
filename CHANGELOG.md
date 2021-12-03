@@ -1,3 +1,8 @@
+## 0.9.3
+
+* **✨ New:** Added `forceRecordError` to logError method.
+* **✨ New:** Added `generated` method to `AnalyticsService`.
+
 ## 0.9.2+1
 
 - Update stack trace debug print and config.
