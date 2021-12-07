@@ -1,3 +1,7 @@
+## 0.9.3+1
+
+- Update stack trace of logError to ignore logError line.
+
 ## 0.9.3
 
 * **✨ New:** Added `forceRecordError` to logError method.

@@ -150,8 +150,16 @@ mixin ConstLoglytics<D extends Analytics> implements Loglytics {
     bool addToCrashReports = true,
     bool forceRecordError = false,
   }) {
-    var _stackTrace = stackTrace ?? StackTrace.current;
-    var hasError = error != null;
+    StackTrace? _stackTrace;
+    try {
+      _stackTrace = stackTrace ??
+          StackTrace.fromString(
+            StackTrace.current.toString().split('\n').sublist(1).join('\n'),
+          );
+    } catch (error) {
+      _stackTrace = null;
+    }
+    final hasError = error != null;
     if (hasError || forceRecordError) {
       _crashReportsImplementation?.recordError(
         error,
