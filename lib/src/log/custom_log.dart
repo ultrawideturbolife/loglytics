@@ -24,6 +24,56 @@ void customLog({
   );
 }
 
+void customLogError({
+  required String message,
+  required String location,
+  Object? error,
+  StackTrace? stackTrace,
+  bool fatal = false,
+  bool printStack = true,
+  bool addToCrashReports = true,
+  bool forceRecordError = false,
+  CrashReportsInterface? crashReportsInterface,
+}) {
+  StackTrace? _stackTrace;
+  try {
+    _stackTrace = stackTrace ??
+        StackTrace.fromString(
+          StackTrace.current.toString().split('\n').sublist(1).join('\n'),
+        );
+  } catch (error) {
+    _stackTrace = null;
+  }
+  var hasError = error != null;
+  if (hasError || forceRecordError) {
+    assert(crashReportsInterface != null,
+        'Add crashReportsInterface to customLogError method');
+    crashReportsInterface!.recordError(
+      error,
+      _stackTrace,
+      fatal: fatal,
+    );
+  }
+  customLog(
+    message: message,
+    logType: LogType.error,
+    addToCrashReports: addToCrashReports,
+    location: location,
+    crashReportsInterface: crashReportsInterface,
+  );
+  if (hasError) {
+    customLog(
+      message: error.toString(),
+      logType: LogType.error,
+      addToCrashReports: false,
+      location: location,
+    );
+  }
+  if (printStack) {
+    debugPrintStack(stackTrace: stackTrace);
+  }
+}
+
 /// Used to format the time in each log.
 extension on DateTime {
   String get hourMinuteSecond => '${hour < 10 ? '0$hour' : hour}:'

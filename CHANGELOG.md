@@ -1,3 +1,7 @@
+## 0.9.4
+
+* **✨ New:** Added `customLogError` method for logging errors when use of a mixin is not possible.
+
 ## 0.9.3+1
 
 - Update stack trace of logError to ignore logError line.

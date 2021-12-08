@@ -163,7 +163,15 @@ mixin Loglytics<D extends Analytics> {
     bool addToCrashReports = true,
     bool forceRecordError = false,
   }) {
-    var _stackTrace = stackTrace ?? StackTrace.current;
+    StackTrace? _stackTrace;
+    try {
+      _stackTrace = stackTrace ??
+          StackTrace.fromString(
+            StackTrace.current.toString().split('\n').sublist(1).join('\n'),
+          );
+    } catch (error) {
+      _stackTrace = null;
+    }
     var hasError = error != null;
     if (hasError || forceRecordError) {
       _crashReportsImplementation?.recordError(

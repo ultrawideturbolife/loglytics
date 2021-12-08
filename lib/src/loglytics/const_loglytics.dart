@@ -103,6 +103,8 @@ mixin ConstLoglytics<D extends Analytics> implements Loglytics {
     _errorStackTraceEnd = null;
   }
 
+  static void customError(String wtf) {}
+
   // --------------- REGULAR --------------- REGULAR --------------- REGULAR --------------- \\
 
   /// Logs a regular [message] with [LogType.info] as [debugPrint].
