@@ -14,6 +14,12 @@ extension LogTypeExtensions on LogType {
         return '[SUCCESS]';
       case LogType.analytic:
         return '[ANALYTIC]';
+      case LogType.debug:
+        return '[DEBUG]';
+      case LogType.mvvm:
+        return '[MVVM]';
+      case LogType.bloc:
+        return '[BLOC]';
     }
   }
 
@@ -30,6 +36,12 @@ extension LogTypeExtensions on LogType {
         return '✅ $name';
       case LogType.analytic:
         return '📈 $name';
+      case LogType.debug:
+        return '📈 $name';
+      case LogType.mvvm:
+        return '📚 $name';
+      case LogType.bloc:
+        return '🧱 $name';
     }
   }
 }

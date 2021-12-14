@@ -107,7 +107,7 @@ mixin ConstLoglytics<D extends Analytics> implements Loglytics {
 
   // --------------- REGULAR --------------- REGULAR --------------- REGULAR --------------- \\
 
-  /// Logs a regular [message] with [LogType.info] as [debugPrint].
+  /// Logs a regular [message] with [LogType.info] default as [debugPrint].
   ///
   /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
   /// configured one with the [ConstLoglytics.setup] method.
@@ -115,6 +115,7 @@ mixin ConstLoglytics<D extends Analytics> implements Loglytics {
   void log(
     String message, {
     bool addToCrashReports = true,
+    LogType logType = LogType.info,
   }) =>
       _logMessage(
         message: message,

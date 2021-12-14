@@ -1,3 +1,7 @@
+## 0.9.4+1
+
+* **✨ New:** Add `LogType.debug`, `LogType.bloc` and `LogType.mvvm` as log types.
+
 ## 0.9.4
 
 * **✨ New:** Added `customLogError` method for logging errors when use of a mixin is not possible.
