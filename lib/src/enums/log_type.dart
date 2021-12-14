@@ -7,6 +7,7 @@ enum LogType {
   error,
   success,
   analytic,
+  value,
   debug,
   mvvm,
   bloc,

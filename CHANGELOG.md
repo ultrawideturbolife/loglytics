@@ -1,3 +1,8 @@
+## 0.9.5
+
+* **✨ New:** Added `LogType.value` with proper icon and name
+* **✨ New:** Added custom `location` and removal of `time` to default `log` method.
+
 ## 0.9.4+2
 
 - Fix small bug where new log type would not get parsed.

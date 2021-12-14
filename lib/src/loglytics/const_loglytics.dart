@@ -116,11 +116,15 @@ mixin ConstLoglytics<D extends Analytics> implements Loglytics {
     String message, {
     bool addToCrashReports = true,
     LogType logType = LogType.info,
+    bool showTime = true,
+    String? location,
   }) =>
       _logMessage(
         message: message,
         logType: logType,
         addToCrashReports: addToCrashReports,
+        showTime: showTime,
+        location: location,
       );
 
   /// Logs a warning [message] with [LogType.warning] as [debugPrint].
@@ -370,11 +374,13 @@ mixin ConstLoglytics<D extends Analytics> implements Loglytics {
     required String message,
     required LogType logType,
     bool addToCrashReports = true,
+    bool showTime = true,
+    String? location,
   }) {
     if (addToCrashReports) _tryLogCrashReportMessage(message);
     debugPrint(
-      '$time '
-      '[$_logLocation] '
+      '${showTime ? '$time ' : ''}'
+      '${location == null ? '[$_logLocation] ' : '$location '}'
       '${logType.icon} $message',
     );
   }
@@ -389,10 +395,11 @@ mixin ConstLoglytics<D extends Analytics> implements Loglytics {
     required addToCrashReports,
     required String? description,
   }) {
-    if (addToCrashReports) _tryLogCrashReportValue(value, logType);
+    if (addToCrashReports) _tryLogCrashReportValue(value, description);
     final _time = time;
-    debugPrint(
-        '$_time [$_logLocation] 💾 [VALUE] ${description != null ? '$description: ' : ''}$value');
+    debugPrint('$_time'
+        '[$_logLocation] '
+        '${logType.icon} ${description != null ? '$description: ' : ''}$value');
   }
 
   /// Used under the hood to log a [key], [value] and [logType] with optional [description].

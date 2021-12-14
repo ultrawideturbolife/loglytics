@@ -14,6 +14,8 @@ extension LogTypeExtensions on LogType {
         return '[SUCCESS]';
       case LogType.analytic:
         return '[ANALYTIC]';
+      case LogType.value:
+        return '[VALUE]';
       case LogType.debug:
         return '[DEBUG]';
       case LogType.mvvm:
@@ -36,6 +38,8 @@ extension LogTypeExtensions on LogType {
         return '✅ $name';
       case LogType.analytic:
         return '📈 $name';
+      case LogType.value:
+        return '💾 $name';
       case LogType.debug:
         return '📈 $name';
       case LogType.mvvm:
