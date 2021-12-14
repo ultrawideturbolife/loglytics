@@ -1,3 +1,7 @@
+## 0.9.4+2
+
+- Fix small bug where new log type would not get parsed.
+
 ## 0.9.4+1
 
 * **✨ New:** Add `LogType.debug`, `LogType.bloc` and `LogType.mvvm` as log types.

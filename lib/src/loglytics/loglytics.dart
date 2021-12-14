@@ -132,7 +132,7 @@ mixin Loglytics<D extends Analytics> {
   }) =>
       _logMessage(
         message: message,
-        logType: LogType.info,
+        logType: logType,
         addToCrashReports: addToCrashReports,
       );
 
