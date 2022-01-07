@@ -68,6 +68,10 @@ enum AnalyticsTypes {
   ended,
   refreshed,
   generated,
+  unsupported,
+  invalid,
+  valid,
+  shown,
   none,
 }
 
@@ -207,6 +211,14 @@ extension AnalyticsTypesHelpers on AnalyticsTypes {
         return 'refreshed';
       case AnalyticsTypes.generated:
         return 'generated';
+      case AnalyticsTypes.unsupported:
+        return 'unsupported';
+      case AnalyticsTypes.invalid:
+        return 'invalid';
+      case AnalyticsTypes.valid:
+        return 'valid';
+      case AnalyticsTypes.shown:
+        return 'shown';
       case AnalyticsTypes.none:
         return '';
     }

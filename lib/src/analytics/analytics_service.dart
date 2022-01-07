@@ -907,6 +907,58 @@ class AnalyticsService {
         ),
       );
 
+  /// Sends an [AnalyticsTypes.unsupported] based on given [subject] and possible [parameters].
+  void unsupported({
+    required String subject,
+    Map<String, Object?>? parameters,
+  }) =>
+      _logAnalytic(
+        Analytic(
+          subject: subject,
+          parameters: parameters,
+          type: AnalyticsTypes.unsupported,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.invalid] based on given [subject] and possible [parameters].
+  void invalid({
+    required String subject,
+    Map<String, Object?>? parameters,
+  }) =>
+      _logAnalytic(
+        Analytic(
+          subject: subject,
+          parameters: parameters,
+          type: AnalyticsTypes.invalid,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.valid] based on given [subject] and possible [parameters].
+  void valid({
+    required String subject,
+    Map<String, Object?>? parameters,
+  }) =>
+      _logAnalytic(
+        Analytic(
+          subject: subject,
+          parameters: parameters,
+          type: AnalyticsTypes.valid,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.shown] based on given [subject] and possible [parameters].
+  void shown({
+    required String subject,
+    Map<String, Object?>? parameters,
+  }) =>
+      _logAnalytic(
+        Analytic(
+          subject: subject,
+          parameters: parameters,
+          type: AnalyticsTypes.shown,
+        ),
+      );
+
   /// Sends the current screen based on given [subject] and possible [parameters].
   void screen({
     required String subject,

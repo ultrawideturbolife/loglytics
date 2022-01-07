@@ -1,3 +1,7 @@
+## 0.9.5+1
+
+* **✨ New:** Added new methods `unsupported`, `invalid`, `valid` and `shown`.
+
 ## 0.9.5
 
 * **✨ New:** Added `LogType.value` with proper icon and name
