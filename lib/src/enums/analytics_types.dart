@@ -72,6 +72,8 @@ enum AnalyticsTypes {
   invalid,
   valid,
   shown,
+  loaded,
+  saved,
   none,
 }
 
@@ -219,6 +221,10 @@ extension AnalyticsTypesHelpers on AnalyticsTypes {
         return 'valid';
       case AnalyticsTypes.shown:
         return 'shown';
+      case AnalyticsTypes.loaded:
+        return 'loaded';
+      case AnalyticsTypes.saved:
+        return 'saved';
       case AnalyticsTypes.none:
         return '';
     }

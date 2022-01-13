@@ -169,7 +169,7 @@ mixin ConstLoglytics<D extends Analytics> implements Loglytics {
     final hasError = error != null;
     if (hasError || forceRecordError) {
       _crashReportsImplementation?.recordError(
-        error,
+        error ?? message,
         _stackTrace,
         fatal: fatal,
       );

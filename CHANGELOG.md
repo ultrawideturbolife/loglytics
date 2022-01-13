@@ -1,3 +1,8 @@
+## 0.9.5+2
+
+* **✨ New:** Added new methods `saved` and `loaded`.
+* Ensured that `logError` uses the message as error when no error is given.
+
 ## 0.9.5+1
 
 * **✨ New:** Added new methods `unsupported`, `invalid`, `valid` and `shown`.

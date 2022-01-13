@@ -959,6 +959,32 @@ class AnalyticsService {
         ),
       );
 
+  /// Sends an [AnalyticsTypes.saved] based on given [subject] and possible [parameters].
+  void saved({
+    required String subject,
+    Map<String, Object?>? parameters,
+  }) =>
+      _logAnalytic(
+        Analytic(
+          subject: subject,
+          parameters: parameters,
+          type: AnalyticsTypes.saved,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.loaded] based on given [subject] and possible [parameters].
+  void loaded({
+    required String subject,
+    Map<String, Object?>? parameters,
+  }) =>
+      _logAnalytic(
+        Analytic(
+          subject: subject,
+          parameters: parameters,
+          type: AnalyticsTypes.loaded,
+        ),
+      );
+
   /// Sends the current screen based on given [subject] and possible [parameters].
   void screen({
     required String subject,
