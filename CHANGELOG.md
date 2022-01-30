@@ -1,3 +1,28 @@
+## 0.10.0
+
+* **✨ New:** Added `Loglytics.isActive` bool to facilitate checking if `Loglytics` has already been initialized.
+* **🐛️ Bugfix:** Added actual assignment to subscriptions in the `EventBus`.
+* **🐛️ Bugfix:** Fixed type in `Loglytics.setUp`.
+
+## 0.10.0
+
+* **✨ New:** Added a `Loglytics.create()` method to allow for easy creation of `Loglytics` objects when using an object is preferred over using a `mixin`.
+* **✨ New:** Added a `Log` a logger class that holds all logging capabilities and may be initialised on its own.
+* **✨ New:** Implemented an `EventBus` that handles crash reporting events in chronological order instead of `unawaiting` all of them. You choose to handle separate event streams for analytics and logging or to combine them by setting the `combineEvents` boolean in the `Loglytics.setUp` methods to true or false.
+* **⚙️ Refactor:** Removed description as a named parameter inside the `log.value` method and replaced it with a positional parameter to allow for smoother logging.
+* **⚠️ Breaking:** `Loglytics` will now create its own instance of `GetIt`.
+* **⚠️ Breaking:** Removed a lot of required parameters for different classes.
+* **⚠️ Breaking:** Moved the logging functionality to its own `Log` class to allow for easier initialisation of pure loggers and clearing up the IntelliSense clutter when a class has implemented `Loglytics`, any previous logging method is now available under the `log` method.
+* **⚠️ Breaking:** Removed the convenience methods `logDispose` and `logInitialise`.
+* **⚠️ Breaking:** Removed all `customLog` methods.
+* **⚠️ Breaking:** Removed the `ConstLoglytics` class.
+* **⚠️ Breaking:** Removed the `shouldLogAnalytics` boolean.
+* **⚠️ Breaking:** Removed the `CoreSubjects` class.
+* Added '[PROPERTY]' tag to debug log when setting user property to create better distinction between analytics logging and user property logging.
+* Added the location of the log as '[$location]' to crash reporting.
+* Added a several methods so analytics objects may be registered / reset independently of the `Loglytics.setUp`.
+* Added a separate `Loglytics.registerAnalytics` method so analytics may be registered separately from the `Loglytics.setUp`.
+
 ## 0.9.5+2
 
 * **✨ New:** Added new methods `saved` and `loaded`.
@@ -141,7 +166,7 @@
 
 ## 0.6.0
 
-* **🐛️ Bugfix:** Setup method only allow one Analytics object to be passed due to wrong use of generics.
+* **🐛️ Bugfix:** Set up method only allow one Analytics object to be passed due to wrong use of generics.
 * **⚠️ Breaking:** Setup method was refactored to pass an `AnalyticsFactory` to register all your analytics with.
 
 ## 0.5.0

@@ -6,11 +6,9 @@ import 'implementations/analytics_implementation.dart';
 import 'implementations/crash_reports_implementation.dart';
 
 void main() {
-  customLog(message: 'Setting up Loglytics', location: 'main()', logType: LogType.info);
-  Loglytics.setup(
-    analyticsImplementation: AnalyticsImplementation(Object()),
-    crashReportsImplementation: CrashReportsImplementation(Object()),
-    shouldLogAnalytics: true,
+  Loglytics.setUp(
+    analyticsInterface: AnalyticsImplementation(Object()),
+    crashReportsInterface: CrashReportsImplementation(Object()),
     analytics: (analyticsFactory) {
       analyticsFactory.registerAnalytic(() => CounterAnalytics());
     },
@@ -23,46 +21,56 @@ class MyApp extends StatelessWidget with Loglytics {
 
   @override
   Widget build(BuildContext context) {
-    logWarning('Starting app..');
+    log.warning('Starting app..');
     return MaterialApp(
       title: 'Loglytics Demo',
       theme: ThemeData(
         primarySwatch: Colors.red,
       ),
-      home: const MyHomePage(title: 'Loglytics Demo Home Page'),
+      home: MyHomePage(title: 'Loglytics Demo Home Page'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
+
+  late final Log log = Log(location: runtimeType.toString());
+  late final Loglytics loglytics =
+      Loglytics.create(location: runtimeType.toString());
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with Loglytics<CounterAnalytics> {
+class _MyHomePageState extends State<MyHomePage>
+    with Loglytics<CounterAnalytics> {
   int _counter = 0;
 
   @override
   void initState() {
+    widget.log.info('Test the individual logger one two three');
+    widget.loglytics.log.info('Test the individual loglytics one two three');
+    widget.loglytics.analytics.service.changed(subject: 'nothing');
+    widget.loglytics.analytics.service
+        .userProperty(property: 'this', value: 'is_so_cool');
     analytics.viewPage();
     super.initState();
   }
 
   void _incrementCounter() {
-    log('Pressing increment button..');
-    analytics.service.tapped(subject: analytics.core.button);
+    log.info('Pressing increment button..');
+    analytics.service.tapped(subject: 'button');
     setState(
       () {
         _counter++;
-        logValue(_counter);
+        log.value(_counter, 'The counter');
         analytics.service.incremented(
           subject: analytics.counterButton,
           parameters: {
-            analytics.core.time: DateTime.now(),
+            'time': DateTime.now(),
           },
         );
       },
@@ -74,12 +82,10 @@ class _MyHomePageState extends State<MyHomePage> with Loglytics<CounterAnalytics
     return Scaffold(
       appBar: AppBar(
         title: GestureDetector(
-          child: Text(
-            widget.title,
-          ),
+          child: Text(widget.title),
           onTap: () {
-            log('What a weird thing to do..');
-            analytics.service.tapped(subject: analytics.core.header);
+            log.info('What a weird thing to do..');
+            analytics.service.tapped(subject: 'header');
           },
         ),
       ),
@@ -94,7 +100,6 @@ class _MyHomePageState extends State<MyHomePage> with Loglytics<CounterAnalytics
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
             ),
-            const ConstClass(),
           ],
         ),
       ),
@@ -103,18 +108,6 @@ class _MyHomePageState extends State<MyHomePage> with Loglytics<CounterAnalytics
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ),
-    );
-  }
-}
-
-class ConstClass extends StatelessWidget with ConstLoglytics<CounterAnalytics> {
-  const ConstClass({Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    analytics.service.began(subject: 'apocalypse');
-    return GestureDetector(
-      onTap: () => analytics.service.tapped(subject: 'cool_text'),
-      child: const Text('wow, cool'),
     );
   }
 }

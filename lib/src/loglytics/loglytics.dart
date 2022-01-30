@@ -1,17 +1,26 @@
-import 'package:flutter/foundation.dart';
-import 'package:get_it/get_it.dart';
-import 'package:loglytics/src/loglytics/const_loglytics.dart';
+import 'dart:async';
 
-import '../../loglytics.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:loglytics/src/analytics/analytic.dart';
+import 'package:loglytics/src/analytics/analytics_factory.dart';
+import 'package:loglytics/src/enums/analytics_types.dart';
+import 'package:loglytics/src/enums/log_type.dart';
+import 'package:loglytics/src/extensions/log_type_extensions.dart';
+
+import '../analytics/analytics.dart';
 import '../analytics/analytics_interface.dart';
-import '../analytics/analytics_service.dart';
 import '../crash_reports/crash_reports_interface.dart';
 import '../extensions/date_time_extensions.dart';
-import '../extensions/log_type_extensions.dart';
+
+part '../analytics/analytics_service.dart';
+part '../log/log.dart';
+part 'event_bus.dart';
 
 /// Used to provide all logging, analytics and crashlytics functionality to a class of your choosing.
 ///
-/// If you want to make use of the analytic functionality use [Loglytics.setup] to provide your
+/// If you want to make use of the analytic functionality use [Loglytics.setUp] to provide your
 /// implementations of the [AnalyticsInterface] and [CrashReportsInterface]. After doing so you can
 /// add the [Loglytics] mixin to any class where you would like to add logging and/or analytics to.
 /// In order to have access to the appropriate [Analytics] implementation for a specific
@@ -23,494 +32,98 @@ import '../extensions/log_type_extensions.dart';
 /// default [Analytics.core] getter that's accessible through [Loglytics.analytics].
 mixin Loglytics<D extends Analytics> {
   // Used to register and provider the proper [Analytics]
-  static final GetIt _getIt = GetIt.instance;
+  static final GetIt _getIt = GetIt.asNewInstance();
 
-  /// Used to grab the proper [Analytics] implementation or provide a default one.
-  D get _getAnalytics {
-    try {
-      return _getIt.get<D>()
-        ..initialise(
-          loglytics: this,
-          analyticsImplementation: _analyticsImplementation,
-          crashReportsImplementation: _crashReportsImplementation,
-        );
-    } on Error catch (_) {
-      return (Analytics()
-        ..initialise(
-          loglytics: this,
-          analyticsImplementation: _analyticsImplementation,
-          crashReportsImplementation: _crashReportsImplementation,
-        )) as D;
-    } catch (error) {
-      logError(
-          'Something went wrong grabbing the analytics data for $runtimeType.',
-          error: error);
-      return (Analytics()
-        ..initialise(
-          loglytics: this,
-          analyticsImplementation: _analyticsImplementation,
-          crashReportsImplementation: _crashReportsImplementation,
-        )) as D;
-    }
-  }
-
-  /// Provides the configured [Analytics] functionality through the [Loglytics] mixin.
-  late final D analytics = _getAnalytics;
-
-  /// Used for showing the location (class) of a single log.
-  late final _logLocation = runtimeType.toString();
-
-  // --------------- SETUP --------------- SETUP --------------- SETUP --------------- \\
-
-  static AnalyticsInterface? _analyticsImplementation;
-  static AnalyticsInterface? get getAnalyticsInterface =>
-      _analyticsImplementation;
-
-  static CrashReportsInterface? _crashReportsImplementation;
-  static CrashReportsInterface? get getCrashReportsInterface =>
-      _crashReportsImplementation;
-
-  static bool _shouldLogAnalytics = true;
-  static bool _setupConstLoglytics = true;
-
-  static int? _errorStackTraceEnd;
-  static const int _errorStackTraceEndDefault = 8;
-
-  /// Used to configure the logging and analytic abilities of the [Loglytics].
-  ///
-  /// Use the [analyticsImplementation] and [crashReportsImplementation] to specify your implementations
-  /// of both functionalities. This is optional as the [Loglytics] can also be used as a pure logger.
-  /// The [shouldLogAnalytics] boolean can be set to turn the debug logging of analytics on or off.
-  /// This does not turn your analytics off, it only disables the debug logging.
-  /// Populate the [analytics] parameter with callbacks to your [Analytics] implementations.
-  /// Example: [() => CounterAnalytics(), () => CookieAnalytics()].
-  static void setup({
-    AnalyticsInterface? analyticsImplementation,
-    CrashReportsInterface? crashReportsImplementation,
-    bool? shouldLogAnalytics,
-    void Function(AnalyticsFactory analyticsFactory)? analytics,
-    int? errorStackTraceEnd,
-    bool setupConstLoglytics = true,
-  }) {
-    _analyticsImplementation = analyticsImplementation;
-    _crashReportsImplementation = crashReportsImplementation;
-    if (shouldLogAnalytics != null) _shouldLogAnalytics = shouldLogAnalytics;
-    if (analytics != null) {
-      analytics(AnalyticsFactory(getIt: _getIt));
-    }
-    _errorStackTraceEnd = errorStackTraceEnd ?? _errorStackTraceEndDefault;
-    _setupConstLoglytics = setupConstLoglytics;
-    if (_setupConstLoglytics) {
-      ConstLoglytics.setup(
-        crashReportsImplementation: crashReportsImplementation,
-        analyticsImplementation: analyticsImplementation,
-        errorStackTraceEnd: errorStackTraceEnd,
-        shouldLogAnalytics: shouldLogAnalytics,
-      );
-    }
-  }
-
-  /// Used to configure the logging and analytic abilities of the [Loglytics].
-  static void dispose() {
-    _analyticsImplementation = null;
-    _crashReportsImplementation = null;
-    _shouldLogAnalytics = true;
-    _errorStackTraceEnd = null;
-    if (_setupConstLoglytics) ConstLoglytics.dispose();
-  }
-
-  // --------------- REGULAR --------------- REGULAR --------------- REGULAR --------------- \\
-
-  /// Logs a regular [message] with [LogType.info] default as [debugPrint].
-  ///
-  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setup] method.
-  void log(
-    String message, {
-    bool addToCrashReports = true,
-    LogType logType = LogType.info,
-    bool showTime = true,
-    String? location,
-  }) =>
-      _logMessage(
-        message: message,
-        logType: logType,
-        addToCrashReports: addToCrashReports,
-        showTime: showTime,
+  // Used to create an instance of Loglytics when using a mixin is not possible or breaks a const constructor.
+  static Loglytics create<T extends Analytics>({required String location}) =>
+      _Loglytics<T>(
         location: location,
       );
 
-  /// Logs a warning [message] with [LogType.warning] as [debugPrint].
-  ///
-  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setup] method.
-  void logWarning(
-    String message, {
-    bool addToCrashReports = true,
-  }) =>
-      _logMessage(
-        message: message,
-        logType: LogType.warning,
-        addToCrashReports: addToCrashReports,
-      );
+  /// Used to handle events in the proper order that they are sent.
+  static late final EventBus _eventBus = EventBus();
 
-  /// Logs an error [message] with [LogType.error] as [debugPrint].
+  /// Provides the configured [Analytics] functionality through the [Loglytics] mixin.
+  late final D analytics = _getIt.get<D>()
+    ..service = AnalyticsService(loglytics: this);
+
+  /// Used to provide all logging capabilities.
+  late final Log log = Log(
+    location: location,
+    maxLinesStackTrace: _maxLinesStackTrace,
+  );
+
+  /// Used to define the location of Loglytics logging and implementation.
+  String get location => runtimeType.toString();
+
+  // --------------- SETUP --------------- SETUP --------------- SETUP --------------- \\
+
+  static AnalyticsInterface? _analyticsInterface;
+  static CrashReportsInterface? _crashReportsInterface;
+
+  static int? _maxLinesStackTrace;
+  static bool _combineEvents = false;
+  static bool _isActive = false;
+  static bool get isActive => _isActive;
+
+  /// Used to configure the logging and analytic abilities of the [Loglytics].
   ///
-  /// Also tries to send the log with optional [error], [stackTrace] and [fatal] boolean to your
-  /// [CrashReportsInterface] implementation should you have configured one with the
-  /// [Loglytics.setup] method.
-  void logError(
-    String message, {
-    Object? error,
-    StackTrace? stackTrace,
-    bool fatal = false,
-    bool printStack = true,
-    bool addToCrashReports = true,
-    bool forceRecordError = false,
+  /// Use the [analyticsInterface] and [crashReportsInterface] to specify your implementations
+  /// of both functionalities. This is optional as the [Loglytics] can also be used as a pure logger.
+  /// Populate the [analytics] parameter with callbacks to your [Analytics] implementations.
+  /// Example: [() => CounterAnalytics(), () => CookieAnalytics()].
+  static void setUp({
+    AnalyticsInterface? analyticsInterface,
+    CrashReportsInterface? crashReportsInterface,
+    void Function(AnalyticsFactory analyticsFactory)? analytics,
+    int? maxLinesStackTrace,
+    bool combineEvents = true,
   }) {
-    StackTrace? _stackTrace;
-    try {
-      _stackTrace = stackTrace ??
-          StackTrace.fromString(
-            StackTrace.current.toString().split('\n').sublist(1).join('\n'),
-          );
-    } catch (error) {
-      _stackTrace = null;
+    _analyticsInterface = analyticsInterface;
+    _crashReportsInterface = crashReportsInterface;
+    if (analytics != null) {
+      registerAnalytics(analytics: analytics);
     }
-    var hasError = error != null;
-    if (hasError || forceRecordError) {
-      _crashReportsImplementation?.recordError(
-        error,
-        _stackTrace,
-        fatal: fatal,
-      );
-    }
-    _logMessage(
-      message: message,
-      logType: LogType.error,
-      addToCrashReports: addToCrashReports,
-    );
-    if (hasError) {
-      _logMessage(
-        message: error.toString(),
-        logType: LogType.error,
-        addToCrashReports: false,
-      );
-    }
-    if (printStack) {
-      debugPrintStack(
-          stackTrace: stackTrace,
-          maxFrames: _errorStackTraceEnd ?? _errorStackTraceEndDefault);
-    }
+    _maxLinesStackTrace = maxLinesStackTrace;
+    _combineEvents = combineEvents;
+    _eventBus._listen();
+    _isActive = true;
   }
 
-  /// Logs a success [message] with [LogType.success] as [debugPrint].
-  ///
-  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setup] method.
-  void logSuccess(
-    String message, {
-    bool addToCrashReports = true,
-  }) =>
-      _logMessage(
-        message: message,
-        logType: LogType.success,
-        addToCrashReports: addToCrashReports,
-      );
-
-  /// Logs (does not send!) an analytic [name] with [LogType.analytic] as [debugPrint].
-  ///
-  /// Also accepts logs an optional [value] or [parameters] and tries to send the message to your
-  /// [CrashReportsInterface] implementation should you have configured one with the
-  /// [Loglytics.setup] method.
-  void logAnalytic({
-    required String name,
-    String? value,
-    Map<String, Object?>? parameters,
+  /// Used to register analytics objects, default to .
+  static void registerAnalytics({
+    required void Function(AnalyticsFactory analyticsFactory) analytics,
+    bool registerDefaultAnalytics = true,
   }) {
-    if (_shouldLogAnalytics) {
-      debugPrint(
-        '$time '
-        '[$_logLocation] '
-        '${LogType.analytic.icon} '
-        '$name${value != null ? ': $value' : ''}'
-        '${parameters != null ? ': $parameters' : ''}',
-      );
+    final analyticsFactory = AnalyticsFactory(getIt: _getIt);
+    if (registerDefaultAnalytics) {
+      analyticsFactory.registerAnalytic(() => Analytics());
     }
+    analytics(analyticsFactory);
   }
 
-  // --------------- VALUES --------------- VALUES --------------- VALUES --------------- \\
+  /// Used to reset analytics objects.
+  static void resetAnalytics() => _getIt.reset();
 
-  /// Logs a [value] and optional [message] with a default [LogType.info] as [debugPrint].
-  ///
-  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setup] method.
-  void logValue(
-    Object? value, {
-    String? description,
-    LogType logType = LogType.info,
-    bool addToCrashReports = true,
-  }) =>
-      _logValue(
-        description: description,
-        value: value,
-        logType: logType,
-        addToCrashReports: addToCrashReports,
-      );
-
-  /// Logs a [key], [value] and optional [message] with a default [LogType.info] as [debugPrint].
-  ///
-  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setup] method.
-  void logKeyValue(
-    String key,
-    Object? value, {
-    String? message,
-    LogType logType = LogType.info,
-    bool addToCrashReports = true,
-  }) =>
-      _logKeyValue(
-        key: key,
-        description: message,
-        value: value,
-        logType: logType,
-        addToCrashReports: addToCrashReports,
-      );
-
-  /// Logs a [list] and optional [message] with a default [LogType.info] as [debugPrint].
-  ///
-  /// Iterates over the given [list] and uses the [_logValue] method under the hood to log each item.
-  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setup] method.
-  void logList<T extends Object?>(
-    List<T> list, {
-    String? message,
-    LogType logType = LogType.info,
-    bool addToCrashReports = true,
-  }) =>
-      _logIterable(
-        iterable: list,
-        description: message,
-        logType: logType,
-        addToCrashReports: addToCrashReports,
-      );
-
-  /// Logs a [set] and optional [message] with a default [LogType.info] as [debugPrint].
-  ///
-  /// Iterates over the given [set] and uses the [_logValue] method under the hood to log each item.
-  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setup] method.
-  void logSet<T extends Object?>(
-    Set<T> set, {
-    String? message,
-    LogType logType = LogType.info,
-    bool addToCrashReports = true,
-  }) =>
-      _logIterable(
-        iterable: set,
-        description: message,
-        logType: logType,
-        addToCrashReports: addToCrashReports,
-      );
-
-  /// Logs a [map] and optional [message] with a default [LogType.info] as [debugPrint].
-  ///
-  /// Iterates over the given [map] and uses the [_logKeyValue] method under the hood to log each item.
-  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setup] method.
-  void logMap(
-    Map<String, Object?> map, {
-    String? message,
-    LogType logType = LogType.info,
-    bool addToCrashReports = true,
-  }) =>
-      _logMap(
-        map: map,
-        description: message,
-        logType: logType,
-        addToCrashReports: addToCrashReports,
-      );
-
-  /// Logs a [map]'s values and optional [message] with a default [LogType.info] as [debugPrint].
-  ///
-  /// Iterates over the given [map] and uses the [_logValue] method under the hood to log each item.
-  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setup] method.
-  void logValues<T extends Object?, E extends Object?>(
-    Map<T, E> map, {
-    String? message,
-    LogType logType = LogType.info,
-    bool addToCrashReports = true,
-  }) =>
-      _logValues(
-        map: map,
-        description: message,
-        addToCrashReports: addToCrashReports,
-      );
-
-  // --------------- CONVENIENCE --------------- CONVENIENCE --------------- CONVENIENCE --------------- \\
-
-  /// Enables easy logging of class initialization.
-  void logInit() => log('I am Initialized!');
-
-  /// Enables easy logging of disposing classes.
-  void logDispose() => log('I am Disposed!');
-
-  // --------------- PRINTERS --------------- PRINTERS --------------- PRINTERS --------------- \\
-
-  /// Used under the hood to log a [message] with [logType].
-  ///
-  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setup] method.
-  void _logMessage({
-    required String message,
-    required LogType logType,
-    bool addToCrashReports = true,
-    bool showTime = true,
-    String? location,
-  }) {
-    if (addToCrashReports) _tryLogCrashReportMessage(message);
-    debugPrint(
-      '${showTime ? '$time ' : ''}'
-      '${location == null ? '[$_logLocation] ' : '$location '}'
-      '${logType.icon} $message',
-    );
-  }
-
-  /// Used under the hood to log a [value] and [logType] with optional [description].
-  ///
-  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setup] method.
-  void _logValue({
-    required Object? value,
-    required LogType logType,
-    required addToCrashReports,
-    required String? description,
-  }) {
-    if (addToCrashReports) _tryLogCrashReportValue(value, description);
-    final _time = time;
-    debugPrint('$_time'
-        '[$_logLocation] '
-        '${logType.icon} ${description != null ? '$description: ' : ''}$value');
-  }
-
-  /// Used under the hood to log a [key], [value] and [logType] with optional [description].
-  ///
-  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setup] method.
-  void _logKeyValue({
-    required String key,
-    required Object? value,
-    required LogType logType,
-    required addToCrashReports,
-    required String? description,
-  }) {
-    _tryLogCrashReportKeyValue(key, value, description);
-    debugPrint(
-      '$time '
-      '[$_logLocation] '
-      '${description != null ? '${logType.icon} $description ' : ''}'
-      '🔑 [KEY] $key '
-      '💾 [VALUE] $value',
-    );
-  }
-
-  /// Used under the hood to log an [iterable] and [logType] with optional [description].
-  ///
-  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setup] method.
-  void _logIterable<T extends Object?>({
-    required Iterable<T> iterable,
-    LogType logType = LogType.info,
-    required addToCrashReports,
-    String? description,
-  }) {
-    for (T value in iterable) {
-      _logValue(
-        value: value,
-        logType: logType,
-        description: description,
-        addToCrashReports: addToCrashReports,
-      );
-    }
-  }
-
-  /// Used under the hood to log a [map] and [logType] with optional [description].
-  ///
-  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setup] method.
-  void _logMap({
-    required Map<String, Object?> map,
-    LogType logType = LogType.info,
-    required addToCrashReports,
-    String? description,
-  }) =>
-      map.forEach(
-        (key, value) {
-          _logKeyValue(
-            key: key,
-            value: value,
-            logType: logType,
-            description: description,
-            addToCrashReports: addToCrashReports,
-          );
-        },
-      );
-
-  /// Used under the hood to log a [map]'s values and [logType] with optional [description].
-  ///
-  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setup] method.
-  void _logValues<K extends Object?, V extends Object?>({
-    required Map<K, V> map,
-    String? description,
-    LogType logType = LogType.info,
-    required addToCrashReports,
-  }) =>
-      map.forEach(
-        (_, value) {
-          _logValue(
-            value: value,
-            logType: logType,
-            description: description,
-            addToCrashReports: addToCrashReports,
-          );
-        },
-      );
-
-  // --------------- CRASHLYTICS --------------- CRASHLYTICS --------------- CRASHLYTICS --------------- \\
-
-  /// Used under the hood to try and log a crashlytics [message] with [logType].
-  void _tryLogCrashReportMessage(String message) =>
-      _crashReportsImplementation?.log(message);
-
-  /// Used under the hood to try and log a crashlytics [key] and [value] with [logType].
-  void _tryLogCrashReportKeyValue(
-    String key,
-    Object? value,
-    Object? description,
-  ) =>
-      _crashReportsImplementation?.log(
-          '${description != null ? '$description: ' : ''}{ $key: $value }');
-
-  /// Used under the hood to try and log a crashlytics [value] with [logType].
-  void _tryLogCrashReportValue(
-    Object? value,
-    Object? description,
-  ) {
-    _crashReportsImplementation
-        ?.log('${description != null ? '$description: ' : 'value: '} $value');
+  /// Used to configure the logging and analytic abilities of the [Loglytics].
+  static void dispose() {
+    _analyticsInterface = null;
+    _crashReportsInterface = null;
+    _maxLinesStackTrace = null;
+    resetAnalytics();
+    _eventBus.dispose();
+    _isActive = false;
   }
 }
 
-extension on Analytics {
-  void initialise({
-    required Loglytics? loglytics,
-    required AnalyticsInterface? analyticsImplementation,
-    required CrashReportsInterface? crashReportsImplementation,
-  }) =>
-      service = AnalyticsService(
-          loglytics: loglytics,
-          analyticsImplementation: analyticsImplementation,
-          crashReportsImplementation: crashReportsImplementation);
+/// Used to provide [Loglytics] as a an object while keeping mixin functionality.
+class _Loglytics<X extends Analytics> with Loglytics<X> {
+  _Loglytics({
+    required String location,
+  }) : _location = location;
+
+  final String _location;
+
+  @override
+  String get location => _location;
 }

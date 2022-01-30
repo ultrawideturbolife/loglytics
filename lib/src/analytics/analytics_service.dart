@@ -1,52 +1,48 @@
-import '../../loglytics.dart';
-import '../loglytics/loglytics.dart';
-import 'analytic.dart';
-import 'analytics_interface.dart';
+part of '../loglytics/loglytics.dart';
 
 /// Used to provide an easy interface for sending analytics.
 ///
 /// Each [AnalyticsTypes] has its own method that receives a subject and possible parameters.
 /// For example when using the [AnalyticsService.viewed] method with given subject 'counter_page'
-/// your [AnalyticsService._analyticsImplementation] will attempt to send a 'counter_page_viewed'
+/// your [AnalyticsService._analyticsInterface] will attempt to send a 'counter_page_viewed'
 /// event.
 class AnalyticsService {
-  AnalyticsService({
-    Loglytics? loglytics,
-    AnalyticsInterface? analyticsImplementation,
-    CrashReportsInterface? crashReportsImplementation,
-  })  : _loglytics = loglytics,
-        _analyticsImplementation = analyticsImplementation,
-        _crashReportsImplementation = crashReportsImplementation;
+  AnalyticsService({Loglytics? loglytics}) : _loglytics = loglytics;
 
+  /// Used to log analytics from where they are sent.
   final Loglytics? _loglytics;
-  final AnalyticsInterface? _analyticsImplementation;
-  final CrashReportsInterface? _crashReportsImplementation;
+
+  /// Used to handle analytics in proper order that they are sent.
+  late final EventBus _eventBus = EventBus();
 
   /// Used to identify the first input when sending a stream of similar analytics.
   Analytic? _firstInput;
 
-  /// Sets a [userId] that persists throughout the app.
+  /// Sets a [userId] that persists throughout the app's lifecycle.
   ///
-  /// This applies to your possible [_analyticsImplementation] as well as your
-  /// [_crashReportsImplementation].
+  /// This applies to your possible [_analyticsInterface] as well as your
+  /// [_crashReportsInterface].
   void userId({required String userId}) {
-    _analyticsImplementation?.setUserId(userId);
-    _crashReportsImplementation?.setUserIdentifier(userId);
-    _loglytics?.logAnalytic(name: 'user_id', value: userId);
+    _eventBus.tryAddAnalytic(Loglytics._analyticsInterface?.setUserId(userId));
+    _eventBus.tryAddCrashReport(
+        Loglytics._crashReportsInterface?.setUserIdentifier(userId));
+    _loglytics?.log.analytic(name: 'user_id', value: userId);
   }
 
   /// Sets a user [property] and [value] that persists throughout the app.
   ///
-  /// This applies to your possible [_analyticsImplementation] as well as your
-  /// [_crashReportsImplementation].
+  /// This applies to your possible [_analyticsInterface] as well as your
+  /// [_crashReportsInterface].
   void userProperty({required String property, required Object? value}) {
     final _value = value?.toString() ?? '';
     if (_value.isNotEmpty) {
-      _analyticsImplementation?.setUserProperty(name: property, value: _value);
-      _crashReportsImplementation?.setCustomKey(property, _value);
-      _loglytics?.logAnalytic(name: property, value: _value);
+      _eventBus.tryAddAnalytic(Loglytics._analyticsInterface
+          ?.setUserProperty(name: property, value: _value));
+      _eventBus.tryAddCrashReport(
+          Loglytics._crashReportsInterface?.setCustomKey(property, _value));
+      _loglytics?.log.analytic(name: '[PROPERTY] $property', value: _value);
     } else {
-      _loglytics?.logError('Refused setting empty value for $property');
+      _loglytics?.log.error('Refused setting empty value for $property');
     }
   }
 
@@ -990,13 +986,14 @@ class AnalyticsService {
     required String subject,
   }) {
     final name = subject;
-    _analyticsImplementation?.setCurrentScreen(name: name);
-    _loglytics?.logAnalytic(name: name);
+    _eventBus.tryAddAnalytic(
+        Loglytics._analyticsInterface?.setCurrentScreen(name: name));
+    _loglytics?.log.analytic(name: name);
   }
 
   /// Resets all current analytics data.
   Future<void> resetAnalytics() async =>
-      _analyticsImplementation?.resetAnalyticsData();
+      Loglytics._analyticsInterface?.resetAnalyticsData();
 
   /// Resets the [_firstInput] used by [AnalyticsService.input].
   void resetFirstInput() => _firstInput = null;
@@ -1005,15 +1002,21 @@ class AnalyticsService {
   void _logAnalytic(Analytic analytic) {
     final name = analytic.name;
     final parameters = analytic.parameters;
-    _analyticsImplementation?.logEvent(name: name, parameters: parameters);
-    _loglytics?.logAnalytic(name: name, parameters: parameters);
+    _eventBus.tryAddAnalytic(Loglytics._analyticsInterface
+        ?.logEvent(name: name, parameters: parameters));
+    _loglytics?.log.analytic(name: name, parameters: parameters);
   }
 
   /// Alternate method used for sending [CustomAnalytic]s.
   void _logCustomAnalytic(CustomAnalytic customAnalytic) {
     final name = customAnalytic.name;
     final parameters = customAnalytic.parameters;
-    _analyticsImplementation?.logEvent(name: name, parameters: parameters);
-    _loglytics?.logAnalytic(name: name, parameters: parameters);
+    _eventBus.tryAddAnalytic(
+      Loglytics._analyticsInterface?.logEvent(
+        name: name,
+        parameters: parameters,
+      ),
+    );
+    _loglytics?.log.analytic(name: name, parameters: parameters);
   }
 }

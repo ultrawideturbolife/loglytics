@@ -1,3 +1,5 @@
+import 'package:loglytics/loglytics.dart';
+
 /// Exposes all analytic methods for implementation.
 abstract class AnalyticsInterface {
   /// Logs an event by [name] and possible [parameters].
@@ -23,4 +25,11 @@ abstract class AnalyticsInterface {
 
   /// Resets all current analytics data.
   Future<void> resetAnalyticsData();
+}
+
+class IndividualUsage {
+  late final Loglytics loglytics =
+      Loglytics.create(location: runtimeType.toString());
+  late final Log log = Log(location: runtimeType.toString());
+  late final AnalyticsService analyticsService = AnalyticsService();
 }
