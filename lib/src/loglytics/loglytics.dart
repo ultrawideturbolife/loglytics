@@ -103,15 +103,15 @@ mixin Loglytics<D extends Analytics> {
   }
 
   /// Used to reset analytics objects.
-  static void resetAnalytics() => _getIt.reset();
+  static Future<void> resetAnalytics() => _getIt.reset();
 
   /// Used to configure the logging and analytic abilities of the [Loglytics].
-  static void dispose() {
+  static Future<void> dispose() async {
     _analyticsInterface = null;
     _crashReportsInterface = null;
     _maxLinesStackTrace = null;
-    resetAnalytics();
-    _eventBus.dispose();
+    await resetAnalytics();
+    await _eventBus.dispose();
     _isActive = false;
   }
 }

@@ -1,3 +1,19 @@
+## 0.10.1+4
+
+* Made `EventBus` streams broadcast streams to avoid listen error when resetting.
+
+## 0.10.1+3
+
+* **🐛️ Bugfix:** Add better checks to `EventBus` streams.
+
+## 0.10.1+2
+
+* **🐛️ Bugfix:** Made `EventBus.dispose` return a `Future`.
+
+## 0.10.1+1
+
+* **🐛️ Bugfix:** Made reset analytics methods return a `Future`.
+
 ## 0.10.1
 
 * **✨ New:** Added `Loglytics.isActive` bool to facilitate checking if `Loglytics` has already been initialized.
