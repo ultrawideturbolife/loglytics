@@ -1,4 +1,4 @@
-## 0.10.0
+## 0.10.1
 
 * **✨ New:** Added `Loglytics.isActive` bool to facilitate checking if `Loglytics` has already been initialized.
 * **🐛️ Bugfix:** Added actual assignment to subscriptions in the `EventBus`.
