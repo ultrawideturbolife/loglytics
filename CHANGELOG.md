@@ -1,3 +1,7 @@
+## 0.10.1+5
+
+* **🐛️ Bugfix:** Made `Loglytics.create` return proper `Analytics` object.
+
 ## 0.10.1+4
 
 * Made `EventBus` streams broadcast streams to avoid listen error when resetting.

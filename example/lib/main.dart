@@ -38,8 +38,8 @@ class MyHomePage extends StatefulWidget {
   final String title;
 
   late final Log log = Log(location: runtimeType.toString());
-  late final Loglytics loglytics =
-      Loglytics.create(location: runtimeType.toString());
+  late final Loglytics<CounterAnalytics> loglytics =
+      Loglytics.create<CounterAnalytics>(location: runtimeType.toString());
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();

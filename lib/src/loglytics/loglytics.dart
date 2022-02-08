@@ -35,7 +35,7 @@ mixin Loglytics<D extends Analytics> {
   static final GetIt _getIt = GetIt.asNewInstance();
 
   // Used to create an instance of Loglytics when using a mixin is not possible or breaks a const constructor.
-  static Loglytics create<T extends Analytics>({required String location}) =>
+  static Loglytics<T> create<T extends Analytics>({required String location}) =>
       _Loglytics<T>(
         location: location,
       );
