@@ -373,7 +373,7 @@ class Log {
 
   /// Used under the hood to try and log a crashlytics [message] with [logType].
   void _tryLogCrashReportMessage(String message) => _eventBus.tryAddCrashReport(
-      Loglytics._crashReportsInterface?.log('[$_location}] $message'));
+      Loglytics._crashReportsInterface?.log('[$_location] $message'));
 
   /// Used under the hood to try and log a crashlytics [key] and [value] with [logType].
   void _tryLogCrashReportKeyValue(
@@ -382,7 +382,7 @@ class Log {
     Object? description,
   ) =>
       _eventBus.tryAddCrashReport(Loglytics._crashReportsInterface?.log(
-          '[$_location}] ${description != null ? '$description: ' : ''}{ $key: $value }'));
+          '[$_location] ${description != null ? '$description: ' : ''}{ $key: $value }'));
 
   /// Used under the hood to try and log a crashlytics [value] with [logType].
   void _tryLogCrashReportValue(
@@ -390,5 +390,5 @@ class Log {
     Object? description,
   ) =>
       _eventBus.tryAddCrashReport(Loglytics._crashReportsInterface?.log(
-          '[$_location}] ${description != null ? '$description: ' : 'value: '} $value'));
+          '[$_location] ${description != null ? '$description: ' : 'value: '} $value'));
 }

@@ -1,3 +1,7 @@
+## 0.10.1+6
+
+* **🐛️ Bugfix:** Removed unwanted character at location log.
+
 ## 0.10.1+5
 
 * **🐛️ Bugfix:** Made `Loglytics.create` return proper `Analytics` object.
