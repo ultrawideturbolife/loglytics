@@ -22,6 +22,8 @@ extension LogTypeExtensions on LogType {
         return '[MVVM]';
       case LogType.bloc:
         return '[BLOC]';
+      case LogType.test:
+        return '[TEST]';
     }
   }
 
@@ -41,11 +43,13 @@ extension LogTypeExtensions on LogType {
       case LogType.value:
         return '💾 $name';
       case LogType.debug:
-        return '📈 $name';
+        return '🐛 $name';
       case LogType.mvvm:
         return '📚 $name';
       case LogType.bloc:
         return '🧱 $name';
+      case LogType.test:
+        return '🧪 $name';
     }
   }
 }

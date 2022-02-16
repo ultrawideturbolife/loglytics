@@ -26,13 +26,12 @@ class Log {
   void info(
     String message, {
     bool addToCrashReports = true,
-    LogType logType = LogType.info,
     bool showTime = true,
     String? location,
   }) =>
       _logMessage(
         message: message,
-        logType: logType,
+        logType: LogType.info,
         addToCrashReports: addToCrashReports,
         showTime: showTime,
         location: location,
@@ -45,11 +44,15 @@ class Log {
   void warning(
     String message, {
     bool addToCrashReports = true,
+    bool showTime = true,
+    String? location,
   }) =>
       _logMessage(
         message: message,
         logType: LogType.warning,
         addToCrashReports: addToCrashReports,
+        showTime: showTime,
+        location: location,
       );
 
   /// Logs an error [message] with [LogType.error] as [debugPrint].
@@ -59,6 +62,8 @@ class Log {
   /// [Loglytics.setUp] method.
   void error(
     String message, {
+    bool showTime = true,
+    String? location,
     Object? error,
     StackTrace? stackTrace,
     bool fatal = false,
@@ -89,12 +94,16 @@ class Log {
       message: message,
       logType: LogType.error,
       addToCrashReports: addToCrashReports,
+      showTime: showTime,
+      location: location,
     );
     if (hasError) {
       _logMessage(
         message: error.toString(),
         logType: LogType.error,
         addToCrashReports: false,
+        showTime: showTime,
+        location: location,
       );
     }
     if (printStack) {
@@ -112,11 +121,87 @@ class Log {
   void success(
     String message, {
     bool addToCrashReports = true,
+    bool showTime = true,
+    String? location,
   }) =>
       _logMessage(
         message: message,
         logType: LogType.success,
         addToCrashReports: addToCrashReports,
+        showTime: showTime,
+        location: location,
+      );
+
+  /// Logs a test [message] with [LogType.test] as [debugPrint].
+  ///
+  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
+  /// configured one with the [Loglytics.setUp] method.
+  void test(
+    String message, {
+    bool addToCrashReports = true,
+    bool showTime = true,
+    String? location,
+  }) =>
+      _logMessage(
+        message: message,
+        logType: LogType.test,
+        addToCrashReports: addToCrashReports,
+        showTime: showTime,
+        location: location,
+      );
+
+  /// Logs a debug [message] with [LogType.debug] as [debugPrint].
+  ///
+  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
+  /// configured one with the [Loglytics.setUp] method.
+  void debug(
+    String message, {
+    bool addToCrashReports = true,
+    bool showTime = true,
+    String? location,
+  }) =>
+      _logMessage(
+        message: message,
+        logType: LogType.debug,
+        addToCrashReports: addToCrashReports,
+        showTime: showTime,
+        location: location,
+      );
+
+  /// Logs a bloc [message] with [LogType.bloc] as [debugPrint].
+  ///
+  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
+  /// configured one with the [Loglytics.setUp] method.
+  void bloc(
+    String message, {
+    bool addToCrashReports = true,
+    bool showTime = true,
+    String? location,
+  }) =>
+      _logMessage(
+        message: message,
+        logType: LogType.bloc,
+        addToCrashReports: addToCrashReports,
+        showTime: showTime,
+        location: location,
+      );
+
+  /// Logs a mvvm [message] with [LogType.mvvm] as [debugPrint].
+  ///
+  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
+  /// configured one with the [Loglytics.setUp] method.
+  void mvvm(
+    String message, {
+    bool addToCrashReports = true,
+    bool showTime = true,
+    String? location,
+  }) =>
+      _logMessage(
+        message: message,
+        logType: LogType.mvvm,
+        addToCrashReports: addToCrashReports,
+        showTime: showTime,
+        location: location,
       );
 
   /// Logs (does not send!) an analytic [name] with [LogType.analytic] as [debugPrint].

@@ -11,4 +11,5 @@ enum LogType {
   debug,
   mvvm,
   bloc,
+  test,
 }

@@ -1,3 +1,9 @@
+## 0.10.2
+
+* **✨ New:** Added `LogType.test` and extra convenience methods for `test`, `bloc`, `debug` and `mvvm`.
+* **✨ New:** Added `showTime` and `location` to convenience methods.
+* **⚠️ Breaking:** Removed `logType` from `Log.info`.
+
 ## 0.10.1+6
 
 * **🐛️ Bugfix:** Removed unwanted character at location log.
