@@ -981,6 +981,58 @@ class AnalyticsService {
         ),
       );
 
+  /// Sends an [AnalyticsTypes.found] based on given [subject] and possible [parameters].
+  void found({
+    required String subject,
+    Map<String, Object?>? parameters,
+  }) =>
+      _logAnalytic(
+        Analytic(
+          subject: subject,
+          parameters: parameters,
+          type: AnalyticsTypes.found,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.notFound] based on given [subject] and possible [parameters].
+  void notFound({
+    required String subject,
+    Map<String, Object?>? parameters,
+  }) =>
+      _logAnalytic(
+        Analytic(
+          subject: subject,
+          parameters: parameters,
+          type: AnalyticsTypes.notFound,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.completed] based on given [subject] and possible [parameters].
+  void completed({
+    required String subject,
+    Map<String, Object?>? parameters,
+  }) =>
+      _logAnalytic(
+        Analytic(
+          subject: subject,
+          parameters: parameters,
+          type: AnalyticsTypes.completed,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.error] based on given [subject] and possible [parameters].
+  void error({
+    required String subject,
+    Map<String, Object?>? parameters,
+  }) =>
+      _logAnalytic(
+        Analytic(
+          subject: subject,
+          parameters: parameters,
+          type: AnalyticsTypes.error,
+        ),
+      );
+
   /// Sends the current screen based on given [subject] and possible [parameters].
   void screen({
     required String subject,

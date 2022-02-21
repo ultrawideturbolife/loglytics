@@ -74,6 +74,10 @@ enum AnalyticsTypes {
   shown,
   loaded,
   saved,
+  notFound,
+  found,
+  completed,
+  error,
   none,
 }
 
@@ -225,6 +229,14 @@ extension AnalyticsTypesHelpers on AnalyticsTypes {
         return 'loaded';
       case AnalyticsTypes.saved:
         return 'saved';
+      case AnalyticsTypes.notFound:
+        return 'not_found';
+      case AnalyticsTypes.found:
+        return 'found';
+      case AnalyticsTypes.completed:
+        return 'completed';
+      case AnalyticsTypes.error:
+        return 'error';
       case AnalyticsTypes.none:
         return '';
     }

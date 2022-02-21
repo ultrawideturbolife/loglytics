@@ -1,3 +1,7 @@
+## 0.10.2+1
+
+* **✨ New:** Added `analytics.found`, `analytics.notfound`, `analytics.completed` and `analytics.error`.
+
 ## 0.10.2
 
 * **✨ New:** Added `LogType.test` and extra convenience methods for `test`, `bloc`, `debug` and `mvvm`.
