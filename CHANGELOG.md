@@ -1,6 +1,7 @@
 ## 0.10.2+2
 
 * **✨ New:** Added `[SCREEN]` tag to debug log when logging screen analytics.
+* **✨ New:** Added `Log.broadcastLogs` boolean to indicate whether to broadcast logs through newly added `StreamControllers` `Log.analyticsObserver` and `Log.crashReportsObserver`.
 
 ## 0.10.2+1
 

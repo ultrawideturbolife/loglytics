@@ -17,6 +17,17 @@ class Log {
   /// Used to properly handle chronological processing of events.
   late final EventBus _eventBus = EventBus();
 
+  /// Used to toggle broadcasting logs on or off.
+  static bool broadcastLogs = false;
+
+  /// Used to expose all crash reports logs.
+  static late final StreamController<String> crashReportsObserver =
+      StreamController.broadcast();
+
+  /// Used to expose all analytics logs.
+  static late final StreamController<String> analyticsObserver =
+      StreamController.broadcast();
+
   // --------------- REGULAR --------------- REGULAR --------------- REGULAR --------------- \\
 
   /// Logs a regular [message] with [LogType.info] default as [debugPrint].
@@ -214,13 +225,13 @@ class Log {
     String? value,
     Map<String, Object?>? parameters,
   }) {
-    debugPrint(
-      '$time '
-      '[$_location] '
-      '${LogType.analytic.icon} '
-      '$name${value != null ? ': $value' : ''}'
-      '${parameters != null ? ': $parameters' : ''}',
-    );
+    var _message = '$time '
+        '[$_location] '
+        '${LogType.analytic.icon} '
+        '$name${value != null ? ': $value' : ''}'
+        '${parameters != null ? ': $parameters' : ''}';
+    if (broadcastLogs) analyticsObserver.add(_message);
+    debugPrint(_message);
   }
 
   // --------------- VALUES --------------- VALUES --------------- VALUES --------------- \\
@@ -346,11 +357,11 @@ class Log {
     String? location,
   }) {
     if (addToCrashReports) _tryLogCrashReportMessage(message);
-    debugPrint(
-      '${showTime ? '$time ' : ''}'
-      '${location == null ? '[$_location] ' : '$location '}'
-      '${logType.icon} $message',
-    );
+    final _message = '${showTime ? '$time ' : ''}'
+        '${location == null ? '[$_location] ' : '$location '}'
+        '${logType.icon} $message';
+    if (broadcastLogs) crashReportsObserver.add(_message);
+    debugPrint(_message);
   }
 
   /// Used under the hood to log a [value] and [logType] with optional [description].
@@ -365,9 +376,11 @@ class Log {
   }) {
     if (addToCrashReports) _tryLogCrashReportValue(value, description);
     final _time = time;
-    debugPrint('$_time'
+    final _message = '$_time'
         '[$_location] '
-        '${logType.icon} ${description != null ? '$description: ' : ''}$value');
+        '${logType.icon} ${description != null ? '$description: ' : ''}$value';
+    if (broadcastLogs) crashReportsObserver.add(_message);
+    debugPrint(_message);
   }
 
   /// Used under the hood to log a [key], [value] and [logType] with optional [description].
@@ -382,13 +395,13 @@ class Log {
     required String? description,
   }) {
     _tryLogCrashReportKeyValue(key, value, description);
-    debugPrint(
-      '$time '
-      '[$_location] '
-      '${description != null ? '${logType.icon} $description ' : ''}'
-      '🔑 [KEY] $key '
-      '💾 [VALUE] $value',
-    );
+    final _message = '$time '
+        '[$_location] '
+        '${description != null ? '${logType.icon} $description ' : ''}'
+        '🔑 [KEY] $key '
+        '💾 [VALUE] $value';
+    if (broadcastLogs) crashReportsObserver.add(_message);
+    debugPrint(_message);
   }
 
   /// Used under the hood to log an [iterable] and [logType] with optional [description].
