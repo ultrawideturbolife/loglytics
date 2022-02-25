@@ -1,3 +1,7 @@
+## 0.10.2+2
+
+* **✨ New:** Added `[SCREEN]` tag to debug log when logging screen analytics.
+
 ## 0.10.2+1
 
 * **✨ New:** Added `analytics.found`, `analytics.notfound`, `analytics.completed` and `analytics.error`.

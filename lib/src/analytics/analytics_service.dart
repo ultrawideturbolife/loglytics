@@ -24,8 +24,7 @@ class AnalyticsService {
   /// [_crashReportsInterface].
   void userId({required String userId}) {
     _eventBus.tryAddAnalytic(Loglytics._analyticsInterface?.setUserId(userId));
-    _eventBus.tryAddCrashReport(
-        Loglytics._crashReportsInterface?.setUserIdentifier(userId));
+    _eventBus.tryAddCrashReport(Loglytics._crashReportsInterface?.setUserIdentifier(userId));
     _loglytics?.log.analytic(name: 'user_id', value: userId);
   }
 
@@ -36,10 +35,9 @@ class AnalyticsService {
   void userProperty({required String property, required Object? value}) {
     final _value = value?.toString() ?? '';
     if (_value.isNotEmpty) {
-      _eventBus.tryAddAnalytic(Loglytics._analyticsInterface
-          ?.setUserProperty(name: property, value: _value));
-      _eventBus.tryAddCrashReport(
-          Loglytics._crashReportsInterface?.setCustomKey(property, _value));
+      _eventBus.tryAddAnalytic(
+          Loglytics._analyticsInterface?.setUserProperty(name: property, value: _value));
+      _eventBus.tryAddCrashReport(Loglytics._crashReportsInterface?.setCustomKey(property, _value));
       _loglytics?.log.analytic(name: '[PROPERTY] $property', value: _value);
     } else {
       _loglytics?.log.error('Refused setting empty value for $property');
@@ -47,8 +45,7 @@ class AnalyticsService {
   }
 
   /// Main method used for sending for the more flexible [CustomAnalytic]s.
-  void custom({required CustomAnalytic analytic}) =>
-      _logCustomAnalytic(analytic);
+  void custom({required CustomAnalytic analytic}) => _logCustomAnalytic(analytic);
 
   /// Sends an [AnalyticsTypes.tapped] based on given [subject] and possible [parameters].
   void tapped({
@@ -323,9 +320,7 @@ class AnalyticsService {
       parameters: parameters,
       type: AnalyticsTypes.input,
     );
-    if (_firstInput == null ||
-        !onlyFirstValue ||
-        !analytic.equals(_firstInput)) {
+    if (_firstInput == null || !onlyFirstValue || !analytic.equals(_firstInput)) {
       _logAnalytic(analytic);
     }
     _firstInput = analytic;
@@ -1038,14 +1033,12 @@ class AnalyticsService {
     required String subject,
   }) {
     final name = subject;
-    _eventBus.tryAddAnalytic(
-        Loglytics._analyticsInterface?.setCurrentScreen(name: name));
-    _loglytics?.log.analytic(name: name);
+    _eventBus.tryAddAnalytic(Loglytics._analyticsInterface?.setCurrentScreen(name: name));
+    _loglytics?.log.analytic(name: '[SCREEN] $name');
   }
 
   /// Resets all current analytics data.
-  Future<void> resetAnalytics() async =>
-      Loglytics._analyticsInterface?.resetAnalyticsData();
+  Future<void> resetAnalytics() async => Loglytics._analyticsInterface?.resetAnalyticsData();
 
   /// Resets the [_firstInput] used by [AnalyticsService.input].
   void resetFirstInput() => _firstInput = null;
@@ -1054,8 +1047,8 @@ class AnalyticsService {
   void _logAnalytic(Analytic analytic) {
     final name = analytic.name;
     final parameters = analytic.parameters;
-    _eventBus.tryAddAnalytic(Loglytics._analyticsInterface
-        ?.logEvent(name: name, parameters: parameters));
+    _eventBus.tryAddAnalytic(
+        Loglytics._analyticsInterface?.logEvent(name: name, parameters: parameters));
     _loglytics?.log.analytic(name: name, parameters: parameters);
   }
 
