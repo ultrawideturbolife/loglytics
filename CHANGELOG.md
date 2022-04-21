@@ -1,6 +1,6 @@
 ## 0.10.3
 
-* **✨ New:** Added given command.
+* **✨ New:** Added given command. -
 
 ## 0.10.2+2
 
