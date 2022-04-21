@@ -13,7 +13,7 @@ class Analytic {
   final AnalyticsTypes _type;
   final Map<String, Object?>? parameters;
 
-  String get name => _subject + '_' + _type.name;
+  String get name => _subject + '_' + _type.value;
 
   bool equals(Analytic? other) =>
       other != null &&

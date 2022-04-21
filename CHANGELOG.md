@@ -1,3 +1,7 @@
+## 0.10.3
+
+* **✨ New:** Added given command.
+
 ## 0.10.2+2
 
 * **✨ New:** Added `[SCREEN]` tag to debug log when logging screen analytics.
