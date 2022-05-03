@@ -1,6 +1,7 @@
 ## 0.10.3
 
-* **✨ New:** Added given command. -
+* **✨ New:** Add `Loglytics.getIt<E extends Analytics>()` method to provide access to other analytics objects rather than always only the one specified as a generic argument of Loglytics.
+* **✨ New:** Added given command.
 
 ## 0.10.2+2
 

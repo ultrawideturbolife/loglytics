@@ -3,15 +3,8 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:loglytics/src/analytics/analytic.dart';
-import 'package:loglytics/src/analytics/analytics_factory.dart';
-import 'package:loglytics/src/enums/analytics_types.dart';
-import 'package:loglytics/src/enums/log_type.dart';
-import 'package:loglytics/src/extensions/log_type_extensions.dart';
+import 'package:loglytics/loglytics.dart';
 
-import '../analytics/analytics.dart';
-import '../analytics/analytics_interface.dart';
-import '../crash_reports/crash_reports_interface.dart';
 import '../extensions/date_time_extensions.dart';
 
 part '../analytics/analytics_service.dart';
@@ -46,6 +39,10 @@ mixin Loglytics<D extends Analytics> {
   /// Provides the configured [Analytics] functionality through the [Loglytics] mixin.
   late final D analytics = _getIt.get<D>()
     ..service = AnalyticsService(loglytics: this);
+
+  /// Provides any registered [Analytics] object per generic argument of [E].
+  E getIt<E extends Analytics>() =>
+      _getIt.get<E>()..service = AnalyticsService(loglytics: this);
 
   /// Used to provide all logging capabilities.
   late final Log log = Log(
