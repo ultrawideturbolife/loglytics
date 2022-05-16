@@ -1,3 +1,7 @@
+## 0.10.3+2
+
+* **✨ New:** Added `snoozed` command.
+
 ## 0.10.3+1
 
 * **✨ New:** Added `taken` command.
