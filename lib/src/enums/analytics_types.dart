@@ -79,6 +79,7 @@ enum AnalyticsTypes {
   error,
   given,
   notFound,
+  taken,
   none,
 }
 
@@ -161,6 +162,7 @@ extension AnalyticsTypesHelpers on AnalyticsTypes {
       case AnalyticsTypes.found:
       case AnalyticsTypes.completed:
       case AnalyticsTypes.error:
+      case AnalyticsTypes.taken:
       case AnalyticsTypes.given:
         return name;
       case AnalyticsTypes.notFound:
