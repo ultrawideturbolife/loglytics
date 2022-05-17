@@ -41,8 +41,8 @@ mixin Loglytics<D extends Analytics> {
     ..service = AnalyticsService(loglytics: this);
 
   /// Provides any registered [Analytics] object per generic argument of [E].
-  E getIt<E extends Analytics>() =>
-      _getIt.get<E>()..service = AnalyticsService(loglytics: this);
+  static E getIt<E extends Analytics>({required Loglytics loglytics}) =>
+      _getIt.get<E>()..service = AnalyticsService(loglytics: loglytics);
 
   /// Used to provide all logging capabilities.
   late final Log log = Log(

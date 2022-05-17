@@ -1,5 +1,6 @@
-## 0.10.3+2
+## 0.10.4
 
+* **⚠️ Breaking:** Made `Loglytics.getIt` static to allow for mock generation of classes that implement `Loglytics`.
 * **✨ New:** Added `snoozed` command.
 
 ## 0.10.3+1
