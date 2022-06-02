@@ -103,7 +103,7 @@ mixin Loglytics<D extends Analytics> {
   static Future<void> resetAnalytics() => _getIt.reset();
 
   /// Used to configure the logging and analytic abilities of the [Loglytics].
-  static Future<void> dispose() async {
+  static Future<void> disposeMe() async {
     _analyticsInterface = null;
     _crashReportsInterface = null;
     _maxLinesStackTrace = null;

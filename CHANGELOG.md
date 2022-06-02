@@ -1,3 +1,7 @@
+## 0.10.5
+
+* **⚠️ Breaking:** Renamed `Loglytics.dispose` to `Loglytics.disposeMe` to avoid a rare bug where classes that already have a dispose method and implementing `Loglytics` would result in a `RangeError` when compiling.
+
 ## 0.10.4
 
 * **⚠️ Breaking:** Made `Loglytics.getIt` static to allow for mock generation of classes that implement `Loglytics`.
