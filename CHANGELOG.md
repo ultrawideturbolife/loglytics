@@ -1,3 +1,8 @@
+## 0.11.0+1
+
+* **✨ New:** Added `verified' command.
+* Fix example project
+
 ## 0.11.0
 
 * **⚠️ Breaking:** Let `AnalyticsService.userProperty` accept nullable values.

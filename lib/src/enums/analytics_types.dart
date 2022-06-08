@@ -81,6 +81,7 @@ enum AnalyticsTypes {
   notFound,
   taken,
   snoozed,
+  verified,
   none,
 }
 
@@ -166,6 +167,7 @@ extension AnalyticsTypesHelpers on AnalyticsTypes {
       case AnalyticsTypes.taken:
       case AnalyticsTypes.given:
       case AnalyticsTypes.snoozed:
+      case AnalyticsTypes.verified:
         return name;
       case AnalyticsTypes.notFound:
         return 'not_found';
