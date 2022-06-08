@@ -14,5 +14,5 @@ abstract class CrashReportsInterface {
   Future<void> setUserIdentifier(String identifier);
 
   /// Sets a custom key for the user that usually persists through the apps lifecycle.
-  Future<void> setCustomKey(String key, Object value);
+  Future<void> setCustomKey(String key, String? value);
 }

@@ -32,7 +32,7 @@ class CrashReportsImplementation implements CrashReportsInterface {
   }
 
   @override
-  Future<void> setCustomKey(String key, Object value) {
+  Future<void> setCustomKey(String key, String? value) {
     // _yourCrashReportsProvider.setCustomKey(key, value);
     return Future.value(null); // Remove this.
   }

@@ -1,3 +1,7 @@
+## 0.11.0
+
+* **⚠️ Breaking:** Let `AnalyticsService.userProperty` accept nullable values.
+
 ## 0.10.5
 
 * **⚠️ Breaking:** Renamed `Loglytics.dispose` to `Loglytics.disposeMe` to avoid a rare bug where classes that already have a dispose method and implementing `Loglytics` would result in a `RangeError` when compiling.

@@ -33,17 +33,23 @@ class AnalyticsService {
   ///
   /// This applies to your possible [_analyticsInterface] as well as your
   /// [_crashReportsInterface].
-  void userProperty({required String property, required Object? value}) {
-    final _value = value?.toString() ?? '';
-    if (_value.isNotEmpty) {
-      _eventBus.tryAddAnalytic(Loglytics._analyticsInterface
-          ?.setUserProperty(name: property, value: _value));
-      _eventBus.tryAddCrashReport(
-          Loglytics._crashReportsInterface?.setCustomKey(property, _value));
-      _loglytics?.log.analytic(name: '[PROPERTY] $property', value: _value);
-    } else {
-      _loglytics?.log.error('Refused setting empty value for $property');
-    }
+  void userProperty({required String property, required String? value}) {
+    _eventBus.tryAddAnalytic(
+      Loglytics._analyticsInterface?.setUserProperty(
+        name: property,
+        value: value,
+      ),
+    );
+    _eventBus.tryAddCrashReport(
+      Loglytics._crashReportsInterface?.setCustomKey(
+        property,
+        value,
+      ),
+    );
+    _loglytics?.log.analytic(
+      name: '[PROPERTY] $property',
+      value: value,
+    );
   }
 
   /// Main method used for sending for the more flexible [CustomAnalytic]s.
