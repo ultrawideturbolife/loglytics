@@ -59,9 +59,10 @@ mixin Loglytics<D extends Analytics> {
   static CrashReportsInterface? _crashReportsInterface;
 
   static int? _maxLinesStackTrace;
-  static bool _combineEvents = false;
+  static bool _combineEvents = true;
   static bool _isActive = false;
   static bool get isActive => _isActive;
+  static bool _addAnalyticsToCrashReports = true;
 
   /// Used to configure the logging and analytic abilities of the [Loglytics].
   ///
@@ -75,6 +76,7 @@ mixin Loglytics<D extends Analytics> {
     void Function(AnalyticsFactory analyticsFactory)? analytics,
     int? maxLinesStackTrace,
     bool combineEvents = true,
+    bool addAnalyticsToCrashReports = true,
   }) {
     _analyticsInterface = analyticsInterface;
     _crashReportsInterface = crashReportsInterface;
@@ -83,6 +85,7 @@ mixin Loglytics<D extends Analytics> {
     }
     _maxLinesStackTrace = maxLinesStackTrace;
     _combineEvents = combineEvents;
+    _addAnalyticsToCrashReports = addAnalyticsToCrashReports;
     _eventBus._listen();
     _isActive = true;
   }

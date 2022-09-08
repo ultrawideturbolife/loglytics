@@ -26,7 +26,11 @@ class AnalyticsService {
     _eventBus.tryAddAnalytic(Loglytics._analyticsInterface?.setUserId(userId));
     _eventBus.tryAddCrashReport(
         Loglytics._crashReportsInterface?.setUserIdentifier(userId));
-    _loglytics?.log.analytic(name: 'user_id', value: userId);
+    _loglytics?.log.analytic(
+      name: 'user_id',
+      value: userId,
+      addToCrashReports: Loglytics._addAnalyticsToCrashReports,
+    );
   }
 
   /// Sets a user [property] and [value] that persists throughout the app.
@@ -49,6 +53,7 @@ class AnalyticsService {
     _loglytics?.log.analytic(
       name: '[PROPERTY] $property',
       value: value,
+      addToCrashReports: Loglytics._addAnalyticsToCrashReports,
     );
   }
 
@@ -1098,7 +1103,10 @@ class AnalyticsService {
     final name = subject;
     _eventBus.tryAddAnalytic(
         Loglytics._analyticsInterface?.setCurrentScreen(name: name));
-    _loglytics?.log.analytic(name: '[SCREEN] $name');
+    _loglytics?.log.analytic(
+      name: '[SCREEN] $name',
+      addToCrashReports: Loglytics._addAnalyticsToCrashReports,
+    );
   }
 
   /// Resets all current analytics data.
@@ -1114,7 +1122,11 @@ class AnalyticsService {
     final parameters = analytic.parameters;
     _eventBus.tryAddAnalytic(Loglytics._analyticsInterface
         ?.logEvent(name: name, parameters: parameters));
-    _loglytics?.log.analytic(name: name, parameters: parameters);
+    _loglytics?.log.analytic(
+      name: name,
+      parameters: parameters,
+      addToCrashReports: Loglytics._addAnalyticsToCrashReports,
+    );
   }
 
   /// Alternate method used for sending [CustomAnalytic]s.
@@ -1127,6 +1139,10 @@ class AnalyticsService {
         parameters: parameters,
       ),
     );
-    _loglytics?.log.analytic(name: name, parameters: parameters);
+    _loglytics?.log.analytic(
+      name: name,
+      parameters: parameters,
+      addToCrashReports: Loglytics._addAnalyticsToCrashReports,
+    );
   }
 }

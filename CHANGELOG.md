@@ -1,6 +1,10 @@
+## 0.12.0
+
+* **⚠️ Breaking:** Added `addAanalyticsToCrashReports` option to `Loglytics.setUp`. Defaults to `true`!
+
 ## 0.11.0+1
 
-* **✨ New:** Added `verified' command.
+* **✨ New:** Added `verified` command.
 * Fix example project
 
 ## 0.11.0

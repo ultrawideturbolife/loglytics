@@ -215,23 +215,28 @@ class Log {
         location: location,
       );
 
-  /// Logs (does not send!) an analytic [name] with [LogType.analytic] as [debugPrint].
+  /// Logs a mvvm [message] with [LogType.mvvm] as [debugPrint].
   ///
-  /// Also accepts logs an optional [value] or [parameters] and tries to send the message to your
-  /// [CrashReportsInterface] implementation should you have configured one with the
-  /// [Loglytics.setUp] method.
+  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
+  /// configured one with the [Loglytics.setUp] method.
   void analytic({
     required String name,
     String? value,
+    bool addToCrashReports = true,
+    bool showTime = true,
+    String? location,
     Map<String, Object?>? parameters,
   }) {
-    var _message = '$time '
-        '[$_location] '
-        '${LogType.analytic.icon} '
-        '$name${value != null ? ': $value' : ''}'
+    var message = '$name${value != null ? ': $value' : ''}'
         '${parameters != null ? ': $parameters' : ''}';
-    if (broadcastLogs) analyticsObserver.add(_message);
-    debugPrint(_message);
+    _logMessage(
+      message: message,
+      logType: LogType.analytic,
+      addToCrashReports: addToCrashReports,
+      showTime: showTime,
+      location: location,
+    );
+    if (broadcastLogs) analyticsObserver.add(message);
   }
 
   // --------------- VALUES --------------- VALUES --------------- VALUES --------------- \\
