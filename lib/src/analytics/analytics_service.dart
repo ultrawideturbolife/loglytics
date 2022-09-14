@@ -1096,6 +1096,19 @@ class AnalyticsService {
         ),
       );
 
+  /// Sends an [AnalyticsTypes.swiped] based on given [subject] and possible [parameters].
+  void swiped({
+    required String subject,
+    Map<String, Object?>? parameters,
+  }) =>
+      _logAnalytic(
+        Analytic(
+          subject: subject,
+          parameters: parameters,
+          type: AnalyticsTypes.swiped,
+        ),
+      );
+
   /// Sends the current screen based on given [subject] and possible [parameters].
   void screen({
     required String subject,

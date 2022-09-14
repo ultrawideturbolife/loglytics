@@ -1,3 +1,7 @@
+## 0.12.0+1
+
+* **✨ New:** Added `swiped` option to the `AnalyticsService`.
+
 ## 0.12.0
 
 * **⚠️ Breaking:** Added `addAanalyticsToCrashReports` option to `Loglytics.setUp`. Defaults to `true`!
