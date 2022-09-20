@@ -83,6 +83,7 @@ enum AnalyticsTypes {
   snoozed,
   verified,
   swiped,
+  used,
   none,
 }
 
@@ -170,6 +171,7 @@ extension AnalyticsTypesHelpers on AnalyticsTypes {
       case AnalyticsTypes.snoozed:
       case AnalyticsTypes.verified:
       case AnalyticsTypes.swiped:
+      case AnalyticsTypes.used:
         return name;
       case AnalyticsTypes.notFound:
         return 'not_found';

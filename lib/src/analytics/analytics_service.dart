@@ -1109,6 +1109,19 @@ class AnalyticsService {
         ),
       );
 
+  /// Sends an [AnalyticsTypes.used] based on given [subject] and possible [parameters].
+  void used({
+    required String subject,
+    Map<String, Object?>? parameters,
+  }) =>
+      _logAnalytic(
+        Analytic(
+          subject: subject,
+          parameters: parameters,
+          type: AnalyticsTypes.used,
+        ),
+      );
+
   /// Sends the current screen based on given [subject] and possible [parameters].
   void screen({
     required String subject,
