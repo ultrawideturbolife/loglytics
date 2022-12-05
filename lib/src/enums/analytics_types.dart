@@ -84,6 +84,8 @@ enum AnalyticsTypes {
   verified,
   swiped,
   used,
+  filled,
+  cleared,
   none,
 }
 
@@ -172,6 +174,8 @@ extension AnalyticsTypesHelpers on AnalyticsTypes {
       case AnalyticsTypes.verified:
       case AnalyticsTypes.swiped:
       case AnalyticsTypes.used:
+      case AnalyticsTypes.filled:
+      case AnalyticsTypes.cleared:
         return name;
       case AnalyticsTypes.notFound:
         return 'not_found';
@@ -181,8 +185,10 @@ extension AnalyticsTypesHelpers on AnalyticsTypes {
   }
 
   /// Used to generate [CustomAnalytic] objects based on [AnalyticsTypes].
-  CustomAnalytic toCustomAnalytic(
-          {required String subject, Map<String, Object?>? parameters}) =>
+  CustomAnalytic toCustomAnalytic({
+    required String subject,
+    Map<String, Object?>? parameters,
+  }) =>
       Analytic(subject: subject, type: this, parameters: parameters)
           .toCustomAnalytic;
 }

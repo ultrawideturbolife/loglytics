@@ -1122,6 +1122,32 @@ class AnalyticsService {
         ),
       );
 
+  /// Sends an [AnalyticsTypes.filled] based on given [subject] and possible [parameters].
+  void filled({
+    required String subject,
+    Map<String, Object?>? parameters,
+  }) =>
+      _logAnalytic(
+        Analytic(
+          subject: subject,
+          parameters: parameters,
+          type: AnalyticsTypes.filled,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.cleared] based on given [subject] and possible [parameters].
+  void cleared({
+    required String subject,
+    Map<String, Object?>? parameters,
+  }) =>
+      _logAnalytic(
+        Analytic(
+          subject: subject,
+          parameters: parameters,
+          type: AnalyticsTypes.cleared,
+        ),
+      );
+
   /// Sends the current screen based on given [subject] and possible [parameters].
   void screen({
     required String subject,

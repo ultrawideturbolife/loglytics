@@ -1,3 +1,7 @@
+## 0.12.0+3
+
+* **✨ New:** Added `filled` and `cleared` option to the `AnalyticsService`.
+
 ## 0.12.0+2
 
 * **✨ New:** Added `used` option to the `AnalyticsService`.
