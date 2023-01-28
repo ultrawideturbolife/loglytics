@@ -36,9 +36,13 @@ mixin Loglytics<D extends Analytics> {
   /// Used to handle events in the proper order that they are sent.
   static late final EventBus _eventBus = EventBus();
 
-  /// Provides the configured [Analytics] functionality through the [Loglytics] mixin.
+  /// Provides the configured [Analytics] functionality through the [Loglytics] mixin per type of [D].
   late final D analytics = _getIt.get<D>()
     ..service = AnalyticsService(loglytics: this);
+
+  /// Provides the configured [Analytics] functionality through the [Loglytics] mixin per type of [A].
+  A analyticsAs<A extends Analytics>() =>
+      _getIt.get<A>()..service = AnalyticsService(loglytics: this);
 
   /// Provides any registered [Analytics] object per generic argument of [E].
   static E getIt<E extends Analytics>({required Loglytics loglytics}) =>

@@ -1148,6 +1148,19 @@ class AnalyticsService {
         ),
       );
 
+  /// Sends an [AnalyticsTypes.unverified] based on given [subject] and possible [parameters].
+  void unverified({
+    required String subject,
+    Map<String, Object?>? parameters,
+  }) =>
+      _logAnalytic(
+        Analytic(
+          subject: subject,
+          parameters: parameters,
+          type: AnalyticsTypes.unverified,
+        ),
+      );
+
   /// Sends the current screen based on given [subject] and possible [parameters].
   void screen({
     required String subject,

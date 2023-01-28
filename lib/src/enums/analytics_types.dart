@@ -86,6 +86,7 @@ enum AnalyticsTypes {
   used,
   filled,
   cleared,
+  unverified,
   none,
 }
 
@@ -176,6 +177,7 @@ extension AnalyticsTypesHelpers on AnalyticsTypes {
       case AnalyticsTypes.used:
       case AnalyticsTypes.filled:
       case AnalyticsTypes.cleared:
+      case AnalyticsTypes.unverified:
         return name;
       case AnalyticsTypes.notFound:
         return 'not_found';

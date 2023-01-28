@@ -1,3 +1,8 @@
+## 0.12.0+4
+
+* **✨ New:** Added `unverified` option to the `AnalyticsService`.
+* **✨ New:** Added `analyticsAs<A>()` option to `Loglytics` to allow for multiple types of analytics per inherited `Loglytics` mixin.
+
 ## 0.12.0+3
 
 * **✨ New:** Added `filled` and `cleared` option to the `AnalyticsService`.
