@@ -361,10 +361,10 @@ class Log {
     bool showTime = true,
     String? location,
   }) {
-    if (addToCrashReports) _tryLogCrashReportMessage(message);
+    if (addToCrashReports) _tryLogCrashReportMessage(message, logType);
     final _message = '${showTime ? '$time ' : ''}'
-        '${location == null ? '[$_location] ' : '$location '}'
-        '${logType.icon} $message';
+        '${logType.iconTag} '
+        '${'[${location ?? _location}]'} $message';
     if (broadcastLogs) crashReportsObserver.add(_message);
     debugPrint(_message);
   }
@@ -379,11 +379,11 @@ class Log {
     required addToCrashReports,
     required String? description,
   }) {
-    if (addToCrashReports) _tryLogCrashReportValue(value, description);
+    if (addToCrashReports) _tryLogCrashReportValue(value, description, logType);
     final _time = time;
     final _message = '$_time'
-        '[$_location] '
-        '${logType.icon} ${description != null ? '$description: ' : ''}$value';
+        '${logType.iconTag} '
+        '[$_location] ${description != null ? '$description: ' : ''}$value';
     if (broadcastLogs) crashReportsObserver.add(_message);
     debugPrint(_message);
   }
@@ -399,10 +399,11 @@ class Log {
     required addToCrashReports,
     required String? description,
   }) {
-    _tryLogCrashReportKeyValue(key, value, description);
+    _tryLogCrashReportKeyValue(key, value, description, logType);
     final _message = '$time '
+        '${logType.iconTag} '
         '[$_location] '
-        '${description != null ? '${logType.icon} $description ' : ''}'
+        '${description != null ? '$description ' : ''}'
         '🔑 [KEY] $key '
         '💾 [VALUE] $value';
     if (broadcastLogs) crashReportsObserver.add(_message);
@@ -472,26 +473,44 @@ class Log {
         },
       );
 
-  // --------------- CRASHLYTICS --------------- CRASHLYTICS --------------- CRASHLYTICS --------------- \\
+  // --------------- CRASH REPORTS --------------- CRASH REPORTS --------------- CRASH REPORTS --------------- \\
 
   /// Used under the hood to try and log a crashlytics [message] with [logType].
-  void _tryLogCrashReportMessage(String message) => _eventBus.tryAddCrashReport(
-      Loglytics._crashReportsInterface?.log('[$_location] $message'));
+  void _tryLogCrashReportMessage(
+    String message,
+    LogType logType,
+  ) =>
+      _eventBus.tryAddCrashReport(
+        Loglytics._crashReportsInterface?.log(
+          '${Loglytics._crashReportType.parseLogType(location: _location, logType: logType)} '
+          '$message',
+        ),
+      );
 
   /// Used under the hood to try and log a crashlytics [key] and [value] with [logType].
   void _tryLogCrashReportKeyValue(
     String key,
     Object? value,
     Object? description,
+    LogType logType,
   ) =>
-      _eventBus.tryAddCrashReport(Loglytics._crashReportsInterface?.log(
-          '[$_location] ${description != null ? '$description: ' : ''}{ $key: $value }'));
+      _eventBus.tryAddCrashReport(
+        Loglytics._crashReportsInterface?.log(
+          '${Loglytics._crashReportType.parseLogType(location: _location, logType: logType)} '
+          '${description != null ? '$description: ' : ''}{ $key: $value }',
+        ),
+      );
 
   /// Used under the hood to try and log a crashlytics [value] with [logType].
   void _tryLogCrashReportValue(
     Object? value,
     Object? description,
+    LogType logType,
   ) =>
-      _eventBus.tryAddCrashReport(Loglytics._crashReportsInterface?.log(
-          '[$_location] ${description != null ? '$description: ' : 'value: '} $value'));
+      _eventBus.tryAddCrashReport(
+        Loglytics._crashReportsInterface?.log(
+          '${Loglytics._crashReportType.parseLogType(location: _location, logType: logType)} '
+          '${description != null ? '$description: ' : 'value: '} $value',
+        ),
+      );
 }

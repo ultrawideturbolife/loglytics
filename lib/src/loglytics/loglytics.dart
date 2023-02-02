@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:loglytics/loglytics.dart';
 
+import '../enums/crash_report_type.dart';
 import '../extensions/date_time_extensions.dart';
 
 part '../analytics/analytics_service.dart';
@@ -67,6 +68,7 @@ mixin Loglytics<D extends Analytics> {
   static bool _isActive = false;
   static bool get isActive => _isActive;
   static bool _addAnalyticsToCrashReports = true;
+  static CrashReportType _crashReportType = CrashReportType.location;
 
   /// Used to configure the logging and analytic abilities of the [Loglytics].
   ///
@@ -81,6 +83,7 @@ mixin Loglytics<D extends Analytics> {
     int? maxLinesStackTrace,
     bool combineEvents = true,
     bool addAnalyticsToCrashReports = true,
+    CrashReportType crashReportType = CrashReportType.location,
   }) {
     _analyticsInterface = analyticsInterface;
     _crashReportsInterface = crashReportsInterface;
@@ -92,6 +95,7 @@ mixin Loglytics<D extends Analytics> {
     _addAnalyticsToCrashReports = addAnalyticsToCrashReports;
     _eventBus._listen();
     _isActive = true;
+    _crashReportType = crashReportType;
   }
 
   /// Used to register analytics objects, default to .

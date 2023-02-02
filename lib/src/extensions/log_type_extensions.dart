@@ -2,7 +2,7 @@ import '../enums/log_type.dart';
 
 /// Used to define a proper name per [LogType] when icons are not preferred.
 extension LogTypeExtensions on LogType {
-  String get name {
+  String get tag {
     switch (this) {
       case LogType.info:
         return '[INFO]';
@@ -28,28 +28,28 @@ extension LogTypeExtensions on LogType {
   }
 
   /// Used to define a proper icon per [LogType] when a name is not preferred.
-  String get icon {
+  String get iconTag {
     switch (this) {
       case LogType.info:
-        return '🗣 $name';
+        return '🗣 $tag';
       case LogType.warning:
-        return '⚠ $name';
+        return '⚠ $tag';
       case LogType.error:
-        return '❌ $name';
+        return '❌ $tag';
       case LogType.success:
-        return '✅ $name';
+        return '✅ $tag';
       case LogType.analytic:
-        return '📈 $name';
+        return '📈 $tag';
       case LogType.value:
-        return '💾 $name';
+        return '💾 $tag';
       case LogType.debug:
-        return '🐛 $name';
+        return '🐛 $tag';
       case LogType.mvvm:
-        return '📚 $name';
+        return '📚 $tag';
       case LogType.bloc:
-        return '🧱 $name';
+        return '🧱 $tag';
       case LogType.test:
-        return '🧪 $name';
+        return '🧪 $tag';
     }
   }
 }
