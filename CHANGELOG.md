@@ -1,3 +1,7 @@
+## 0.12.0+6
+
+* **🐛️ Bugfix:** Export `CrashReportType`.
+
 ## 0.12.0+5
 
 * **✨ New:** Added `CrashReportType` to control the leading information that gets sent to your crash reports. Configure it through the `Loglytics.setUp` method. Defaults to `location` (like before).
