@@ -32,10 +32,12 @@ class Log {
   static bool broadcastLogs = false;
 
   /// Used to expose all crash reports logs.
-  static final StreamController<String> crashReportsObserver = StreamController.broadcast();
+  static final StreamController<String> crashReportsObserver =
+      StreamController.broadcast();
 
   /// Used to expose all analytics logs.
-  static final StreamController<String> analyticsObserver = StreamController.broadcast();
+  static final StreamController<String> analyticsObserver =
+      StreamController.broadcast();
 
   // --------------- REGULAR --------------- REGULAR --------------- REGULAR --------------- \\
 
@@ -65,11 +67,11 @@ class Log {
   /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
   /// configured one with the [Loglytics.setUp] method.
   void debug(
-      String message, {
-        bool addToCrashReports = true,
-        String? location,
-        String? tag,
-      }) {
+    String message, {
+    bool addToCrashReports = true,
+    String? location,
+    String? tag,
+  }) {
     if (level.skipLog(LogLevel.debug)) return;
     _logMessage(
       message: message,
@@ -250,7 +252,8 @@ class Log {
     String? tag,
   }) {
     final localTag = tag ?? _tag;
-    if (addToCrashReports) _tryLogCrashReportMessage(message, logLevel, localTag);
+    if (addToCrashReports)
+      _tryLogCrashReportMessage(message, logLevel, localTag);
     final localMessage = '${Log.logTime ? '$time ' : ''}'
         '${logLevel.iconTag} '
         '${'[${location ?? _location}]'} '
