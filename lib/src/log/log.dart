@@ -252,8 +252,9 @@ class Log {
     String? tag,
   }) {
     final localTag = tag ?? _tag;
-    if (addToCrashReports)
+    if (addToCrashReports) {
       _tryLogCrashReportMessage(message, logLevel, localTag);
+    }
     final localMessage = '${Log.logTime ? '$time ' : ''}'
         '${logLevel.iconTag} '
         '${'[${location ?? _location}]'} '
