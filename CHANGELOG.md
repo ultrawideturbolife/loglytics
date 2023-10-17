@@ -7,6 +7,7 @@
 * **✨ New:** Added `LogLevel.trace` and `LogLevel.fatal`.
 * **✨ New:** Added `Log.logTime` (static boolean) to allow for toggling the logging of time.
 * **✨ New:** Added option to specify a `tag` to `Log` or any of its methods, allowing for more convenient debugging of logs and specific subjects.
+* **✨ New:** Easy fetching of separate analytics objects through `Loglytics.getAnalytics<Analytic>`.
 
 ## 0.12.0+8
 

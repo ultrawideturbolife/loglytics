@@ -3,11 +3,11 @@ part of '../loglytics/loglytics.dart';
 /// Pure logger class to facilitate logging.
 class Log {
   Log({
-    required String location,
+    String? location,
     String? tag,
     int? maxLinesStackTrace,
   })  : _tag = tag,
-        _location = location,
+        _location = location ?? 'Log',
         _maxLinesStackTrace = maxLinesStackTrace;
 
   /// Used to indicate the tag of the log, can also be specified per method.

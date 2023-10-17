@@ -28,8 +28,7 @@ mixin Loglytics<D extends Analytics> {
   static final GetIt _getIt = GetIt.asNewInstance();
 
   // Used to create an instance of Loglytics when using a mixin is not possible or breaks a const constructor.
-  static Loglytics<T> create<T extends Analytics>({required String location}) =>
-      _Loglytics<T>(
+  static Loglytics<T> create<T extends Analytics>({required String location}) => _Loglytics<T>(
         location: location,
       );
 
@@ -37,19 +36,16 @@ mixin Loglytics<D extends Analytics> {
   static final EventBus _eventBus = EventBus();
 
   /// Provides the configured [Analytics] functionality through the [Loglytics] mixin per type of [D].
-  late final D analytics = _getIt.get<D>()
-    ..service = AnalyticsService(log: log);
+  late final D analytics = _getIt.get<D>()..service = AnalyticsService(log: log);
 
   /// Provides the configured [Analytics] functionality through the [Loglytics] mixin per type of [A].
-  A analyticsAs<A extends Analytics>() =>
-      _getIt.get<A>()..service = AnalyticsService(log: log);
+  A analyticsAs<A extends Analytics>() => _getIt.get<A>()..service = AnalyticsService(log: log);
 
   /// Provides any registered [Analytics] object per generic argument of [E].
   ///
   /// [location] is used for logging purposes, can be left out if desired.
   static E getAnalytics<E extends Analytics>({String? location}) =>
-      _getIt.get<E>()
-        ..service = AnalyticsService(log: Log(location: location ?? 'Log'));
+      _getIt.get<E>()..service = AnalyticsService(log: Log(location: location));
 
   /// Used to provide all logging capabilities.
   late final Log log = Log(
