@@ -8,17 +8,17 @@ enum CrashReportType {
 }
 
 extension CrashReportTypeExtension on CrashReportType {
-  String parseLogType({
+  String parseLogLevel({
     required String location,
-    required LogType logType,
+    required LogLevel logLevel,
   }) {
     switch (this) {
       case CrashReportType.location:
         return '[$location]';
       case CrashReportType.tagLocation:
-        return '${logType.tag} [$location]';
+        return '${logLevel.tag} [$location]';
       case CrashReportType.iconTagLocation:
-        return '${logType.iconTag} [$location]';
+        return '${logLevel.iconTag} [$location]';
     }
   }
 }

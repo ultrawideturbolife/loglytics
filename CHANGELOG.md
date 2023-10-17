@@ -1,3 +1,21 @@
+## 0.13.0
+
+* **⚠️ Breaking:** Removed all convenience methods like `value`, `map` and `mvvm`.
+* **⚠️ Breaking:** Removed LogTypes/LogLevels: `success`, `value`, `mvvm`, `bloc`, `test`.
+* **⚠️ Breaking:** Renamed `LogType` to `LogLevel`.
+* **✨ New:** Added option to specify `LogLevel` to `Loglytics.setUp` method and `Log.level` (static `LogLevel`). This will ignore certain levels of logging based on specified `Log.level` (default is info).
+* **✨ New:** Added `LogLevel.trace` and `LogLevel.fatal`.
+* **✨ New:** Added `Log.logTime` (static boolean) to allow for toggling the logging of time.
+* **✨ New:** Added option to specify a `tag` to `Log` or any of its methods, allowing for more convenient debugging of logs and specific subjects.
+
+## 0.12.0+8
+
+* **✨ New:** Added `linked`, `unlinked` and `resumed` option to the `AnalyticsService`.
+* 
+## 0.12.0+7
+
+* **✨ New:** Added `paused` option to the `AnalyticsService`.
+
 ## 0.12.0+6
 
 * **🐛️ Bugfix:** Export `CrashReportType`.
@@ -68,7 +86,7 @@
 
 * **✨ New:** Added `LogType.test` and extra convenience methods for `test`, `bloc`, `debug` and `mvvm`.
 * **✨ New:** Added `showTime` and `location` to convenience methods.
-* **⚠️ Breaking:** Removed `logType` from `Log.info`.
+* **⚠️ Breaking:** Removed `logLevel` from `Log.info`.
 
 ## 0.10.1+6
 

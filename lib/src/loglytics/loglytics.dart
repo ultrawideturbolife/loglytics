@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:loglytics/loglytics.dart';
 
-import '../enums/crash_report_type.dart';
 import '../extensions/date_time_extensions.dart';
 
 part '../analytics/analytics_service.dart';
@@ -29,25 +28,24 @@ mixin Loglytics<D extends Analytics> {
   static final GetIt _getIt = GetIt.asNewInstance();
 
   // Used to create an instance of Loglytics when using a mixin is not possible or breaks a const constructor.
-  static Loglytics<T> create<T extends Analytics>({required String location}) =>
-      _Loglytics<T>(
+  static Loglytics<T> create<T extends Analytics>({required String location}) => _Loglytics<T>(
         location: location,
       );
 
   /// Used to handle events in the proper order that they are sent.
-  static late final EventBus _eventBus = EventBus();
+  static final EventBus _eventBus = EventBus();
 
   /// Provides the configured [Analytics] functionality through the [Loglytics] mixin per type of [D].
-  late final D analytics = _getIt.get<D>()
-    ..service = AnalyticsService(loglytics: this);
+  late final D analytics = _getIt.get<D>()..service = AnalyticsService(log: log);
 
   /// Provides the configured [Analytics] functionality through the [Loglytics] mixin per type of [A].
-  A analyticsAs<A extends Analytics>() =>
-      _getIt.get<A>()..service = AnalyticsService(loglytics: this);
+  A analyticsAs<A extends Analytics>() => _getIt.get<A>()..service = AnalyticsService(log: log);
 
   /// Provides any registered [Analytics] object per generic argument of [E].
-  static E getIt<E extends Analytics>({required Loglytics loglytics}) =>
-      _getIt.get<E>()..service = AnalyticsService(loglytics: loglytics);
+  ///
+  /// [location] is used for logging purposes, can be left out if desired.
+  static E getAnalytics<E extends Analytics>({String? location}) =>
+      _getIt.get<E>()..service = AnalyticsService(log: Log(location: location ?? 'Log'));
 
   /// Used to provide all logging capabilities.
   late final Log log = Log(
@@ -77,6 +75,8 @@ mixin Loglytics<D extends Analytics> {
   /// Populate the [analytics] parameter with callbacks to your [Analytics] implementations.
   /// Example: [() => CounterAnalytics(), () => CookieAnalytics()].
   static void setUp({
+    bool logTime = false,
+    LogLevel logLevel = LogLevel.info,
     AnalyticsInterface? analyticsInterface,
     CrashReportsInterface? crashReportsInterface,
     void Function(AnalyticsFactory analyticsFactory)? analytics,
@@ -85,6 +85,8 @@ mixin Loglytics<D extends Analytics> {
     bool addAnalyticsToCrashReports = true,
     CrashReportType crashReportType = CrashReportType.location,
   }) {
+    Log.logTime = logTime;
+    Log.level = logLevel;
     _analyticsInterface = analyticsInterface;
     _crashReportsInterface = crashReportsInterface;
     if (analytics != null) {

@@ -87,6 +87,10 @@ enum AnalyticsTypes {
   filled,
   cleared,
   unverified,
+  paused,
+  resumed,
+  linked,
+  unlinked,
   none,
 }
 
@@ -178,6 +182,10 @@ extension AnalyticsTypesHelpers on AnalyticsTypes {
       case AnalyticsTypes.filled:
       case AnalyticsTypes.cleared:
       case AnalyticsTypes.unverified:
+      case AnalyticsTypes.paused:
+      case AnalyticsTypes.resumed:
+      case AnalyticsTypes.linked:
+      case AnalyticsTypes.unlinked:
         return name;
       case AnalyticsTypes.notFound:
         return 'not_found';

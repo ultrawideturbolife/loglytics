@@ -66,7 +66,7 @@ class _MyHomePageState extends State<MyHomePage>
     setState(
       () {
         _counter++;
-        log.value(_counter, 'The counter');
+        log.info('The counter: $_counter');
         analytics.service.incremented(
           subject: analytics.counterButton,
           parameters: {
@@ -98,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage>
             ),
             Text(
               '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+              style: Theme.of(context).textTheme.headlineMedium,
             ),
           ],
         ),

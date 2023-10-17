@@ -4,9 +4,20 @@ part of '../loglytics/loglytics.dart';
 class Log {
   Log({
     required String location,
+    String? tag,
     int? maxLinesStackTrace,
-  })  : _location = location,
+  })  : _tag = tag,
+        _location = location,
         _maxLinesStackTrace = maxLinesStackTrace;
+
+  /// Used to indicate the tag of the log, can also be specified per method.
+  final String? _tag;
+
+  /// Used to toggle logging of time on or off.
+  static bool logTime = false;
+
+  /// Used to set the log level of the [Loglytics].
+  static LogLevel level = LogLevel.info;
 
   /// Used to indicate the current location of the log.
   final String _location;
@@ -21,59 +32,129 @@ class Log {
   static bool broadcastLogs = false;
 
   /// Used to expose all crash reports logs.
-  static late final StreamController<String> crashReportsObserver =
-      StreamController.broadcast();
+  static final StreamController<String> crashReportsObserver = StreamController.broadcast();
 
   /// Used to expose all analytics logs.
-  static late final StreamController<String> analyticsObserver =
-      StreamController.broadcast();
+  static final StreamController<String> analyticsObserver = StreamController.broadcast();
 
   // --------------- REGULAR --------------- REGULAR --------------- REGULAR --------------- \\
 
-  /// Logs a regular [message] with [LogType.info] default as [debugPrint].
+  /// Logs a trace [message] with [LogLevel.trace] default as [debugPrint].
+  ///
+  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
+  /// configured one with the [Loglytics.setUp] method.
+  void trace(
+    String message, {
+    bool addToCrashReports = true,
+    String? location,
+    String? tag,
+  }) {
+    const logLevel = LogLevel.trace;
+    if (level.skipLog(logLevel)) return;
+    _logMessage(
+      message: message,
+      logLevel: logLevel,
+      addToCrashReports: addToCrashReports,
+      location: location,
+      tag: tag,
+    );
+  }
+
+  /// Logs a debug [message] with [LogLevel.debug] as [debugPrint].
+  ///
+  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
+  /// configured one with the [Loglytics.setUp] method.
+  void debug(
+      String message, {
+        bool addToCrashReports = true,
+        String? location,
+        String? tag,
+      }) {
+    if (level.skipLog(LogLevel.debug)) return;
+    _logMessage(
+      message: message,
+      logLevel: LogLevel.debug,
+      addToCrashReports: addToCrashReports,
+      location: location,
+      tag: tag,
+    );
+  }
+
+  /// Logs an info [message] with [LogLevel.info] default as [debugPrint].
   ///
   /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
   /// configured one with the [Loglytics.setUp] method.
   void info(
     String message, {
     bool addToCrashReports = true,
-    bool showTime = true,
     String? location,
-  }) =>
-      _logMessage(
-        message: message,
-        logType: LogType.info,
-        addToCrashReports: addToCrashReports,
-        showTime: showTime,
-        location: location,
-      );
+    String? tag,
+  }) {
+    const logLevel = LogLevel.info;
+    if (level.skipLog(logLevel)) return;
+    _logMessage(
+      message: message,
+      logLevel: logLevel,
+      addToCrashReports: addToCrashReports,
+      location: location,
+      tag: tag,
+    );
+  }
 
-  /// Logs a warning [message] with [LogType.warning] as [debugPrint].
+  /// Logs an analytic [name] with [LogLevel.analytic] as [debugPrint].
+  ///
+  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
+  /// configured one with the [Loglytics.setUp] method.
+  void analytic({
+    required String name,
+    String? value,
+    bool addToCrashReports = true,
+    String? location,
+    Map<String, Object?>? parameters,
+    String? tag,
+  }) {
+    const logLevel = LogLevel.analytic;
+    if (level.skipLog(logLevel)) return;
+    var message = '$name${value != null ? ': $value' : ''}'
+        '${parameters != null ? ': $parameters' : ''}';
+    _logMessage(
+      message: message,
+      logLevel: logLevel,
+      addToCrashReports: addToCrashReports,
+      location: location,
+      tag: tag,
+    );
+    if (broadcastLogs) analyticsObserver.add(message);
+  }
+
+  /// Logs a warning [message] with [LogLevel.warning] as [debugPrint].
   ///
   /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
   /// configured one with the [Loglytics.setUp] method.
   void warning(
     String message, {
     bool addToCrashReports = true,
-    bool showTime = true,
     String? location,
-  }) =>
-      _logMessage(
-        message: message,
-        logType: LogType.warning,
-        addToCrashReports: addToCrashReports,
-        showTime: showTime,
-        location: location,
-      );
+    String? tag,
+  }) {
+    const logLevel = LogLevel.warning;
+    if (level.skipLog(logLevel)) return;
+    _logMessage(
+      message: message,
+      logLevel: logLevel,
+      addToCrashReports: addToCrashReports,
+      location: location,
+      tag: tag,
+    );
+  }
 
-  /// Logs an error [message] with [LogType.error] as [debugPrint].
+  /// Logs an error [message] with [LogLevel.error] as [debugPrint].
   ///
   /// Also tries to send the log with optional [error], [stackTrace] and [fatal] boolean to your
   /// [CrashReportsInterface] implementation should you have configured one with the
   /// [Loglytics.setUp] method.
   void error(
     String message, {
-    bool showTime = true,
     String? location,
     Object? error,
     StackTrace? stackTrace,
@@ -81,40 +162,43 @@ class Log {
     bool printStack = true,
     bool addToCrashReports = true,
     bool forceRecordError = false,
+    String? tag,
   }) {
-    StackTrace _stackTrace;
+    var logLevel = fatal ? LogLevel.fatal : LogLevel.error;
+    if (level.skipLog(logLevel)) return;
+    StackTrace localStackTrace;
     try {
-      _stackTrace = stackTrace ??
+      localStackTrace = stackTrace ??
           StackTrace.fromString(
             StackTrace.current.toString().split('\n').sublist(1).join('\n'),
           );
     } catch (error) {
-      _stackTrace = StackTrace.current;
+      localStackTrace = StackTrace.current;
     }
     final hasError = error != null;
     if (hasError || forceRecordError) {
       _eventBus.tryAddCrashReport(
         Loglytics._crashReportsInterface?.recordError(
           error,
-          _stackTrace,
+          localStackTrace,
           fatal: fatal,
         ),
       );
     }
     _logMessage(
       message: message,
-      logType: LogType.error,
+      logLevel: logLevel,
       addToCrashReports: addToCrashReports,
-      showTime: showTime,
       location: location,
+      tag: tag,
     );
     if (hasError) {
       _logMessage(
         message: error.toString(),
-        logType: LogType.error,
+        logLevel: logLevel,
         addToCrashReports: false,
-        showTime: showTime,
         location: location,
+        tag: tag,
       );
     }
     if (printStack) {
@@ -125,392 +209,70 @@ class Log {
     }
   }
 
-  /// Logs a success [message] with [LogType.success] as [debugPrint].
+  /// Logs a fatal [message] with [LogLevel.fatal] as [debugPrint].
   ///
-  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setUp] method.
-  void success(
+  /// Also tries to send the log with optional [error], [stackTrace] and [fatal] boolean to your
+  /// [CrashReportsInterface] implementation should you have configured one with the
+  /// [Loglytics.setUp] method.
+  void fatal(
     String message, {
-    bool addToCrashReports = true,
-    bool showTime = true,
     String? location,
+    Object? error,
+    StackTrace? stackTrace,
+    bool printStack = true,
+    bool addToCrashReports = true,
+    bool forceRecordError = false,
+    String? tag,
   }) =>
-      _logMessage(
-        message: message,
-        logType: LogType.success,
-        addToCrashReports: addToCrashReports,
-        showTime: showTime,
+      this.error(
+        message,
         location: location,
-      );
-
-  /// Logs a test [message] with [LogType.test] as [debugPrint].
-  ///
-  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setUp] method.
-  void test(
-    String message, {
-    bool addToCrashReports = true,
-    bool showTime = true,
-    String? location,
-  }) =>
-      _logMessage(
-        message: message,
-        logType: LogType.test,
+        error: error,
+        stackTrace: stackTrace,
+        fatal: true,
+        printStack: printStack,
         addToCrashReports: addToCrashReports,
-        showTime: showTime,
-        location: location,
-      );
-
-  /// Logs a debug [message] with [LogType.debug] as [debugPrint].
-  ///
-  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setUp] method.
-  void debug(
-    String message, {
-    bool addToCrashReports = true,
-    bool showTime = true,
-    String? location,
-  }) =>
-      _logMessage(
-        message: message,
-        logType: LogType.debug,
-        addToCrashReports: addToCrashReports,
-        showTime: showTime,
-        location: location,
-      );
-
-  /// Logs a bloc [message] with [LogType.bloc] as [debugPrint].
-  ///
-  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setUp] method.
-  void bloc(
-    String message, {
-    bool addToCrashReports = true,
-    bool showTime = true,
-    String? location,
-  }) =>
-      _logMessage(
-        message: message,
-        logType: LogType.bloc,
-        addToCrashReports: addToCrashReports,
-        showTime: showTime,
-        location: location,
-      );
-
-  /// Logs a mvvm [message] with [LogType.mvvm] as [debugPrint].
-  ///
-  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setUp] method.
-  void mvvm(
-    String message, {
-    bool addToCrashReports = true,
-    bool showTime = true,
-    String? location,
-  }) =>
-      _logMessage(
-        message: message,
-        logType: LogType.mvvm,
-        addToCrashReports: addToCrashReports,
-        showTime: showTime,
-        location: location,
-      );
-
-  /// Logs a mvvm [message] with [LogType.mvvm] as [debugPrint].
-  ///
-  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setUp] method.
-  void analytic({
-    required String name,
-    String? value,
-    bool addToCrashReports = true,
-    bool showTime = true,
-    String? location,
-    Map<String, Object?>? parameters,
-  }) {
-    var message = '$name${value != null ? ': $value' : ''}'
-        '${parameters != null ? ': $parameters' : ''}';
-    _logMessage(
-      message: message,
-      logType: LogType.analytic,
-      addToCrashReports: addToCrashReports,
-      showTime: showTime,
-      location: location,
-    );
-    if (broadcastLogs) analyticsObserver.add(message);
-  }
-
-  // --------------- VALUES --------------- VALUES --------------- VALUES --------------- \\
-
-  /// Logs a [value] and optional [message] with a default [LogType.info] as [debugPrint].
-  ///
-  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setUp] method.
-  void value(
-    Object? value,
-    String? description, {
-    LogType logType = LogType.info,
-    bool addToCrashReports = true,
-  }) =>
-      _logValue(
-        description: description,
-        value: value,
-        logType: logType,
-        addToCrashReports: addToCrashReports,
-      );
-
-  /// Logs a [key], [value] and optional [message] with a default [LogType.info] as [debugPrint].
-  ///
-  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setUp] method.
-  void keyValue(
-    String key,
-    Object? value, {
-    String? message,
-    LogType logType = LogType.info,
-    bool addToCrashReports = true,
-  }) =>
-      _logKeyValue(
-        key: key,
-        description: message,
-        value: value,
-        logType: logType,
-        addToCrashReports: addToCrashReports,
-      );
-
-  /// Logs a [list] and optional [message] with a default [LogType.info] as [debugPrint].
-  ///
-  /// Iterates over the given [list] and uses the [_logValue] method under the hood to log each item.
-  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setUp] method.
-  void list<T extends Object?>(
-    List<T> list, {
-    String? message,
-    LogType logType = LogType.info,
-    bool addToCrashReports = true,
-  }) =>
-      _logIterable(
-        iterable: list,
-        description: message,
-        logType: logType,
-        addToCrashReports: addToCrashReports,
-      );
-
-  /// Logs a [set] and optional [message] with a default [LogType.info] as [debugPrint].
-  ///
-  /// Iterates over the given [set] and uses the [_logValue] method under the hood to log each item.
-  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setUp] method.
-  void set<T extends Object?>(
-    Set<T> set, {
-    String? message,
-    LogType logType = LogType.info,
-    bool addToCrashReports = true,
-  }) =>
-      _logIterable(
-        iterable: set,
-        description: message,
-        logType: logType,
-        addToCrashReports: addToCrashReports,
-      );
-
-  /// Logs a [map] and optional [message] with a default [LogType.info] as [debugPrint].
-  ///
-  /// Iterates over the given [map] and uses the [_logKeyValue] method under the hood to log each item.
-  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setUp] method.
-  void map(
-    Map<String, Object?> map, {
-    String? message,
-    LogType logType = LogType.info,
-    bool addToCrashReports = true,
-  }) =>
-      _logMap(
-        map: map,
-        description: message,
-        logType: logType,
-        addToCrashReports: addToCrashReports,
-      );
-
-  /// Logs a [map]'s values and optional [message] with a default [LogType.info] as [debugPrint].
-  ///
-  /// Iterates over the given [map] and uses the [_logValue] method under the hood to log each item.
-  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setUp] method.
-  void values<T extends Object?, E extends Object?>(
-    Map<T, E> map, {
-    String? message,
-    LogType logType = LogType.info,
-    bool addToCrashReports = true,
-  }) =>
-      _logValues(
-        map: map,
-        description: message,
-        addToCrashReports: addToCrashReports,
+        forceRecordError: forceRecordError,
+        tag: tag,
       );
 
   // --------------- PRINTERS --------------- PRINTERS --------------- PRINTERS --------------- \\
 
-  /// Used under the hood to log a [message] with [logType].
+  /// Used under the hood to log a [message] with [logLevel].
   ///
   /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
   /// configured one with the [Loglytics.setUp] method.
   void _logMessage({
     required String message,
-    required LogType logType,
+    required LogLevel logLevel,
     bool addToCrashReports = true,
-    bool showTime = true,
     String? location,
+    String? tag,
   }) {
-    if (addToCrashReports) _tryLogCrashReportMessage(message, logType);
-    final _message = '${showTime ? '$time ' : ''}'
-        '${logType.iconTag} '
-        '${'[${location ?? _location}]'} $message';
-    if (broadcastLogs) crashReportsObserver.add(_message);
-    debugPrint(_message);
+    final localTag = tag ?? _tag;
+    if (addToCrashReports) _tryLogCrashReportMessage(message, logLevel, localTag);
+    final localMessage = '${Log.logTime ? '$time ' : ''}'
+        '${logLevel.iconTag} '
+        '${'[${location ?? _location}]'} '
+        '${localTag != null ? '[$localTag] ' : ''}'
+        '$message';
+    if (broadcastLogs) crashReportsObserver.add(localMessage);
+    debugPrint(localMessage);
   }
-
-  /// Used under the hood to log a [value] and [logType] with optional [description].
-  ///
-  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setUp] method.
-  void _logValue({
-    required Object? value,
-    required LogType logType,
-    required addToCrashReports,
-    required String? description,
-  }) {
-    if (addToCrashReports) _tryLogCrashReportValue(value, description, logType);
-    final _time = time;
-    final _message = '$_time'
-        '${logType.iconTag} '
-        '[$_location] ${description != null ? '$description: ' : ''}$value';
-    if (broadcastLogs) crashReportsObserver.add(_message);
-    debugPrint(_message);
-  }
-
-  /// Used under the hood to log a [key], [value] and [logType] with optional [description].
-  ///
-  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setUp] method.
-  void _logKeyValue({
-    required String key,
-    required Object? value,
-    required LogType logType,
-    required addToCrashReports,
-    required String? description,
-  }) {
-    _tryLogCrashReportKeyValue(key, value, description, logType);
-    final _message = '$time '
-        '${logType.iconTag} '
-        '[$_location] '
-        '${description != null ? '$description ' : ''}'
-        '🔑 [KEY] $key '
-        '💾 [VALUE] $value';
-    if (broadcastLogs) crashReportsObserver.add(_message);
-    debugPrint(_message);
-  }
-
-  /// Used under the hood to log an [iterable] and [logType] with optional [description].
-  ///
-  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setUp] method.
-  void _logIterable<T extends Object?>({
-    required Iterable<T> iterable,
-    LogType logType = LogType.info,
-    required addToCrashReports,
-    String? description,
-  }) {
-    for (T value in iterable) {
-      _logValue(
-        value: value,
-        logType: logType,
-        description: description,
-        addToCrashReports: addToCrashReports,
-      );
-    }
-  }
-
-  /// Used under the hood to log a [map] and [logType] with optional [description].
-  ///
-  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setUp] method.
-  void _logMap({
-    required Map<String, Object?> map,
-    LogType logType = LogType.info,
-    required addToCrashReports,
-    String? description,
-  }) =>
-      map.forEach(
-        (key, value) {
-          _logKeyValue(
-            key: key,
-            value: value,
-            logType: logType,
-            description: description,
-            addToCrashReports: addToCrashReports,
-          );
-        },
-      );
-
-  /// Used under the hood to log a [map]'s values and [logType] with optional [description].
-  ///
-  /// Also tries to send the log to your [CrashReportsInterface] implementation should you have
-  /// configured one with the [Loglytics.setUp] method.
-  void _logValues<K extends Object?, V extends Object?>({
-    required Map<K, V> map,
-    String? description,
-    LogType logType = LogType.info,
-    required addToCrashReports,
-  }) =>
-      map.forEach(
-        (_, value) {
-          _logValue(
-            value: value,
-            logType: logType,
-            description: description,
-            addToCrashReports: addToCrashReports,
-          );
-        },
-      );
 
   // --------------- CRASH REPORTS --------------- CRASH REPORTS --------------- CRASH REPORTS --------------- \\
 
-  /// Used under the hood to try and log a crashlytics [message] with [logType].
+  /// Used under the hood to try and log a crashlytics [message] with [logLevel].
   void _tryLogCrashReportMessage(
     String message,
-    LogType logType,
+    LogLevel logLevel,
+    String? tag,
   ) =>
       _eventBus.tryAddCrashReport(
         Loglytics._crashReportsInterface?.log(
-          '${Loglytics._crashReportType.parseLogType(location: _location, logType: logType)} '
+          '${Loglytics._crashReportType.parseLogLevel(location: _location, logLevel: logLevel)} '
+          '${tag != null ? '[$tag] ' : ''}'
           '$message',
-        ),
-      );
-
-  /// Used under the hood to try and log a crashlytics [key] and [value] with [logType].
-  void _tryLogCrashReportKeyValue(
-    String key,
-    Object? value,
-    Object? description,
-    LogType logType,
-  ) =>
-      _eventBus.tryAddCrashReport(
-        Loglytics._crashReportsInterface?.log(
-          '${Loglytics._crashReportType.parseLogType(location: _location, logType: logType)} '
-          '${description != null ? '$description: ' : ''}{ $key: $value }',
-        ),
-      );
-
-  /// Used under the hood to try and log a crashlytics [value] with [logType].
-  void _tryLogCrashReportValue(
-    Object? value,
-    Object? description,
-    LogType logType,
-  ) =>
-      _eventBus.tryAddCrashReport(
-        Loglytics._crashReportsInterface?.log(
-          '${Loglytics._crashReportType.parseLogType(location: _location, logType: logType)} '
-          '${description != null ? '$description: ' : 'value: '} $value',
         ),
       );
 }

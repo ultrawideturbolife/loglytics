@@ -1,55 +1,43 @@
-import '../enums/log_type.dart';
+import '../enums/log_level.dart';
 
-/// Used to define a proper name per [LogType] when icons are not preferred.
-extension LogTypeExtensions on LogType {
+/// Used to define a proper name per [LogLevel] when icons are not preferred.
+extension LogLevelExtensions on LogLevel {
   String get tag {
     switch (this) {
-      case LogType.info:
-        return '[INFO]';
-      case LogType.warning:
-        return '[WARNING]';
-      case LogType.error:
-        return '[ERROR]';
-      case LogType.success:
-        return '[SUCCESS]';
-      case LogType.analytic:
-        return '[ANALYTIC]';
-      case LogType.value:
-        return '[VALUE]';
-      case LogType.debug:
+      case LogLevel.trace:
+        return '[TRACE]';
+      case LogLevel.debug:
         return '[DEBUG]';
-      case LogType.mvvm:
-        return '[MVVM]';
-      case LogType.bloc:
-        return '[BLOC]';
-      case LogType.test:
-        return '[TEST]';
+      case LogLevel.info:
+        return '[INFO]';
+      case LogLevel.analytic:
+        return '[ANALYTIC]';
+      case LogLevel.warning:
+        return '[WARNING]';
+      case LogLevel.error:
+        return '[ERROR]';
+      case LogLevel.fatal:
+        return '[FATAL]';
     }
   }
 
-  /// Used to define a proper icon per [LogType] when a name is not preferred.
+  /// Used to define a proper icon per [LogLevel] when a name is not preferred.
   String get iconTag {
     switch (this) {
-      case LogType.info:
-        return '🗣 $tag';
-      case LogType.warning:
-        return '⚠ $tag';
-      case LogType.error:
-        return '❌ $tag';
-      case LogType.success:
-        return '✅ $tag';
-      case LogType.analytic:
-        return '📈 $tag';
-      case LogType.value:
-        return '💾 $tag';
-      case LogType.debug:
+      case LogLevel.trace:
+        return '⏱️ $tag';
+      case LogLevel.debug:
         return '🐛 $tag';
-      case LogType.mvvm:
-        return '📚 $tag';
-      case LogType.bloc:
-        return '🧱 $tag';
-      case LogType.test:
-        return '🧪 $tag';
+      case LogLevel.info:
+        return '🗣 $tag';
+      case LogLevel.analytic:
+        return '📊 $tag';
+      case LogLevel.warning:
+        return '🚧 $tag';
+      case LogLevel.error:
+        return '❌ $tag';
+      case LogLevel.fatal:
+        return '☠️ $tag';
     }
   }
 }

@@ -7,10 +7,10 @@ part of '../loglytics/loglytics.dart';
 /// your [AnalyticsService._analyticsInterface] will attempt to send a 'counter_page_viewed'
 /// event.
 class AnalyticsService {
-  AnalyticsService({Loglytics? loglytics}) : _loglytics = loglytics;
+  AnalyticsService({Log? log}) : _log = log;
 
   /// Used to log analytics from where they are sent.
-  final Loglytics? _loglytics;
+  final Log? _log;
 
   /// Used to handle analytics in proper order that they are sent.
   late final EventBus _eventBus = EventBus();
@@ -26,7 +26,7 @@ class AnalyticsService {
     _eventBus.tryAddAnalytic(Loglytics._analyticsInterface?.setUserId(userId));
     _eventBus.tryAddCrashReport(
         Loglytics._crashReportsInterface?.setUserIdentifier(userId));
-    _loglytics?.log.analytic(
+    _log?.analytic(
       name: 'user_id',
       value: userId,
       addToCrashReports: Loglytics._addAnalyticsToCrashReports,
@@ -50,7 +50,7 @@ class AnalyticsService {
         value,
       ),
     );
-    _loglytics?.log.analytic(
+    _log?.analytic(
       name: '[PROPERTY] $property',
       value: value,
       addToCrashReports: Loglytics._addAnalyticsToCrashReports,
@@ -1161,6 +1161,58 @@ class AnalyticsService {
         ),
       );
 
+  /// Sends an [AnalyticsTypes.paused] based on given [subject] and possible [parameters].
+  void paused({
+    required String subject,
+    Map<String, Object?>? parameters,
+  }) =>
+      _logAnalytic(
+        Analytic(
+          subject: subject,
+          parameters: parameters,
+          type: AnalyticsTypes.paused,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.resumed] based on given [subject] and possible [parameters].
+  void resumed({
+    required String subject,
+    Map<String, Object?>? parameters,
+  }) =>
+      _logAnalytic(
+        Analytic(
+          subject: subject,
+          parameters: parameters,
+          type: AnalyticsTypes.resumed,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.linked] based on given [subject] and possible [parameters].
+  void linked({
+    required String subject,
+    Map<String, Object?>? parameters,
+  }) =>
+      _logAnalytic(
+        Analytic(
+          subject: subject,
+          parameters: parameters,
+          type: AnalyticsTypes.linked,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.unlinked] based on given [subject] and possible [parameters].
+  void unlinked({
+    required String subject,
+    Map<String, Object?>? parameters,
+  }) =>
+      _logAnalytic(
+        Analytic(
+          subject: subject,
+          parameters: parameters,
+          type: AnalyticsTypes.unlinked,
+        ),
+      );
+
   /// Sends the current screen based on given [subject] and possible [parameters].
   void screen({
     required String subject,
@@ -1168,7 +1220,7 @@ class AnalyticsService {
     final name = subject;
     _eventBus.tryAddAnalytic(
         Loglytics._analyticsInterface?.setCurrentScreen(name: name));
-    _loglytics?.log.analytic(
+    _log?.analytic(
       name: '[SCREEN] $name',
       addToCrashReports: Loglytics._addAnalyticsToCrashReports,
     );
@@ -1187,7 +1239,7 @@ class AnalyticsService {
     final parameters = analytic.parameters;
     _eventBus.tryAddAnalytic(Loglytics._analyticsInterface
         ?.logEvent(name: name, parameters: parameters));
-    _loglytics?.log.analytic(
+    _log?.analytic(
       name: name,
       parameters: parameters,
       addToCrashReports: Loglytics._addAnalyticsToCrashReports,
@@ -1204,7 +1256,7 @@ class AnalyticsService {
         parameters: parameters,
       ),
     );
-    _loglytics?.log.analytic(
+    _log?.analytic(
       name: name,
       parameters: parameters,
       addToCrashReports: Loglytics._addAnalyticsToCrashReports,
