@@ -91,6 +91,7 @@ enum AnalyticsTypes {
   resumed,
   linked,
   unlinked,
+  requested,
   none,
 }
 
@@ -186,6 +187,7 @@ extension AnalyticsTypesHelpers on AnalyticsTypes {
       case AnalyticsTypes.resumed:
       case AnalyticsTypes.linked:
       case AnalyticsTypes.unlinked:
+      case AnalyticsTypes.requested:
         return name;
       case AnalyticsTypes.notFound:
         return 'not_found';

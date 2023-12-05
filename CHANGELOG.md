@@ -1,3 +1,7 @@
+## 0.13.0+1
+
+* **✨ New:** Added `requested` as `AnalyticType`. 
+
 ## 0.13.0
 
 * **⚠️ Breaking:** Removed all convenience methods like `value`, `map` and `mvvm`.

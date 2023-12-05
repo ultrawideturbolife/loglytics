@@ -1213,6 +1213,19 @@ class AnalyticsService {
         ),
       );
 
+  /// Sends an [AnalyticsTypes.requested] based on given [subject] and possible [parameters].
+  void requested({
+    required String subject,
+    Map<String, Object?>? parameters,
+  }) =>
+      _logAnalytic(
+        Analytic(
+          subject: subject,
+          parameters: parameters,
+          type: AnalyticsTypes.requested,
+        ),
+      );
+
   /// Sends the current screen based on given [subject] and possible [parameters].
   void screen({
     required String subject,
