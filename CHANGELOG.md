@@ -1,3 +1,7 @@
+## 0.14.0
+
+* **⚠️ Breaking:** Updated `logEvent` signature to reflect latest changes by firebase analytics.
+
 ## 0.13.0+1
 
 * **✨ New:** Added `requested` as `AnalyticType`. 

@@ -5,7 +5,7 @@ abstract class AnalyticsInterface {
   /// Logs an event by [name] and possible [parameters].
   Future<void> logEvent({
     required String name,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   });
 
   /// Sets the user [id] of the current user that's logged in.
