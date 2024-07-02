@@ -64,7 +64,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.tapped] based on given [subject] and possible [parameters].
   void tapped({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -77,7 +77,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.clicked] based on given [subject] and possible [parameters].
   void clicked({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -90,7 +90,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.focussed] based on given [subject] and possible [parameters].
   void focussed({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -103,7 +103,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.selected] based on given [subject] and possible [parameters].
   void selected({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -116,7 +116,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.connected] based on given [subject] and possible [parameters].
   void connected({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -129,7 +129,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.disconnected] based on given [subject] and possible [parameters].
   void disconnected({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -142,7 +142,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.viewed] based on given [subject] and possible [parameters].
   void viewed({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -155,7 +155,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.hidden] based on given [subject] and possible [parameters].
   void hidden({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -168,7 +168,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.opened] based on given [subject] and possible [parameters].
   void opened({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -181,7 +181,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.closed] based on given [subject] and possible [parameters].
   void closed({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -194,7 +194,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.failed] based on given [subject] and possible [parameters].
   void failed({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -207,7 +207,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.succeeded] based on given [subject] and possible [parameters].
   void succeeded({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -220,7 +220,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.sent] based on given [subject] and possible [parameters].
   void sent({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -233,7 +233,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.received] based on given [subject] and possible [parameters].
   void received({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -246,7 +246,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.validated] based on given [subject] and possible [parameters].
   void validated({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -259,7 +259,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.invalidated] based on given [subject] and possible [parameters].
   void invalidated({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -272,7 +272,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.searched] based on given [subject] and possible [parameters].
   void searched({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -285,7 +285,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.liked] based on given [subject] and possible [parameters].
   void liked({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -298,7 +298,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.shared] based on given [subject] and possible [parameters].
   void shared({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -311,7 +311,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.commented] based on given [subject] and possible [parameters].
   void commented({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -326,7 +326,7 @@ class AnalyticsService {
   /// Defaults to only sending the first analytic by settings [onlyFirstValue] to true.
   void input({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
     bool onlyFirstValue = true,
   }) {
     final analytic = Analytic(
@@ -345,7 +345,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.incremented] based on given [subject] and possible [parameters].
   void incremented({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -358,7 +358,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.decremented] based on given [subject] and possible [parameters].
   void decremented({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -371,7 +371,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.accepted] based on given [subject] and possible [parameters].
   void accepted({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -384,7 +384,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.declined] based on given [subject] and possible [parameters].
   void declined({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -397,7 +397,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.alert] based on given [subject] and possible [parameters].
   void alert({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -410,7 +410,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.scrolled] based on given [subject] and possible [parameters].
   void scrolled({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -423,7 +423,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.started] based on given [subject] and possible [parameters].
   void started({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -436,7 +436,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.stopped] based on given [subject] and possible [parameters].
   void stopped({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -449,7 +449,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.initialised] based on given [subject] and possible [parameters].
   void initialised({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -462,7 +462,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.disposed] based on given [subject] and possible [parameters].
   void disposed({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -475,7 +475,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.fetched] based on given [subject] and possible [parameters].
   void fetched({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -488,7 +488,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.set] based on given [subject] and possible [parameters].
   void set({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -501,7 +501,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.get] based on given [subject] and possible [parameters].
   void get({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -514,7 +514,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.foreground] based on given [subject] and possible [parameters].
   void foreground({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -527,7 +527,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.background] based on given [subject] and possible [parameters].
   void background({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -540,7 +540,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.purchased] based on given [subject] and possible [parameters].
   void purchased({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -553,7 +553,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.dismissed] based on given [subject] and possible [parameters].
   void dismissed({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -566,7 +566,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.upgraded] based on given [subject] and possible [parameters].
   void upgraded({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -579,7 +579,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.downgraded] based on given [subject] and possible [parameters].
   void downgraded({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -592,7 +592,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.interaction] based on given [subject] and possible [parameters].
   void interaction({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -605,7 +605,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.query] based on given [subject] and possible [parameters].
   void query({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -618,7 +618,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.confirmed] based on given [subject] and possible [parameters].
   void confirmed({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -631,7 +631,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.canceled] based on given [subject] and possible [parameters].
   void canceled({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -644,7 +644,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.created] based on given [subject] and possible [parameters].
   void created({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -657,7 +657,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.read] based on given [subject] and possible [parameters].
   void read({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -670,7 +670,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.updated] based on given [subject] and possible [parameters].
   void updated({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -683,7 +683,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.deleted] based on given [subject] and possible [parameters].
   void deleted({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -696,7 +696,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.added] based on given [subject] and possible [parameters].
   void added({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -709,7 +709,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.removed] based on given [subject] and possible [parameters].
   void removed({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -722,7 +722,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.subscribed] based on given [subject] and possible [parameters].
   void subscribed({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -735,7 +735,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.unsubscribed] based on given [subject] and possible [parameters].
   void unsubscribed({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -748,7 +748,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.changed] based on given [subject] and possible [parameters].
   void changed({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -761,7 +761,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.denied] based on given [subject] and possible [parameters].
   void denied({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -774,7 +774,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.skipped] based on given [subject] and possible [parameters].
   void skipped({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -787,7 +787,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.checked] based on given [subject] and possible [parameters].
   void checked({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -800,7 +800,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.unchecked] based on given [subject] and possible [parameters].
   void unchecked({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -813,7 +813,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.attempted] based on given [subject] and possible [parameters].
   void attempted({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -826,7 +826,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.reset] based on given [subject] and possible [parameters].
   void reset({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -839,7 +839,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.enabled] based on given [subject] and possible [parameters].
   void enabled({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -852,7 +852,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.disabled] based on given [subject] and possible [parameters].
   void disabled({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -865,7 +865,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.began] based on given [subject] and possible [parameters].
   void began({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -878,7 +878,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.ended] based on given [subject] and possible [parameters].
   void ended({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -891,7 +891,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.refreshed] based on given [subject] and possible [parameters].
   void refreshed({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -904,7 +904,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.generated] based on given [subject] and possible [parameters].
   void generated({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -917,7 +917,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.unsupported] based on given [subject] and possible [parameters].
   void unsupported({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -930,7 +930,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.invalid] based on given [subject] and possible [parameters].
   void invalid({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -943,7 +943,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.valid] based on given [subject] and possible [parameters].
   void valid({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -956,7 +956,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.shown] based on given [subject] and possible [parameters].
   void shown({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -969,7 +969,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.saved] based on given [subject] and possible [parameters].
   void saved({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -982,7 +982,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.loaded] based on given [subject] and possible [parameters].
   void loaded({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -995,7 +995,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.found] based on given [subject] and possible [parameters].
   void found({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -1008,7 +1008,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.notFound] based on given [subject] and possible [parameters].
   void notFound({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -1021,7 +1021,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.completed] based on given [subject] and possible [parameters].
   void completed({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -1034,7 +1034,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.error] based on given [subject] and possible [parameters].
   void error({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -1047,7 +1047,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.given] based on given [subject] and possible [parameters].
   void given({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -1060,7 +1060,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.taken] based on given [subject] and possible [parameters].
   void taken({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -1073,7 +1073,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.snoozed] based on given [subject] and possible [parameters].
   void snoozed({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -1086,7 +1086,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.verified] based on given [subject] and possible [parameters].
   void verified({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -1099,7 +1099,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.swiped] based on given [subject] and possible [parameters].
   void swiped({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -1112,7 +1112,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.used] based on given [subject] and possible [parameters].
   void used({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -1125,7 +1125,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.filled] based on given [subject] and possible [parameters].
   void filled({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -1138,7 +1138,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.cleared] based on given [subject] and possible [parameters].
   void cleared({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -1151,7 +1151,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.unverified] based on given [subject] and possible [parameters].
   void unverified({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -1164,7 +1164,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.paused] based on given [subject] and possible [parameters].
   void paused({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -1177,7 +1177,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.resumed] based on given [subject] and possible [parameters].
   void resumed({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -1190,7 +1190,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.linked] based on given [subject] and possible [parameters].
   void linked({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -1203,7 +1203,7 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.unlinked] based on given [subject] and possible [parameters].
   void unlinked({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
@@ -1216,13 +1216,26 @@ class AnalyticsService {
   /// Sends an [AnalyticsTypes.requested] based on given [subject] and possible [parameters].
   void requested({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       _logAnalytic(
         Analytic(
           subject: subject,
           parameters: parameters,
           type: AnalyticsTypes.requested,
+        ),
+      );
+
+  /// Sends an [AnalyticsTypes.pressed] based on given [subject] and possible [parameters].
+  void pressed({
+    required String subject,
+    Map<String, Object>? parameters,
+  }) =>
+      _logAnalytic(
+        Analytic(
+          subject: subject,
+          parameters: parameters,
+          type: AnalyticsTypes.pressed,
         ),
       );
 

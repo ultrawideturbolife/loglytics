@@ -1,3 +1,7 @@
+## 0.14.1
+
+* **✨ New:** Added `AnalyticsTypes.pressed`.
+
 ## 0.14.0
 
 * **⚠️ Breaking:** Updated `logEvent` signature to reflect latest changes by firebase analytics.

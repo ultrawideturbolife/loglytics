@@ -92,6 +92,7 @@ enum AnalyticsTypes {
   linked,
   unlinked,
   requested,
+  pressed,
   none,
 }
 
@@ -188,6 +189,7 @@ extension AnalyticsTypesHelpers on AnalyticsTypes {
       case AnalyticsTypes.linked:
       case AnalyticsTypes.unlinked:
       case AnalyticsTypes.requested:
+      case AnalyticsTypes.pressed:
         return name;
       case AnalyticsTypes.notFound:
         return 'not_found';
@@ -199,7 +201,7 @@ extension AnalyticsTypesHelpers on AnalyticsTypes {
   /// Used to generate [CustomAnalytic] objects based on [AnalyticsTypes].
   CustomAnalytic toCustomAnalytic({
     required String subject,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) =>
       Analytic(subject: subject, type: this, parameters: parameters)
           .toCustomAnalytic;

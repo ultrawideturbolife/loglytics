@@ -11,7 +11,7 @@ class Analytic {
 
   final String _subject;
   final AnalyticsTypes _type;
-  final Map<String, Object?>? parameters;
+  final Map<String, Object>? parameters;
 
   String get name => '${_subject}_${_type.value}';
 
@@ -30,7 +30,7 @@ class Analytic {
 class CustomAnalytic extends Analytic {
   CustomAnalytic({
     required String name,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
   }) : super(
           subject: name,
           parameters: parameters,
